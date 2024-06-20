@@ -1,0 +1,9 @@
+# Braces on a new line
+BreakBeforeBraces: Allman
+AlignConsecutiveAssignments:
+  Enabled: true
+  AlignCompound: true
+AlignAfterOpenBracket: BlockIndent
+SeparateDefinitionBlocks: Always
+BinPackArguments: false
+BinPackParameters: false
