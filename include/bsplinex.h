@@ -4,6 +4,8 @@
 // Standard includes
 #include <algorithm>
 #include <functional>
+#include <iostream>
+#include <string>
 #include <vector>
 
 /**
@@ -19,19 +21,25 @@
  * Curve domain:
  * - If the curve is open, the domain is [t_p, t_{end - p}]
  * - If the curve is periodic, the domain is [t_0, t_{end}] but appropiate
- * padding is needed
+ *   padding is needed
  * - If the curve is clamped, the domain is [t_0, t_{end}] but the start and end
- * knots must have multiplicity `p+1`
+ *   knots must have multiplicity `p+1`
  *
  * Knots padding:
  * - If the curve is open, no padding is needed, the full `n + p + 1` knots have
- * to be provided
+ *   to be provided
  * - If the curve is periodic, we need to add `p` knots at the left and right
- * following periodicity: [0, 1, 2, 2.5, 3] with p = 3 -> [-1.0, -0.5, 0, 1,
- * 2, 2.5, 3, 4] the knots are added following the pattern [left, right, left,
- * right, left, ...]
+ *   following periodicity: [0, 1, 2, 2.5, 3] with p = 3 ->
+ *   [-2.0, -1.0, -0.5, 0, 1, 2, 2.5, 3, 4, 5, 5.5]
  * - If the curve is clamped, we must repeat the first an last knots `p` times:
- *     [0, 1, 2, 2.5, 3] with p = 3 -> [0, 0, 0, 0, 1, 2, 2.5, 3, 3, 3, 3]
+ *   [0, 1, 2, 2.5, 3] with p = 3 -> [0, 0, 0, 0, 1, 2, 2.5, 3, 3, 3, 3]
+ *
+ * Control points:
+ * - If the curve is open, the number of control points must be `n = m - p - 1`
+ * - If the curve is periodic, the number of control points must be `n = m - 1`
+ *   since they will need to be padded for periodicity
+ * - If the curve is clamped, the number of control points must be
+ *   `n = m + p - 1`
  */
 
 namespace bsplinex
@@ -48,7 +56,7 @@ template <typename T> class BSpline
 {
 private:
   size_t degree = 0;
-  std::vector<T> vector{};
+  std::vector<T> knots{};
   std::vector<T> control_points{};
   BoundaryCondition bc_type = OPEN;
 
@@ -77,40 +85,86 @@ public:
     {
       throw std::invalid_argument("Knots must be monotonic increasing");
     }
-    this->vector  = knots;
-    this->bc_type = bc_type;
-    this->pad_knots();
 
-    // The control points must be knots - p - 1
-    if (control_points.size() != knots.size() - degree - 1)
+    // The control points change length depending on the boundary condition
+    switch (bc_type)
     {
+    case OPEN:
+      if (control_points.size() != knots.size() - degree - 1)
+      {
+        throw std::invalid_argument(
+            "For the OPEN boundary condition, the control points must be "
+            "knots.size() - degree - 1, found: " +
+            std::to_string(control_points.size()) +
+            " != " + std::to_string(knots.size() - degree - 1)
+        );
+      }
+      break;
+    case PERIODIC:
+      if (control_points.size() != knots.size() - 1)
+      {
+        throw std::invalid_argument(
+            "For the PERIODIC boundary condition, the control points must be "
+            "knots.size() - 1, found: " +
+            std::to_string(control_points.size()) +
+            " != " + std::to_string(knots.size() - 1)
+        );
+      }
+      break;
+    case CLAMPED:
+      if (control_points.size() != knots.size() + degree - 1)
+      {
+        throw std::invalid_argument(
+            "For the CLAMPED boundary condition, the control points must be "
+            "knots.size() + degree - 1, found: " +
+            std::to_string(control_points.size()) +
+            " != " + std::to_string(knots.size() + degree - 1)
+        );
+      }
+    default:
       throw std::invalid_argument(
-          "Control points must be knots.size() - degree - 1"
+          "Invalid boundary condition" + std::to_string(bc_type)
       );
     }
-    this->control_points = control_points;
 
-    // If the curve is periodic, the knots and control points must be circular
-    if (PERIODIC == bc_type)
+    // Assign the values
+    this->knots          = knots;
+    this->control_points = control_points;
+    this->bc_type        = bc_type;
+
+    // Apply the boundary conditions
+    this->apply_boundary_conditions();
+
+    for (size_t i = 0; i < this->knots.size(); i++)
     {
-      this->circular_condition(this->knots);
-      this->circular_condition(this->control_points);
+      std::cout << this->knots[i] << " ";
     }
+    std::cout << std::endl;
+    for (size_t i = 0; i < this->control_points.size(); i++)
+    {
+      std::cout << this->control_points[i] << " ";
+    }
+    std::cout << std::endl;
   }
 
   T evaluate(T point, size_t derivative = 0) const
   {
     // For now the point must in one knot interval (later we will implement
     // extrapolation)
-    if (point < this->vector.front() || point > this->vector.back())
+    if (point < this->knots[this->degree] ||
+        point >= this->knots[this->knots.size() - this->degree - 1])
     {
       throw std::invalid_argument("Point must be within the knot interval");
     }
 
     // Binary search to find the knot interval
-    size_t k =
-        std::upper_bound(this->vector.begin(), this->vector.end(), point) -
-        this->vector.begin() - 1;
+    size_t k = std::upper_bound(
+                   this->knots.begin() + this->degree,
+                   this->knots.end() - this->degree,
+                   point
+               ) -
+               this->knots.begin() - 1;
+    std::cout << k << std::endl;
 
     return this->deboor_with_derivatives(k, point, derivative);
   }
@@ -146,78 +200,63 @@ private:
       for (int j = 0; j <= this->control_points.size() - n; j++)
       {
         q[j] = (this->degree - n + 1) * (q[j + 1] - q[j]) /
-               (this->vector[j + this->degree + 1] - this->vector[j + n]);
+               (this->knots[j + this->degree + 1] - this->knots[j + n]);
       }
     }
 
     // Modify the knot vector
-    std::vector<T> new_t(this->vector.begin() + d, this->vector.end() - d);
+    std::vector<T> new_t(this->knots.begin() + d, this->knots.end() - d);
 
     return this->deboor(k - d, x, new_t, q, this->degree - d);
   }
 
-  void pad_knots()
+  void apply_boundary_conditions()
   {
     switch (this->bc_type)
     {
     case PERIODIC:
     {
-      size_t knots_right = this->degree / 2;
-      size_t knots_left  = this->degree - knots_right;
-      std::vector<T> periodic_knots(this->vector.size() + this->degree);
-      for (size_t i = 0; i < knots_left; i++)
+      // Pad the knots
+      std::vector<T> periodic_knots(this->knots.size() + 2 * this->degree);
+      for (size_t i = 0; i < this->degree; i++)
       {
-        periodic_knots[knots_left - 1 - i] =
-            this->vector.front() -
-            (this->vector.back() -
-             this->vector[this->vector.size() - 1 - (i + 1)]);
+        periodic_knots[this->degree - 1 - i] =
+            this->knots.front() -
+            (this->knots.back() - this->knots[this->knots.size() - 1 - (i + 1)]
+            );
       }
-      for (size_t i = 0; i < this->vector.size(); i++)
+      for (size_t i = 0; i < this->knots.size(); i++)
       {
-        periodic_knots[knots_left + i] = this->vector[i];
+        periodic_knots[this->degree + i] = this->knots[i];
       }
-      for (size_t i = 0; i < knots_right; i++)
+      for (size_t i = 0; i < this->degree; i++)
       {
-        periodic_knots[knots_left + this->vector.size() + i] =
-            this->vector.back() + (this->vector[i + 1] - this->vector.front());
+        periodic_knots[this->degree + this->knots.size() + i] =
+            this->knots.back() + (this->knots[i + 1] - this->knots.front());
       }
-      this->vector = periodic_knots;
+      this->knots = periodic_knots;
+
+      // Pad the control points
+      this->control_points.insert(
+          this->control_points.end(),
+          this->control_points.begin(),
+          this->control_points.begin() + this->degree
+      );
+
       break;
     }
     case CLAMPED:
     {
-      this->vector.insert(
-          this->vector.begin(), this->degree, this->vector.front()
+      this->knots.insert(
+          this->knots.begin(), this->degree, this->knots.front()
       );
-      this->vector.insert(
-          this->vector.end(), this->degree, this->vector.back()
-      );
+      this->knots.insert(this->knots.end(), this->degree, this->knots.back());
       break;
     }
     case OPEN:
     default:
       break;
     }
-  }
-
-  void circular_condition(std::vector<T> &vector)
-  {
-    size_t elem_left  = this->degree / 2;
-    size_t elem_right = this->degree - elem_left;
-    std::vector<T> circular_vector(vector.size() + this->degree);
-    for (size_t i = 0; i < elem_left; i++)
-    {
-      circular_vector[elem_left - 1 - i] = vector[vector.size() - 1 - i];
-    }
-    for (size_t i = 0; i < vector.size(); i++)
-    {
-      circular_vector[elem_left + i] = vector[i];
-    }
-    for (size_t i = 0; i < elem_right; i++)
-    {
-      circular_vector[elem_left + vector.size() + i] = vector[i];
-    }
-    vector = circular_vector;
   }
 };
 
