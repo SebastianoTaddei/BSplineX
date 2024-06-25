@@ -52,13 +52,21 @@ enum BoundaryCondition
   CLAMPED  = 2
 };
 
+enum Extrapolation
+{
+  NONE     = 0,
+  CONSTANT = 1
+};
+
 template <typename T> class BSpline
 {
 private:
   size_t degree = 0;
   std::vector<T> knots{};
   std::vector<T> control_points{};
-  BoundaryCondition bc_type = OPEN;
+  BoundaryCondition bc_type   = OPEN;
+  Extrapolation extrapolation = NONE;
+  T period                    = 0;
 
 public:
   BSpline() = default;
@@ -67,7 +75,8 @@ public:
       size_t degree,
       std::vector<T> const &knots,
       std::vector<T> const &control_points,
-      BoundaryCondition bc_type = OPEN
+      BoundaryCondition bc_type   = OPEN,
+      Extrapolation extrapolation = NONE
   )
   {
     if (0 == degree)
@@ -131,6 +140,7 @@ public:
     this->knots          = knots;
     this->control_points = control_points;
     this->bc_type        = bc_type;
+    this->extrapolation  = extrapolation;
 
     // Apply the boundary conditions
     this->apply_boundary_conditions();
@@ -149,22 +159,47 @@ public:
 
   T evaluate(T point, size_t derivative = 0) const
   {
-    // For now the point must in one knot interval (later we will implement
-    // extrapolation)
-    if (point < this->knots[this->degree] ||
-        point >= this->knots[this->knots.size() - this->degree - 1])
+    // If the curve is periodic, we need to map the point to the domain
+    if (PERIODIC == this->bc_type)
     {
-      throw std::invalid_argument("Point must be within the knot interval");
+      if (point < this->knots[this->degree])
+      {
+        point +=
+            this->period *
+            (std::floor((this->knots[this->degree] - point) / this->period) + 1
+            );
+      }
+      else if (point >= this->knots[this->knots.size() - this->degree - 1])
+      {
+        point -=
+            this->period *
+            (std::floor(
+                 (point - this->knots[this->knots.size() - this->degree - 1]) /
+                 this->period
+             ) +
+             1);
+      }
     }
 
     // Binary search to find the knot interval
-    size_t k = std::upper_bound(
-                   this->knots.begin() + this->degree,
-                   this->knots.end() - this->degree,
-                   point
-               ) -
-               this->knots.begin() - 1;
-    std::cout << k << std::endl;
+    auto upper = std::upper_bound(
+        this->knots.begin() + this->degree,
+        this->knots.end() - this->degree,
+        point
+    );
+
+    // Find the index of the knot interval
+    size_t k = upper - this->knots.begin() - 1;
+
+    // If the point is outside the domain, extrapolate
+    if (upper == this->knots.begin() + this->degree)
+    {
+      this->apply_extrapolation(1, 0, k, point);
+    }
+    else if (upper == this->knots.end() - this->degree)
+    {
+      this->apply_extrapolation(0, 1, k, point);
+    }
 
     return this->deboor_with_derivatives(k, point, derivative);
   }
@@ -216,6 +251,9 @@ private:
     {
     case PERIODIC:
     {
+      // Save the period
+      this->period = this->knots.back() - this->knots.front();
+
       // Pad the knots
       std::vector<T> periodic_knots(this->knots.size() + 2 * this->degree);
       for (size_t i = 0; i < this->degree; i++)
@@ -256,6 +294,29 @@ private:
     case OPEN:
     default:
       break;
+    }
+  }
+
+  void apply_extrapolation(bool left, bool right, size_t &k, T &point) const
+  {
+    switch (this->extrapolation)
+    {
+    case NONE:
+      throw std::invalid_argument("Point outside the domain");
+    case CONSTANT:
+      if (left)
+      {
+        k     = this->degree;
+        point = this->knots[k];
+      }
+      else if (right)
+      {
+        k     = this->knots.size() - this->degree - 1;
+        point = this->knots[k];
+      }
+      break;
+    default:
+      throw std::invalid_argument("Invalid extrapolation type");
     }
   }
 };
