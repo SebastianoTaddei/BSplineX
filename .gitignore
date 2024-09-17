@@ -188,4 +188,14 @@ tags
 .history
 .ionide
 
+# clangd
+.cache/*
+
+# draw.io
+*.dtmp
+*.bkp
+
+# Build files
+build/*
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,vim,clion

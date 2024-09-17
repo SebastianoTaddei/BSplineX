@@ -1,0 +1,110 @@
+find(x)
+  check_bounds(x) -> needs the accessor
+    if PERIODIC
+      x_left = t.at(p)
+      x_right = t.at(-p)
+      period = x_right - x_left
+      ...
+      return i
+    else if out_of_bounds
+      i = extrapolate(x)
+
+      return i
+
+  i = search(x) -> needs the accessor
+    t.at(i) <= x < t.at(i+1)
+
+  return i
+
+accessor
+  at(i)
+    if i < p
+      return pad.left(i)
+    else if i >= n + p
+      return pad.right(i)
+    else
+      return data[i]
+
+t_[p, n-p] = [0, 1, 2, 3]
+OPEN = [___-2, -1,___ 0, 1, 2, 3, ___4, 5___]
+CLAMPED = [___0, 0,___ 0, 1, 2, 3, ___3, 3___]
+PERIODIC = [...]
+
+Knots(knot_positions)
+  padder(knot_positions)
+    pad.left = knot_positions[0:p]
+    pad.right = knot_positions[n-p:n]
+  atter(knot_positions)
+    data = knot_positions[p:n-p]
+
+Knots(start, stop, step)
+  padder(start, stop, step)
+  atter(start, stop, step)
+
+
+class Knots():
+  Finder finder;
+  Atter atter;
+  Padder padder;
+  Extrapolator extrapolator;
+
+  def Knots(vec: knots_values):
+    something gets initialised
+
+  def find(x): -> index || value_error
+    if out_of_bounds(x):
+      x = extrapolator.extrapolate(x)
+
+    index = finder.find(x)
+
+  def at(i):
+    return atter.at(i)
+
+  def out_of_bounds(x): -> requires_extrapolation
+    return x < atter.at(p) or x >= atter.at(n-p):
+
+class Finder():
+  def find(x):
+    pass
+
+class Atter():
+  Data data;
+  Padder padder;
+
+  def Atter(data):
+    data = data
+
+  def at(i):
+    pass
+
+class Padder():
+  def left(i):
+    pass
+  def right(i):
+    pass
+
+class Data():
+  raw_data
+  begin
+  end
+  step_size
+
+  def Data(data):
+    if curve_type == UNIFORM:
+      raw_data = null
+      begin = data[0]
+      end = data[-1]
+      step_size = data[1] - data[0]
+    elif curve_type == NON_UNIFORM:
+      raw_data = memcopy(data)
+
+  def at(i): -> value
+    if curve_type == UNIFORM:
+      value = begin + i * step_size
+      return value if value <= end else ValueError
+    elif curve_type == NON_UNIFORM:
+      return raw_data[i]
+
+class Extrapolator():
+  def extrapolate(x):
+    pass

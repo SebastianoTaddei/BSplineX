@@ -130,10 +130,12 @@ public:
             " != " + std::to_string(knots.size() + degree - 1)
         );
       }
+      break;
     default:
       throw std::invalid_argument(
           "Invalid boundary condition" + std::to_string(bc_type)
       );
+      break;
     }
 
     // Assign the values

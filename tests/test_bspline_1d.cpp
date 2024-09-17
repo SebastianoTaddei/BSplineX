@@ -2,7 +2,7 @@
 
 #include <matplot/matplot.h>
 
-#include "bsplinex.h"
+#include "bsplinex.hpp"
 
 int main()
 {
