@@ -12,3 +12,10 @@ target_include_directories(bsplinex INTERFACE
 )
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
+
+if(MSVC)
+  target_compile_options(bsplinex INTERFACE /W4 /WX)
+else()
+  target_compile_options(bsplinex INTERFACE -Wall -Wextra -pedantic -Werror)
+endif()
+
