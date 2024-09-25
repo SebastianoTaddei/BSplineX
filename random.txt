@@ -1,47 +1,3 @@
-find(x)
-  check_bounds(x) -> needs the accessor
-    if PERIODIC
-      x_left = t.at(p)
-      x_right = t.at(-p)
-      period = x_right - x_left
-      ...
-      return i
-    else if out_of_bounds
-      i = extrapolate(x)
-
-      return i
-
-  i = search(x) -> needs the accessor
-    t.at(i) <= x < t.at(i+1)
-
-  return i
-
-accessor
-  at(i)
-    if i < p
-      return pad.left(i)
-    else if i >= n + p
-      return pad.right(i)
-    else
-      return data[i]
-
-t_[p, n-p] = [0, 1, 2, 3]
-OPEN = [___-2, -1,___ 0, 1, 2, 3, ___4, 5___]
-CLAMPED = [___0, 0,___ 0, 1, 2, 3, ___3, 3___]
-PERIODIC = [...]
-
-Knots(knot_positions)
-  padder(knot_positions)
-    pad.left = knot_positions[0:p]
-    pad.right = knot_positions[n-p:n]
-  atter(knot_positions)
-    data = knot_positions[p:n-p]
-
-Knots(start, stop, step)
-  padder(start, stop, step)
-  atter(start, stop, step)
-
-
 class Knots():
   Finder finder;
   Atter atter;
@@ -64,24 +20,73 @@ class Knots():
     return x < atter.at(p) or x >= atter.at(n-p):
 
 class Finder():
+  Atter atter
+
+  def Finder(atter):
+    self.atter = atter
+
   def find(x):
-    pass
+    if self.atter.domain_length() < 100:
+      return self.linear_search(x)
+    else:
+      return self.binary_search(x)
+
+  def find_ordered(x)
+
+  def find_vectorised(vec: x)
 
 class Atter():
   Data data;
   Padder padder;
 
   def Atter(data):
-    data = data
+    self.data = Data(data)
+    self.padder = Padder(self.data)
 
   def at(i):
-    pass
+    if i < p || i > n - p:
+      return self.padder.at(i)
+    else:
+      reutrn self.data.at(i)
+
+  def at_in_domain(i):
+    return self.data.at(i)
+
+  def domain_length():
+    return self.data.length
 
 class Padder():
+  left
+  right
+
+  def Padder(Data &data):
+    if boundary_condition == OPEN:
+      self.open_pad(data)
+    elif boundary_condition == CLAMPED:
+      self.clamped_pad(data)
+    elif boundary_condition == PERIODIC:
+      self.periodic_pad(data)
+
+
+  def open_pad(Data &data):
+    self.left = data[:p]
+    self.right = data[-p:]
+    data.reduce_domain(p, p)
+
+  def clamped_pad(Data &data):
+    self.left = data[0] * ones(p)
+    self.right = data[-1] * ones(p)
+
+  def periodic_pad(Data &data):
+    period = data[-1] - data[0]
+    self.left = data[-p - 1:-1] - period
+    self.right = data[1:p + 1] + period
+
   def left(i):
-    pass
+    self.left[i]
+
   def right(i):
-    pass
+    self.right[i]
 
 class Data():
   raw_data
@@ -91,20 +96,37 @@ class Data():
 
   def Data(data):
     if curve_type == UNIFORM:
-      raw_data = null
-      begin = data[0]
-      end = data[-1]
-      step_size = data[1] - data[0]
+      self.raw_data = null
+      self.begin = data[0]
+      self.end = data[-1]
+      self.step_size = data[1] - data[0]
     elif curve_type == NON_UNIFORM:
-      raw_data = memcopy(data)
+      self.raw_data = memcopy(data)
 
   def at(i): -> value
     if curve_type == UNIFORM:
-      value = begin + i * step_size
+      value = self.begin + i * self.step_size
       return value if value <= end else ValueError
     elif curve_type == NON_UNIFORM:
-      return raw_data[i]
+      return self.raw_data[i]
+
+  def reduce_domain(from_begin, from_end):
+    if curve_type == UNIFORM:
+      self.raw_data = null
+      self.begin += from_begin * step_size
+      self.end -= from_end * step_size
+    elif curve_type == NON_UNIFORM:
+      self.raw_data = self.raw_data[from_begin:-from_end]
 
 class Extrapolator():
+
+  Atter atter
+
+  def Extrapolator(atter):
+    self.atter = atter
+
   def extrapolate(x):
-    pass
+    if exptrapolation == NONE:
+      return ValueError
+    else:
+      return p if x < atter.at(p) else n - p - 1

@@ -2,7 +2,6 @@
 #define DATA_HPP
 
 // Standard includes
-#include <cassert>
 #include <cstddef>
 #include <vector>
 
@@ -65,8 +64,8 @@ public:
 
     this->begin     = begin;
     this->step_size = step;
-    this->num_elems = (end - begin) / step;
-    this->end       = begin + this->num_elems * step;
+    this->num_elems = (end - begin) / step + 1;
+    this->end       = begin + (this->num_elems - 1) * step;
   }
 
   // Specifying the num-elems means the domain will be [begin, end]
@@ -79,12 +78,12 @@ public:
     this->begin     = begin;
     this->end       = end;
     this->num_elems = num_elems;
-    this->step_size = (end - begin) / num_elems;
+    this->step_size = (end - begin) / (num_elems - 1);
   }
 
   T at(size_t index)
   {
-    assertm(index >= 0 && index < this->end, "Out of bounds");
+    assertm(index < this->num_elems, "Out of bounds");
     return this->begin + index * this->step_size;
   }
 
@@ -111,8 +110,9 @@ public:
     assertm(first <= last, "Invalid domain");
     assertm(last <= this->num_elems, "Out of bounds");
 
-    this->end    = this->begin + last * this->step_size;
+    this->end    = this->begin + (last - 1) * this->step_size;
     this->begin += first * this->step_size;
+    this->num_elems = last - first;
   }
 };
 
@@ -126,7 +126,7 @@ public:
 
   T at(size_t index)
   {
-    assertm(index >= 0 && index < this->raw_data.size(), "Out of bounds");
+    assertm(index < this->raw_data.size(), "Out of bounds");
     return this->raw_data[index];
   }
 
