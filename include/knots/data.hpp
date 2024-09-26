@@ -9,30 +9,6 @@
 #include "defines.hpp"
 #include "types.hpp"
 
-/**
- * Naming convention:
- * - `m` -> number of knots
- * - `p` -> degree of the curve
- * - `t` -> knots vector
- *
- * Curve domain:
- * - If the curve is open, the domain is [t_p, t_{end - p}]
- * - If the curve is periodic, the domain is [t_0, t_{end}] but appropiate
- *   padding is needed
- * - If the curve is clamped, the domain is [t_0, t_{end}] but the start and end
- *   knots must have multiplicity `p+1`
- *
- * Knots padding:
- * - If the curve is open, no padding is needed, the full `n + p + 1` knots have
- *   to be provided
- * - If the curve is periodic, we need to add `p` knots at the left and right
- *   following periodicity: [0, 1, 2, 2.5, 3] with p = 3 ->
- *   [-2.0, -1.0, -0.5, 0, 1, 2, 2.5, 3, 4, 5, 5.5]
- * - If the curve is clamped, we must repeat the first an last knots `p` times:
- *   [0, 1, 2, 2.5, 3] with p = 3 -> [0, 0, 0, 0, 1, 2, 2.5, 3, 3, 3, 3]
- *
- */
-
 namespace bsplinex
 {
 namespace knots
@@ -81,15 +57,15 @@ public:
     this->step_size = (end - begin) / (num_elems - 1);
   }
 
-  T at(size_t index)
+  T at(size_t index) const
   {
     assertm(index < this->num_elems, "Out of bounds");
     return this->begin + index * this->step_size;
   }
 
-  size_t size() { return this->num_elems; }
+  size_t size() const { return this->num_elems; }
 
-  std::vector<T> slice(size_t first, size_t last)
+  std::vector<T> slice(size_t first, size_t last) const
   {
     assertm(first <= last, "Invalid range");
     assertm(last <= this->num_elems, "Out of bounds");
@@ -110,9 +86,9 @@ public:
     assertm(first <= last, "Invalid domain");
     assertm(last <= this->num_elems, "Out of bounds");
 
-    this->end    = this->begin + (last - 1) * this->step_size;
-    this->begin += first * this->step_size;
-    this->num_elems = last - first;
+    this->end        = this->begin + (last - 1) * this->step_size;
+    this->begin     += first * this->step_size;
+    this->num_elems  = last - first;
   }
 };
 
@@ -152,22 +128,6 @@ public:
     );
   }
 };
-
-/*
-
-Knots
-  - Finder
-    - Atter
-  - Atter
-    - Data
-    - Padder
-  - Padder
-    - Data
-  - Extrapolator
-    - Atter
-  - Data
-
-*/
 
 } // namespace knots
 } // namespace bsplinex

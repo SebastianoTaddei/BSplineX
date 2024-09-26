@@ -25,22 +25,26 @@ public:
   {
   }
 
-  T at(size_t index)
+  T at(size_t index) const
   {
-    assertm(index < data.size() + 2 * degree, "Out of bounds");
-    if (index < degree)
+    assertm(index < this->data.size() + 2 * this->degree, "Out of bounds");
+    if (index < this->degree)
     {
-      return padder.left(index);
+      return this->padder.left(index);
     }
-    else if (index > data.size() - 1 + degree)
+    else if (index > this->data.size() - 1 + this->degree)
     {
-      return padder.right(index - data.size() - degree);
+      return this->padder.right(index - this->data.size() - this->degree);
     }
     else
     {
-      return data.at(index - degree);
+      return this->data.at(index - this->degree);
     }
   }
+
+  size_t size() const { return this->data.size() + 2 * this->degree; }
+
+  size_t get_degree() const { return this->degree; }
 };
 
 } // namespace knots

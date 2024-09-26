@@ -17,8 +17,8 @@ namespace knots
 template <typename T, Curve C, BoundaryCondition BC> class Padder
 {
 public:
-  virtual T left(size_t index)  = 0;
-  virtual T right(size_t index) = 0;
+  virtual T left(size_t index) const  = 0;
+  virtual T right(size_t index) const = 0;
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::OPEN>
@@ -36,13 +36,13 @@ public:
     data.reduce_domain(degree, data.size() - degree);
   }
 
-  T left(size_t index)
+  T left(size_t index) const
   {
     assertm(index <= this->pad_left.size(), "Out of bounds");
     return this->pad_left[index];
   }
 
-  T right(size_t index)
+  T right(size_t index) const
   {
     assertm(index <= this->pad_right.size(), "Out of bounds");
     return this->pad_right[index];
@@ -62,17 +62,15 @@ public:
     this->pad_left  = data.at(0);
     this->pad_right = data.at(data.size() - 1);
     this->degree    = degree;
-
-    data.reduce_domain(degree, data.size() - degree);
   }
 
-  T left(size_t index)
+  T left(size_t index) const
   {
     assertm(index <= this->degree, "Out of bounds");
     return this->pad_left;
   }
 
-  T right(size_t index)
+  T right(size_t index) const
   {
     assertm(index <= this->degree, "Out of bounds");
     return this->pad_right;
@@ -96,17 +94,15 @@ public:
       this->pad_left  -= period;
       this->pad_right += period;
     }
-
-    data.reduce_domain(degree, data.size() - degree);
   }
 
-  T left(size_t index)
+  T left(size_t index) const
   {
     assertm(index <= this->pad_left.size(), "Out of bounds");
     return this->pad_left[index];
   }
 
-  T right(size_t index)
+  T right(size_t index) const
   {
     assertm(index <= this->pad_right.size(), "Out of bounds");
     return this->pad_right[index];
