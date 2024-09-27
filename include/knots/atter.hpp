@@ -6,6 +6,7 @@
 #include "knots/data.hpp"
 #include "knots/padder.hpp"
 #include "types.hpp"
+#include <iterator>
 
 namespace bsplinex
 {
@@ -45,6 +46,49 @@ public:
   size_t size() const { return this->data.size() + 2 * this->degree; }
 
   size_t get_degree() const { return this->degree; }
+
+  class iterator
+  {
+  private:
+    Atter<T, C, BC> const &atter;
+    size_t index{0};
+
+  public:
+    iterator(Atter<T, C, BC> const &atter, size_t index)
+        : atter{atter}, index{index}
+    {
+    }
+
+    iterator &operator++()
+    {
+      ++(this->index);
+      return *this;
+    }
+
+    iterator operator++(int)
+    {
+      iterator retval = *this;
+      ++(*this);
+      return retval;
+    }
+
+    bool operator==(iterator other) const { return this->index == other.index; }
+
+    bool operator!=(iterator other) const { return !(*this == other); }
+
+    T operator*() { return this->atter.at(this->index); }
+
+    // iterator traits
+    using difference_type   = size_t;
+    using value_type        = T;
+    using pointer           = const T *;
+    using reference         = const T &;
+    using iterator_category = std::random_access_iterator_tag;
+  };
+
+  iterator begin() { return {*this, 0}; }
+
+  iterator end() { return {*this, this->size()}; }
 };
 
 } // namespace knots

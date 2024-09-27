@@ -1,0 +1,37 @@
+layout {
+    cwd "./"
+
+    // Editing tab
+    tab name="Edit" focus=true {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        pane {
+            borderless true
+            focus true
+            name "BSplineX"
+            edit "./"
+        }
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+
+    // Launch tab
+    tab name="Launch" {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        pane {
+            name "BSplineX"
+        }
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+
+    // Git tab
+    tab name="Git" {
+        pane borderless=true command="lazygit"
+    }
+}
