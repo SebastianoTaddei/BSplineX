@@ -2,6 +2,7 @@
 #define FINDER_HPP
 
 // Standard includes
+#include <algorithm>
 #include <cstddef>
 
 // BSplineX includes
@@ -45,7 +46,13 @@ public:
       return this->extrapolator.extrapolate(value);
     }
 
-    return this->binary_search(value);
+    auto upper = std::upper_bound(
+        this->atter.begin() + this->index_left,
+        this->atter.begin() + this->index_right + 1,
+        value
+    );
+
+    return upper - this->atter.begin() - 1;
   }
 
   size_t binary_search(T value) const

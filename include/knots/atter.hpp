@@ -59,6 +59,8 @@ public:
     {
     }
 
+    iterator(iterator const &b) : atter{b.atter}, index{b.index} {}
+
     iterator &operator++()
     {
       ++(this->index);
@@ -72,23 +74,79 @@ public:
       return retval;
     }
 
-    bool operator==(iterator other) const { return this->index == other.index; }
+    iterator &operator--()
+    {
+      --(this->index);
+      return *this;
+    }
 
-    bool operator!=(iterator other) const { return !(*this == other); }
+    iterator operator--(int)
+    {
+      iterator retval = *this;
+      --(*this);
+      return retval;
+    }
+
+    iterator &operator+=(int n)
+    {
+      this->index += n;
+      return *this;
+    }
+
+    iterator operator+(int n)
+    {
+      iterator retval  = *this;
+      retval          += n;
+      return retval;
+    }
+
+    iterator &operator-=(int n)
+    {
+      this->index -= n;
+      return *this;
+    }
+
+    iterator operator-(int n)
+    {
+      iterator retval  = *this;
+      retval          -= n;
+      return retval;
+    }
+
+    int operator-(iterator const &b) { return b.index - this->index; }
+
+    bool operator==(iterator const &other) const
+    {
+      return this->index == other.index;
+    }
+
+    iterator operator=(iterator const &b) { return iterator{b}; };
+
+    bool operator!=(iterator const &other) const { return !(*this == other); }
 
     T operator*() { return this->atter.at(this->index); }
 
+    T operator[](int n) { return *(*this + n); }
+
+    bool operator<(iterator const &b) { return this->index < b.index; }
+
+    bool operator>(iterator const &b) { return this->index > b.index; }
+
+    bool operator<=(iterator const &b) { return !(*this > b); }
+
+    bool operator>=(iterator const &b) { return !(*this < b); }
+
     // iterator traits
-    using difference_type   = size_t;
+    using difference_type   = int;
     using value_type        = T;
     using pointer           = const T *;
     using reference         = const T &;
     using iterator_category = std::random_access_iterator_tag;
   };
 
-  iterator begin() { return {*this, 0}; }
+  iterator begin() const { return {*this, 0}; }
 
-  iterator end() { return {*this, this->size()}; }
+  iterator end() const { return {*this, this->size()}; }
 };
 
 } // namespace knots
