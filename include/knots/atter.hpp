@@ -1,16 +1,15 @@
 #ifndef ATTER_HPP
 #define ATTER_HPP
 
+#include <iostream>
+
 // BSplineX includes
 #include "defines.hpp"
 #include "knots/data.hpp"
 #include "knots/padder.hpp"
 #include "types.hpp"
-#include <iterator>
 
-namespace bsplinex
-{
-namespace knots
+namespace bsplinex::knots
 {
 
 template <typename T, Curve C, BoundaryCondition BC> class Atter
@@ -43,23 +42,27 @@ public:
     }
   }
 
-  size_t size() const { return this->data.size() + 2 * this->degree; }
+  [[nodiscard]] size_t size() const { return this->data.size() + 2 * this->degree; }
 
-  size_t get_degree() const { return this->degree; }
+  [[nodiscard]] size_t get_degree() const { return this->degree; }
 
   class iterator
   {
   private:
-    Atter<T, C, BC> const &atter;
+    Atter<T, C, BC> const *atter{nullptr};
     size_t index{0};
 
   public:
-    iterator(Atter<T, C, BC> const &atter, size_t index)
+    iterator(Atter<T, C, BC> const *atter, size_t index)
         : atter{atter}, index{index}
     {
+      std::cout << "Build iterator with index = " << this->index << std::endl;
     }
 
-    iterator(iterator const &b) : atter{b.atter}, index{b.index} {}
+    iterator(iterator const &b) : atter{b.atter}, index{b.index}
+    {
+      std::cout << "Copied iterator with index = " << this->index << std::endl;
+    }
 
     iterator &operator++()
     {
@@ -113,18 +116,32 @@ public:
       return retval;
     }
 
-    int operator-(iterator const &b) { return b.index - this->index; }
+    int operator-(iterator const &b) { return this->index - b.index; }
 
     bool operator==(iterator const &other) const
     {
       return this->index == other.index;
     }
 
-    iterator operator=(iterator const &b) { return iterator{b}; };
+    iterator &operator=(iterator const &b)
+    {
+      if (this == &b)
+      {
+        return *this;
+      }
+
+      this->atter = b.atter;
+      this->index = b.index;
+      return *this;
+    };
 
     bool operator!=(iterator const &other) const { return !(*this == other); }
 
-    T operator*() { return this->atter.at(this->index); }
+    T operator*()
+    {
+      std::cout << this->index << std::endl;
+      return this->atter->at(this->index);
+    }
 
     T operator[](int n) { return *(*this + n); }
 
@@ -144,12 +161,11 @@ public:
     using iterator_category = std::random_access_iterator_tag;
   };
 
-  iterator begin() const { return {*this, 0}; }
+  iterator begin() const { return {this, 0}; }
 
-  iterator end() const { return {*this, this->size()}; }
+  iterator end() const { return {this, this->size()}; }
 };
 
-} // namespace knots
-} // namespace bsplinex
+} // namespace bsplinex::knots
 
 #endif

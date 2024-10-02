@@ -10,9 +10,8 @@
 #include "knots/atter.hpp"
 #include "types.hpp"
 
-namespace bsplinex
-{
-namespace knots
+
+namespace bsplinex::knots
 {
 
 template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT>
@@ -60,7 +59,7 @@ public:
   }
 };
 
-} // namespace knots
-} // namespace bsplinex
+} // namespace bsplinex::knots
+
 
 #endif

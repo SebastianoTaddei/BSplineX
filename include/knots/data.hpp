@@ -9,9 +9,8 @@
 #include "defines.hpp"
 #include "types.hpp"
 
-namespace bsplinex
-{
-namespace knots
+
+namespace bsplinex::knots
 {
 
 template <typename T, Curve C> class Data
@@ -63,7 +62,7 @@ public:
     return this->begin + index * this->step_size;
   }
 
-  size_t size() const { return this->num_elems; }
+  [[nodiscard]] size_t size() const { return this->num_elems; }
 
   std::vector<T> slice(size_t first, size_t last) const
   {
@@ -129,7 +128,7 @@ public:
   }
 };
 
-} // namespace knots
-} // namespace bsplinex
+} // namespace bsplinex::knots
+
 
 #endif

@@ -10,9 +10,8 @@
 #include "knots/extrapolator.hpp"
 #include "types.hpp"
 
-namespace bsplinex
-{
-namespace knots
+
+namespace bsplinex::knots
 {
 
 template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT>
@@ -48,7 +47,7 @@ public:
 
     auto upper = std::upper_bound(
         this->atter.begin() + this->index_left,
-        this->atter.begin() + this->index_right + 1,
+        this->atter.begin() + (this->index_right + 1),
         value
     );
 
@@ -76,7 +75,7 @@ public:
   }
 };
 
-} // namespace knots
-} // namespace bsplinex
+} // namespace bsplinex::knots
+
 
 #endif
