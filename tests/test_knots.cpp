@@ -1,6 +1,3 @@
-#include "knots/atter.hpp"
-#include "knots/extrapolator.hpp"
-#include "knots/finder.hpp"
 #include "knots/knots.hpp"
 #include <iostream>
 
@@ -8,35 +5,19 @@ using namespace bsplinex;
 
 int main()
 {
-  knots::Data<double, Curve::UNIFORM> data{0.0, 10.0, 1.0};
-  knots::Atter<double, Curve::UNIFORM, BoundaryCondition::CLAMPED> atter{
-      data, 3
-  };
-  knots::Extrapolator<
-      double,
-      Curve::UNIFORM,
-      BoundaryCondition::CLAMPED,
-      Extrapolation::NONE>
-      extrapolator{};
-  knots::Finder<
-      double,
-      Curve::UNIFORM,
-      BoundaryCondition::CLAMPED,
-      Extrapolation::NONE>
-      finder{atter, extrapolator};
   knots::Knots<
       double,
-      Curve::UNIFORM,
-      BoundaryCondition::CLAMPED,
-      Extrapolation::NONE>
-      knots{atter, finder};
+      Curve::NON_UNIFORM,
+      BoundaryCondition::PERIODIC,
+      Extrapolation::PERIODIC>
+      knots{{{0.0, 1.0, 2.0, 2.5, 3.4, 3.9, 4.6, 9.0}}, 3};
 
-  for (size_t i{0}; i < 17; i++)
+  for (size_t i{0}; i < knots.size(); i++)
   {
     std::cout << knots.at(i) << std::endl;
   }
 
-  std::cout << knots.find(3.0) << std::endl;
+  std::cout << knots.find(31.0) << std::endl;
 
   return 0;
 }

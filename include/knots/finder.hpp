@@ -10,7 +10,6 @@
 #include "knots/extrapolator.hpp"
 #include "types.hpp"
 
-
 namespace bsplinex::knots
 {
 
@@ -19,18 +18,15 @@ class Finder
 {
 private:
   Atter<T, C, BC> const &atter;
-  Extrapolator<T, C, BC, EXT> const &extrapolator;
+  Extrapolator<T, C, BC, EXT> extrapolator;
   size_t index_left{0};
   size_t index_right{0};
   T value_left{};
   T value_right{};
 
 public:
-  Finder(
-      Atter<T, C, BC> const &atter,
-      Extrapolator<T, C, BC, EXT> const &extrapolator
-  )
-      : atter{atter}, extrapolator{extrapolator},
+  Finder(Atter<T, C, BC> const &atter)
+      : atter{atter}, extrapolator{this->atter},
         index_left{this->atter.get_degree()},
         index_right{this->atter.size() - this->index_left - 1},
         value_left{this->atter.at(this->index_left)},
@@ -42,7 +38,7 @@ public:
   {
     if (value < this->value_left || value > this->value_right)
     {
-      return this->extrapolator.extrapolate(value);
+      value = this->extrapolator.extrapolate(value);
     }
 
     auto upper = std::upper_bound(
@@ -76,6 +72,5 @@ public:
 };
 
 } // namespace bsplinex::knots
-
 
 #endif

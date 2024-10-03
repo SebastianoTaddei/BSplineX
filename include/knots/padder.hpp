@@ -91,8 +91,8 @@ public:
     this->pad_right = data.slice(1, degree + 1);
     for (size_t i{0}; i < degree; i++)
     {
-      this->pad_left  -= period;
-      this->pad_right += period;
+      this->pad_left[i]  -= period;
+      this->pad_right[i] += period;
     }
   }
 

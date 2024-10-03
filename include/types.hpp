@@ -3,23 +3,24 @@
 
 namespace bsplinex
 {
-enum BoundaryCondition
+enum class BoundaryCondition
 {
   CLAMPED  = 0,
   OPEN     = 1,
   PERIODIC = 2
 };
 
-enum Curve
+enum class Curve
 {
   NON_UNIFORM = 0,
   UNIFORM     = 1
 };
 
-enum Extrapolation
+enum class Extrapolation
 {
   CONSTANT = 0,
-  NONE
+  PERIODIC = 1,
+  NONE     = 2
 };
 } // namespace bsplinex
 

@@ -9,7 +9,6 @@
 #include "defines.hpp"
 #include "types.hpp"
 
-
 namespace bsplinex::knots
 {
 
@@ -99,13 +98,13 @@ private:
 public:
   Data(std::vector<T> const &data) : raw_data{data} {}
 
-  T at(size_t index)
+  T at(size_t index) const
   {
     assertm(index < this->raw_data.size(), "Out of bounds");
     return this->raw_data[index];
   }
 
-  size_t size() { return this->raw_data.size(); }
+  [[nodiscard]] size_t size() const { return this->raw_data.size(); }
 
   std::vector<T> slice(size_t first, size_t last)
   {
@@ -129,6 +128,5 @@ public:
 };
 
 } // namespace bsplinex::knots
-
 
 #endif

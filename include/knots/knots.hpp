@@ -43,12 +43,12 @@ template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT>
 class Knots
 {
 private:
-  Atter<T, C, BC> const &atter;
-  Finder<T, C, BC, EXT> const &finder;
+  Atter<T, C, BC> atter;
+  Finder<T, C, BC, EXT> finder;
 
 public:
-  Knots(Atter<T, C, BC> const &atter, Finder<T, C, BC, EXT> const &finder)
-      : atter{atter}, finder{finder}
+  Knots(Data<T, C> data, size_t degree)
+      : atter{data, degree}, finder{this->atter}
   {
   }
 
