@@ -5,9 +5,8 @@
 #include <cstddef>
 
 // BSplineX includes
-#include "knots/atter.hpp"
-
-#include "knots/finder.hpp"
+#include "knots/t_atter.hpp"
+#include "knots/t_finder.hpp"
 #include "types.hpp"
 
 /**
@@ -34,9 +33,7 @@
  *
  */
 
-namespace bsplinex
-{
-namespace knots
+namespace bsplinex::knots
 {
 
 template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT>
@@ -76,7 +73,6 @@ Knots
 
 */
 
-} // namespace knots
-} // namespace bsplinex
+} // namespace bsplinex::knots
 
 #endif

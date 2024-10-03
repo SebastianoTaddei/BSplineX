@@ -1,17 +1,15 @@
-#ifndef PADDER_HPP
-#define PADDER_HPP
+#ifndef T_PADDER_HPP
+#define T_PADDER_HPP
 
 // Standard includes
 #include <vector>
 
 // BSplineX includes
 #include "defines.hpp"
-#include "knots/data.hpp"
+#include "knots/t_data.hpp"
 #include "types.hpp"
 
-namespace bsplinex
-{
-namespace knots
+namespace bsplinex::knots
 {
 
 template <typename T, Curve C, BoundaryCondition BC> class Padder
@@ -19,6 +17,7 @@ template <typename T, Curve C, BoundaryCondition BC> class Padder
 public:
   virtual T left(size_t index) const  = 0;
   virtual T right(size_t index) const = 0;
+  virtual size_t size() const         = 0;
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::OPEN>
@@ -47,6 +46,11 @@ public:
     assertm(index <= this->pad_right.size(), "Out of bounds");
     return this->pad_right[index];
   }
+
+  [[nodiscard]] size_t size() const
+  {
+    return this->pad_right.size() + this->pad_right.size();
+  }
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::CLAMPED>
@@ -74,6 +78,11 @@ public:
   {
     assertm(index <= this->degree, "Out of bounds");
     return this->pad_right;
+  }
+
+  [[nodiscard]] size_t size() const
+  {
+    return this->pad_right.size() + this->pad_right.size();
   }
 };
 
@@ -107,9 +116,13 @@ public:
     assertm(index <= this->pad_right.size(), "Out of bounds");
     return this->pad_right[index];
   }
+
+  [[nodiscard]] size_t size() const
+  {
+    return this->pad_right.size() + this->pad_right.size();
+  }
 };
 
-} // namespace knots
-} // namespace bsplinex
+} // namespace bsplinex::knots
 
 #endif

@@ -1,13 +1,13 @@
-#ifndef ATTER_HPP
-#define ATTER_HPP
+#ifndef CP_ATTER_HPP
+#define CP_ATTER_HPP
 
 // BSplineX includes
+#include "control_points/cp_data.hpp"
+#include "control_points/cp_padder.hpp"
 #include "defines.hpp"
-#include "knots/data.hpp"
-#include "knots/padder.hpp"
 #include "types.hpp"
 
-namespace bsplinex::knots
+namespace bsplinex::control_points
 {
 
 template <typename T, Curve C, BoundaryCondition BC> class Atter
@@ -25,12 +25,8 @@ public:
 
   T at(size_t index) const
   {
-    assertm(index < this->data.size() + 2 * this->degree, "Out of bounds");
-    if (index < this->degree)
-    {
-      return this->padder.left(index);
-    }
-    else if (index > this->data.size() - 1 + this->degree)
+    assertm(index < this->data.size() + this->padder.size(), "Out of bounds");
+    if (index > this->data.size() - 1 + this->degree)
     {
       return this->padder.right(index - this->data.size() - this->degree);
     }
@@ -42,7 +38,7 @@ public:
 
   [[nodiscard]] size_t size() const
   {
-    return this->data.size() + 2 * this->degree;
+    return this->data.size() + this->padder.size();
   }
 
   [[nodiscard]] size_t get_degree() const { return this->degree; }
@@ -159,6 +155,6 @@ public:
   iterator end() const { return {this, this->size()}; }
 };
 
-} // namespace bsplinex::knots
+} // namespace bsplinex::control_points
 
 #endif

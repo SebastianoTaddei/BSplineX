@@ -1,5 +1,5 @@
-#ifndef DATA_HPP
-#define DATA_HPP
+#ifndef T_DATA_HPP
+#define T_DATA_HPP
 
 // Standard includes
 #include <cstddef>

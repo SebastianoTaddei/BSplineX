@@ -1,5 +1,5 @@
-#ifndef EXTRAPOLATOR_HPP
-#define EXTRAPOLATOR_HPP
+#ifndef T_EXTRAPOLATOR_HPP
+#define T_EXTRAPOLATOR_HPP
 
 // Standard includes
 #include <cstddef>
@@ -7,7 +7,7 @@
 
 // BSplineX includes
 #include "defines.hpp"
-#include "knots/atter.hpp"
+#include "knots/t_atter.hpp"
 #include "types.hpp"
 
 namespace bsplinex::knots

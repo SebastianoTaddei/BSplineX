@@ -1,13 +1,13 @@
-#ifndef FINDER_HPP
-#define FINDER_HPP
+#ifndef T_FINDER_HPP
+#define T_FINDER_HPP
 
 // Standard includes
 #include <algorithm>
 #include <cstddef>
 
 // BSplineX includes
-#include "knots/atter.hpp"
-#include "knots/extrapolator.hpp"
+#include "knots/t_atter.hpp"
+#include "knots/t_extrapolator.hpp"
 #include "types.hpp"
 
 namespace bsplinex::knots
