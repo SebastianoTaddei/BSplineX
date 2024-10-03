@@ -1,9 +1,6 @@
 #ifndef KNOTS_HPP
 #define KNOTS_HPP
 
-// Standard includes
-#include <cstddef>
-
 // BSplineX includes
 #include "knots/t_atter.hpp"
 #include "knots/t_finder.hpp"
@@ -53,7 +50,7 @@ public:
 
   T at(size_t index) const { return this->atter.at(index); }
 
-  size_t size() const { return this->atter.size(); }
+  [[nodiscard]] size_t size() const { return this->atter.size(); }
 };
 
 /*

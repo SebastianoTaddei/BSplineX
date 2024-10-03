@@ -17,7 +17,7 @@ template <typename T, Curve C, BoundaryCondition BC> class Padder
 public:
   virtual T left(size_t index) const  = 0;
   virtual T right(size_t index) const = 0;
-  virtual size_t size() const         = 0;
+  [[nodiscard]] virtual size_t size() const         = 0;
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::OPEN>
@@ -49,7 +49,7 @@ public:
 
   [[nodiscard]] size_t size() const
   {
-    return this->pad_right.size() + this->pad_right.size();
+    return this->pad_left.size() + this->pad_right.size();
   }
 };
 
@@ -82,7 +82,7 @@ public:
 
   [[nodiscard]] size_t size() const
   {
-    return this->pad_right.size() + this->pad_right.size();
+    return this->pad_left.size() + this->pad_right.size();
   }
 };
 
@@ -119,7 +119,7 @@ public:
 
   [[nodiscard]] size_t size() const
   {
-    return this->pad_right.size() + this->pad_right.size();
+    return this->pad_left.size() + this->pad_right.size();
   }
 };
 

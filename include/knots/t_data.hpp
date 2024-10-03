@@ -26,8 +26,8 @@ template <typename T> class Data<T, Curve::UNIFORM>
 private:
   T begin{};
   T end{};
-  T step_size{};
   size_t num_elems{0};
+  T step_size{};
 
 public:
   // Specifying the step-size means the domain will be [begin, end[

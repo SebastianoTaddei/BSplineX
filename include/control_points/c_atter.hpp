@@ -1,9 +1,9 @@
-#ifndef CP_ATTER_HPP
-#define CP_ATTER_HPP
+#ifndef C_ATTER_HPP
+#define C_ATTER_HPP
 
 // BSplineX includes
-#include "control_points/cp_data.hpp"
-#include "control_points/cp_padder.hpp"
+#include "control_points/c_data.hpp"
+#include "control_points/c_padder.hpp"
 #include "defines.hpp"
 #include "types.hpp"
 
