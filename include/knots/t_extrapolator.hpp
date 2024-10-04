@@ -24,9 +24,9 @@ template <typename T, Curve C, BoundaryCondition BC>
 class Extrapolator<T, C, BC, Extrapolation::NONE>
 {
 public:
-  Extrapolator([[maybe_unused]] Atter<T, C, BC> const &atter) {}
+  Extrapolator(Atter<T, C, BC> const &) {}
 
-  T extrapolate([[maybe_unused]] T value) const
+  T extrapolate(T) const
   {
     throw std::runtime_error("Extrapolation explicitly set to NONE");
   }

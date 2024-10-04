@@ -15,9 +15,11 @@ namespace bsplinex::knots
 template <typename T, Curve C, BoundaryCondition BC> class Padder
 {
 public:
-  virtual T left(size_t index) const  = 0;
-  virtual T right(size_t index) const = 0;
-  [[nodiscard]] virtual size_t size() const         = 0;
+  virtual T left(size_t index) const              = 0;
+  virtual T right(size_t index) const             = 0;
+  [[nodiscard]] virtual size_t size() const       = 0;
+  [[nodiscard]] virtual size_t size_left() const  = 0;
+  [[nodiscard]] virtual size_t size_right() const = 0;
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::OPEN>
@@ -27,30 +29,32 @@ private:
   std::vector<T> pad_right{};
 
 public:
-  Padder(Data<T, C> &data, size_t degree)
-  {
-    this->pad_left  = data.slice(0, degree);
-    this->pad_right = data.slice(data.size() - degree, data.size());
+  Padder(Data<T, C> &, size_t) {}
 
-    data.reduce_domain(degree, data.size() - degree);
+  T left(size_t) const
+  {
+    throw std::runtime_error(
+        "OPEN knots padder has zero length, this function is here "
+        "only for compatibility reasons."
+    );
   }
 
-  T left(size_t index) const
+  T right(size_t) const
   {
-    assertm(index <= this->pad_left.size(), "Out of bounds");
-    return this->pad_left[index];
-  }
-
-  T right(size_t index) const
-  {
-    assertm(index <= this->pad_right.size(), "Out of bounds");
-    return this->pad_right[index];
+    throw std::runtime_error(
+        "OPEN knots padder has zero length, this function is here "
+        "only for compatibility reasons."
+    );
   }
 
   [[nodiscard]] size_t size() const
   {
     return this->pad_left.size() + this->pad_right.size();
   }
+
+  [[nodiscard]] size_t size_left() const { return this->pad_left.size(); }
+
+  [[nodiscard]] size_t size_right() const { return this->pad_right.size(); }
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::CLAMPED>
@@ -70,13 +74,13 @@ public:
 
   T left(size_t index) const
   {
-    assertm(index <= this->degree, "Out of bounds");
+    assertm(index < this->degree, "Out of bounds");
     return this->pad_left;
   }
 
   T right(size_t index) const
   {
-    assertm(index <= this->degree, "Out of bounds");
+    assertm(index < this->degree, "Out of bounds");
     return this->pad_right;
   }
 
@@ -84,6 +88,10 @@ public:
   {
     return this->pad_left.size() + this->pad_right.size();
   }
+
+  [[nodiscard]] size_t size_left() const { return this->pad_left.size(); }
+
+  [[nodiscard]] size_t size_right() const { return this->pad_right.size(); }
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::PERIODIC>
@@ -107,13 +115,13 @@ public:
 
   T left(size_t index) const
   {
-    assertm(index <= this->pad_left.size(), "Out of bounds");
+    assertm(index < this->pad_left.size(), "Out of bounds");
     return this->pad_left[index];
   }
 
   T right(size_t index) const
   {
-    assertm(index <= this->pad_right.size(), "Out of bounds");
+    assertm(index < this->pad_right.size(), "Out of bounds");
     return this->pad_right[index];
   }
 
@@ -121,6 +129,10 @@ public:
   {
     return this->pad_left.size() + this->pad_right.size();
   }
+
+  [[nodiscard]] size_t size_left() const { return this->pad_left.size(); }
+
+  [[nodiscard]] size_t size_right() const { return this->pad_right.size(); }
 };
 
 } // namespace bsplinex::knots
