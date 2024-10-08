@@ -14,9 +14,6 @@ namespace bsplinex::control_points
 
 template <typename T, Curve C, BoundaryCondition BC> class Padder
 {
-private:
-  std::vector<T> pad_right{};
-
 public:
   Padder(Data<T, C> &, size_t) {}
 
@@ -28,9 +25,9 @@ public:
     );
   }
 
-  [[nodiscard]] size_t size() const { return this->pad_right.size(); }
+  [[nodiscard]] size_t size() const { return 0; }
 
-  [[nodiscard]] size_t size_right() const { return this->pad_right.size(); }
+  [[nodiscard]] size_t size_right() const { return 0; }
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::PERIODIC>

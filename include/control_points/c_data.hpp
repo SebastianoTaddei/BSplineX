@@ -37,16 +37,6 @@ public:
         this->raw_data.begin() + first, this->raw_data.begin() + last
     };
   }
-
-  void reduce_domain(size_t first, size_t last)
-  {
-    assertm(first <= last, "Invalid domain");
-    assertm(last <= this->raw_data.size(), "Out of bounds");
-
-    this->raw_data = std::vector<T>(
-        this->raw_data.begin() + first, this->raw_data.begin() + last
-    );
-  }
 };
 
 } // namespace bsplinex::control_points
