@@ -1,10 +1,18 @@
-find_package(Matplot++ REQUIRED)
+include(FetchContent)
 
-add_executable(test_bspline_1d test_bspline_1d.cpp)
-add_executable(test_knots test_knots.cpp)
+set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tmp/_deps)
+fetchcontent_declare(
+  Catch2
+  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+  GIT_TAG        v3.7.1
+)
+fetchcontent_makeavailable(Catch2)
 
-include_directories(PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_executable(test_t_data test_t_data.cpp)
 
-target_link_libraries(test_bspline_1d PUBLIC bsplinex Matplot++::matplot)
-target_link_libraries(test_knots PUBLIC bsplinex)
+target_include_directories(test_t_data PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_t_data PRIVATE bsplinex Catch2::Catch2WithMain)
 
