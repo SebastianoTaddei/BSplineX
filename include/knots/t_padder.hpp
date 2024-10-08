@@ -24,10 +24,6 @@ public:
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::OPEN>
 {
-private:
-  std::vector<T> pad_left{};
-  std::vector<T> pad_right{};
-
 public:
   Padder(Data<T, C> &, size_t) {}
 
@@ -47,14 +43,11 @@ public:
     );
   }
 
-  [[nodiscard]] size_t size() const
-  {
-    return this->pad_left.size() + this->pad_right.size();
-  }
+  [[nodiscard]] size_t size() const { return 0; }
 
-  [[nodiscard]] size_t size_left() const { return this->pad_left.size(); }
+  [[nodiscard]] size_t size_left() const { return 0; }
 
-  [[nodiscard]] size_t size_right() const { return this->pad_right.size(); }
+  [[nodiscard]] size_t size_right() const { return 0; }
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::CLAMPED>

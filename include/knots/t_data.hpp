@@ -15,10 +15,9 @@ namespace bsplinex::knots
 template <typename T, Curve C> class Data
 {
 public:
-  virtual T at(size_t index)                                     = 0;
-  virtual size_t size()                                          = 0;
-  virtual std::vector<T> slice(size_t first, size_t last)        = 0;
-  virtual void reduce_domain(size_t from_begin, size_t from_end) = 0;
+  virtual T at(size_t index)                              = 0;
+  virtual size_t size()                                   = 0;
+  virtual std::vector<T> slice(size_t first, size_t last) = 0;
 };
 
 template <typename T> class Data<T, Curve::UNIFORM>
@@ -78,16 +77,6 @@ public:
 
     return tmp;
   }
-
-  void reduce_domain(size_t first, size_t last)
-  {
-    assertm(first <= last, "Invalid domain");
-    assertm(last <= this->num_elems, "Out of bounds");
-
-    this->end        = this->begin + (last - 1) * this->step_size;
-    this->begin     += first * this->step_size;
-    this->num_elems  = last - first;
-  }
 };
 
 template <typename T> class Data<T, Curve::NON_UNIFORM>
@@ -114,16 +103,6 @@ public:
     return std::vector<T>{
         this->raw_data.begin() + first, this->raw_data.begin() + last
     };
-  }
-
-  void reduce_domain(size_t first, size_t last)
-  {
-    assertm(first <= last, "Invalid domain");
-    assertm(last <= this->raw_data.size(), "Out of bounds");
-
-    this->raw_data = std::vector<T>(
-        this->raw_data.begin() + first, this->raw_data.begin() + last
-    );
   }
 };
 
