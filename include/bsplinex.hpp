@@ -84,6 +84,7 @@ public:
     {
       throw std::invalid_argument("Degree must be greater than 0");
     }
+    this->degree = degree;
 
     // The knots must be at least two and monotonic increasing
     if (knots.size() < 2)
