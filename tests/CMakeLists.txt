@@ -8,12 +8,7 @@ fetchcontent_declare(
 )
 fetchcontent_makeavailable(Catch2)
 
-add_executable(test_knots
-  test_t_data.cpp
-  test_t_padder.cpp
-)
-target_include_directories(test_knots PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
+file(GLOB_RECURSE KNOTS_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/knots/*.cpp")
+add_executable(test_knots ${KNOTS_TESTS})
 target_link_libraries(test_knots PRIVATE bsplinex Catch2::Catch2WithMain)
 
