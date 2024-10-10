@@ -8,11 +8,12 @@ fetchcontent_declare(
 )
 fetchcontent_makeavailable(Catch2)
 
-add_executable(test_t_data test_t_data.cpp)
-
-target_include_directories(test_t_data PRIVATE
+add_executable(test_knots
+  test_t_data.cpp
+  test_t_padder.cpp
+)
+target_include_directories(test_knots PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-
-target_link_libraries(test_t_data PRIVATE bsplinex Catch2::Catch2WithMain)
+target_link_libraries(test_knots PRIVATE bsplinex Catch2::Catch2WithMain)
 
