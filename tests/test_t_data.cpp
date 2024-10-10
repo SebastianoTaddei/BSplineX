@@ -59,3 +59,27 @@ TEST_CASE(
     }
   }
 }
+
+TEST_CASE("knots::Data<double, Curve::NON_UNIFORM> data{data_vec}", "[t_data]")
+{
+  std::vector<double> data_vec{0.0, 1.3, 2.2, 4.9, 13.2};
+  Data<double, Curve::NON_UNIFORM> data{data_vec};
+
+  SECTION("data.size()") { REQUIRE(data.size() == 5); }
+  SECTION("data.at(...)")
+  {
+    for (size_t i{0}; i < data.size(); i++)
+    {
+      REQUIRE(data.at(i) == data_vec.at(i));
+    }
+  }
+  SECTION("data.slice(...)")
+  {
+    std::vector<double> slice = data.slice(1, 4);
+    REQUIRE(slice.size() == 3);
+    for (size_t i{0}; i < slice.size(); i++)
+    {
+      REQUIRE(slice.at(i) == data.at(i + 1));
+    }
+  }
+}
