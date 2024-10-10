@@ -79,12 +79,12 @@ public:
 
   [[nodiscard]] size_t size() const
   {
-    return this->pad_left.size() + this->pad_right.size();
+    return this->size_left() + this->size_right();
   }
 
-  [[nodiscard]] size_t size_left() const { return this->pad_left.size(); }
+  [[nodiscard]] size_t size_left() const { return this->degree; }
 
-  [[nodiscard]] size_t size_right() const { return this->pad_right.size(); }
+  [[nodiscard]] size_t size_right() const { return this->degree; }
 };
 
 template <typename T, Curve C> class Padder<T, C, BoundaryCondition::PERIODIC>
@@ -120,7 +120,7 @@ public:
 
   [[nodiscard]] size_t size() const
   {
-    return this->pad_left.size() + this->pad_right.size();
+    return this->size_left() + this->size_right();
   }
 
   [[nodiscard]] size_t size_left() const { return this->pad_left.size(); }
