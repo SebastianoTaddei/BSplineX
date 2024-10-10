@@ -3,6 +3,7 @@
 
 // Standard includes
 #include <algorithm>
+#include <cmath>
 #include <functional>
 #include <iostream>
 #include <string>
@@ -83,7 +84,6 @@ public:
     {
       throw std::invalid_argument("Degree must be greater than 0");
     }
-    this->degree = degree;
 
     // The knots must be at least two and monotonic increasing
     if (knots.size() < 2)

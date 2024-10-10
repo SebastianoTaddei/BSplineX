@@ -20,6 +20,8 @@ add_library(bsplinex INTERFACE)
 target_include_directories(bsplinex INTERFACE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
+target_sources(bsplinex INTERFACE ${HEADER_FILES})
 
 if(BUILD_TESTS)
   add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)

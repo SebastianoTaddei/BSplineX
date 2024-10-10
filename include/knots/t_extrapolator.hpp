@@ -2,6 +2,7 @@
 #define T_EXTRAPOLATOR_HPP
 
 // Standard includes
+#include <cmath>
 #include <cstddef>
 #include <stdexcept>
 

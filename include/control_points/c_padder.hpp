@@ -2,6 +2,7 @@
 #define C_PADDER_HPP
 
 // Standard includes
+#include <stdexcept>
 #include <vector>
 
 // BSplineX includes
