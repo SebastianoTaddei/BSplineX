@@ -49,26 +49,6 @@ public:
 
     return upper - this->atter.begin() - 1;
   }
-
-  size_t binary_search(T value) const
-  {
-    size_t left   = this->index_left;
-    size_t right  = this->index_right;
-    size_t middle = 0;
-    while (left < right)
-    {
-      middle = (right + left) / 2;
-      if (value < this->atter.at(middle))
-      {
-        right = middle - 1;
-      }
-      else
-      {
-        left = middle + 1;
-      }
-    }
-    return left;
-  }
 };
 
 } // namespace bsplinex::knots
