@@ -50,7 +50,7 @@ public:
   T extrapolate(T value) const
   {
     assertm(
-        value < this->value_left || value > this->value_right,
+        value < this->value_left || value >= this->value_right,
         "Value not outside of the domain"
     );
     return value < this->value_left ? this->value_left : this->value_right;
@@ -76,9 +76,11 @@ public:
   T extrapolate(T value) const
   {
     assertm(
-        value < this->value_left || value > this->value_right,
+        value < this->value_left || value >= this->value_right,
         "Value not outside of the domain"
     );
+
+    // TODO: Figure out how to prevent numerical errors
 
     if (value < this->value_left)
     {
@@ -89,6 +91,11 @@ public:
     {
       value -= this->period *
                (std::floor((value - this->value_right) / this->period) + 1);
+    }
+
+    if (value < this->value_left || value >= this->value_right)
+    {
+      value = this->value_left;
     }
 
     return value;
