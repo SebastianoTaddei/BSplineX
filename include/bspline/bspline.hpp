@@ -1,9 +1,6 @@
 #ifndef BSPLINE_HPP
 #define BSPLINE_HPP
 
-// Standard includes
-#include <sstream>
-
 // BSplineX includes
 #include "control_points/control_points.hpp"
 #include "deboor/deboor.hpp"
@@ -31,11 +28,11 @@ public:
       : knots{knots_data, degree}, control_points{control_points_data, degree},
         degree{degree}, deboor{this->knots, this->control_points, this->degree}
   {
-    if (this->control_points.size() != this->knots.size() - this->degree - 1)
+    if (this->control_points.size() != this->knots.size() - 1)
     {
-      std::stringstream os;
-      os << "Found control_points_data.size() != " << 3;
-      throw std::runtime_error(os.str());
+      throw std::runtime_error(
+          "Found control_points_data.size() != knots_data.size() - degree - 1"
+      );
     }
   }
 
