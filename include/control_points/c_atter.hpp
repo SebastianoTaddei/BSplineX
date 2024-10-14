@@ -10,15 +10,15 @@
 namespace bsplinex::control_points
 {
 
-template <typename T, Curve C, BoundaryCondition BC> class Atter
+template <typename T, BoundaryCondition BC> class Atter
 {
 private:
-  Data<T, C> data;
-  Padder<T, C, BC> padder;
+  Data<T> data;
+  Padder<T, BC> padder;
   size_t degree{0};
 
 public:
-  Atter(Data<T, C> data, size_t degree)
+  Atter(Data<T> data, size_t degree)
       : data{data}, padder{this->data, degree}, degree{degree}
   {
   }

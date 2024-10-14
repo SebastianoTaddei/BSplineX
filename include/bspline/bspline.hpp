@@ -18,14 +18,14 @@ class BSpline
 {
 private:
   knots::Knots<T, C, BC, EXT> knots;
-  control_points::ControlPoints<T, C, BC> control_points;
+  control_points::ControlPoints<T, BC> control_points;
   size_t degree{0};
   deboor::DeBoor<T, C, BC, EXT> deboor;
 
 public:
   BSpline(
       knots::Data<T, C> knots_data,
-      control_points::Data<T, C> control_points_data,
+      control_points::Data<T> control_points_data,
       size_t degree
   )
       : knots{knots_data, degree}, control_points{control_points_data, degree},

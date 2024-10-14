@@ -17,14 +17,14 @@ class DeBoor
 {
 private:
   knots::Knots<T, C, BC, EXT> const &knots;
-  control_points::ControlPoints<T, C, BC> const &control_points;
+  control_points::ControlPoints<T, BC> const &control_points;
   size_t degree{0};
   std::vector<T> support{};
 
 public:
   DeBoor(
       knots::Knots<T, C, BC, EXT> const &knots,
-      control_points::ControlPoints<T, C, BC> const &control_points,
+      control_points::ControlPoints<T, BC> const &control_points,
       size_t degree
   )
       : knots{knots}, control_points{control_points}, degree{degree}

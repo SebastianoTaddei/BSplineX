@@ -28,13 +28,13 @@
 namespace bsplinex::control_points
 {
 
-template <typename T, Curve C, BoundaryCondition BC> class ControlPoints
+template <typename T, BoundaryCondition BC> class ControlPoints
 {
 private:
-  Atter<T, C, BC> atter;
+  Atter<T, BC> atter;
 
 public:
-  ControlPoints(Data<T, C> data, size_t degree) : atter{data, degree} {}
+  ControlPoints(Data<T> data, size_t degree) : atter{data, degree} {}
 
   T at(size_t index) const { return this->atter.at(index); }
 
