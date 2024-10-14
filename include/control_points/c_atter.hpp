@@ -25,14 +25,14 @@ public:
 
   T at(size_t index) const
   {
-    assertm(index < this->data.size() + this->padder.size(), "Out of bounds");
-    if (index > this->data.size() - 1 + this->padder.size_right())
+    assertm(index < this->size(), "Out of bounds");
+    if (index < this->data.size())
     {
-      return this->padder.right(index - this->data.size() - this->degree);
+      return this->data.at(index);
     }
     else
     {
-      return this->data.at(index - this->degree);
+      return this->padder.right(index - this->data.size());
     }
   }
 
