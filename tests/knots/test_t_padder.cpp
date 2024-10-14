@@ -86,7 +86,7 @@ TEST_CASE(
     REQUIRE_THAT(padder.left(1), WithinRel(-10.9));
     REQUIRE_THAT(padder.left(2), WithinRel(-8.2));
   }
-  SECTION("padder.left(...)")
+  SECTION("padder.right(...)")
   {
     REQUIRE_THAT(padder.right(0), WithinRel(14.4));
     REQUIRE_THAT(padder.right(1), WithinRel(15.3));
