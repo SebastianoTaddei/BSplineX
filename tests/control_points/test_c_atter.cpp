@@ -1,5 +1,3 @@
-// Standard includes
-
 // Third-party includes
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
@@ -30,7 +28,7 @@ TEST_CASE(
       REQUIRE(atter.at(i) == data.at(i));
     }
     REQUIRE(atter.at(data.size()) == 0.1);
-    // REQUIRE_THAT(atter.at(data.size() + 1), WithinRel(1.3));
-    // REQUIRE_THAT(atter.at(data.size() + 2), WithinRel(2.2));
+    REQUIRE(atter.at(data.size() + 1) == 1.3);
+    REQUIRE(atter.at(data.size() + 2) == 2.2);
   }
 }
