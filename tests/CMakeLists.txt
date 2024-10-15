@@ -27,3 +27,13 @@ target_link_libraries(test_control_points PRIVATE
 )
 catch_discover_tests(test_control_points)
 
+file(GLOB_RECURSE
+  DEBOOR_TESTS
+  "${CMAKE_CURRENT_SOURCE_DIR}/deboor/*.cpp"
+)
+add_executable(test_deboor ${DEBOOR_TESTS})
+target_link_libraries(test_deboor PRIVATE
+  bsplinex Catch2::Catch2WithMain
+)
+catch_discover_tests(test_deboor)
+
