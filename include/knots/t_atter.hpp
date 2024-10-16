@@ -32,11 +32,11 @@ public:
     }
     else if (index > this->data.size() - 1 + this->padder.size_left())
     {
-      return this->padder.right(index - this->data.size() - this->degree);
+      return this->padder.right(index - this->data.size() - this->padder.size_left());
     }
     else
     {
-      return this->data.at(index - this->degree);
+      return this->data.at(index - this->padder.size_left());
     }
   }
 
