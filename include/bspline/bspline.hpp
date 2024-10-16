@@ -42,40 +42,37 @@ public:
 private:
   void check_sizes()
   {
-    if (this->control_points.size() != this->knots.size() - this->degree - 1)
+    if (this->control_points.size() == this->knots.size() - this->degree - 1)
     {
-      std::stringstream ss{};
-      ss << "Found control_points.size() != knots.size() - degree - 1 ("
-         << this->control_points.size()
-         << " != " << this->knots.size() - this->degree - 1 << "). ";
-
-      switch (BC)
-      {
-      case bsplinex::BoundaryCondition::OPEN:
-      {
-        ss << "With BoundaryCondition::OPEN no padding is added, therefore you "
-              "need to respect: control_points_data.size() = knots_data.size() "
-              "- degree - 1";
-        break;
-      }
-      case bsplinex::BoundaryCondition::CLAMPED:
-      {
-        ss << "With BoundaryCondition::CLAMPED padding is added to the knots, "
-              "therefore you need to respect: control_points_data.size() = "
-              "knots_data.size() + degree - 1";
-        break;
-      }
-      case bsplinex::BoundaryCondition::PERIODIC:
-      {
-        ss << "With BoundaryCondition::PERIODIC padding is added to the knots "
-              "and control points, therefore you need to respect: "
-              "control_points_data.size() = knots_data.size() - 1";
-        break;
-      }
-      };
-
-      throw std::runtime_error(ss.str());
+      return;
     }
+
+    std::stringstream ss{};
+    ss << "Found control_points.size() != knots.size() - degree - 1 ("
+       << this->control_points.size()
+       << " != " << this->knots.size() - this->degree - 1 << "). ";
+
+    // clang-format off
+
+    if constexpr (BC == BoundaryCondition::OPEN)
+    {
+      ss << "With BoundaryCondition::OPEN no padding is added, therefore you need to respect: control_points_data.size() = knots_data.size() - degree - 1";
+    }
+    else if constexpr (BC == BoundaryCondition::CLAMPED)
+    {
+      ss << "With BoundaryCondition::CLAMPED padding is added to the knots, therefore you need to respect: control_points_data.size() = knots_data.size() + degree - 1";
+    }
+    else if constexpr (BC == BoundaryCondition::PERIODIC)
+    {
+      ss << "With BoundaryCondition::PERIODIC padding is added to the knots and control points, therefore you need to respect: control_points_data.size() = knots_data.size() - 1";
+    }
+    else {
+     ss << "Unknown BoundaryCondition, you should not have arrived here ever!";
+    }
+
+    // clang-format on
+
+    throw std::runtime_error(ss.str());
   }
 };
 
