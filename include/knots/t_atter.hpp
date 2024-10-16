@@ -15,11 +15,9 @@ template <typename T, Curve C, BoundaryCondition BC> class Atter
 private:
   Data<T, C> data;
   Padder<T, C, BC> padder;
-  size_t degree{0};
 
 public:
-  Atter(Data<T, C> data, size_t degree)
-      : data{data}, padder{this->data, degree}, degree{degree}
+  Atter(Data<T, C> data, size_t degree) : data{data}, padder{this->data, degree}
   {
   }
 
@@ -32,7 +30,9 @@ public:
     }
     else if (index > this->data.size() - 1 + this->padder.size_left())
     {
-      return this->padder.right(index - this->data.size() - this->padder.size_left());
+      return this->padder.right(
+          index - this->data.size() - this->padder.size_left()
+      );
     }
     else
     {
@@ -44,8 +44,6 @@ public:
   {
     return this->data.size() + this->padder.size();
   }
-
-  [[nodiscard]] size_t get_degree() const { return this->degree; }
 
   class iterator
   {

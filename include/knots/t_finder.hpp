@@ -25,10 +25,9 @@ private:
   T value_right{};
 
 public:
-  Finder(Atter<T, C, BC> const &atter)
-      : atter{atter}, extrapolator{this->atter},
-        index_left{this->atter.get_degree()},
-        index_right{this->atter.size() - this->index_left - 1},
+  Finder(Atter<T, C, BC> const &atter, size_t degree)
+      : atter{atter}, extrapolator{this->atter, degree}, index_left{degree},
+        index_right{this->atter.size() - degree - 1},
         value_left{this->atter.at(this->index_left)},
         value_right{this->atter.at(this->index_right)}
   {

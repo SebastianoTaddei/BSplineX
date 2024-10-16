@@ -42,7 +42,7 @@ private:
 
 public:
   Knots(Data<T, C> data, size_t degree)
-      : atter{data, degree}, finder{this->atter}
+      : atter{data, degree}, finder{this->atter, degree}
   {
   }
 

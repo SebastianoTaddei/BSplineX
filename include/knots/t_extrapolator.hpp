@@ -25,7 +25,7 @@ template <typename T, Curve C, BoundaryCondition BC>
 class Extrapolator<T, C, BC, Extrapolation::NONE>
 {
 public:
-  Extrapolator(Atter<T, C, BC> const &) {}
+  Extrapolator(Atter<T, C, BC> const &, size_t) {}
 
   T extrapolate(T) const
   {
@@ -41,9 +41,9 @@ private:
   T value_right{};
 
 public:
-  Extrapolator(Atter<T, C, BC> const &atter)
-      : value_left{atter.at(atter.get_degree())},
-        value_right{atter.at(atter.size() - atter.get_degree() - 1)}
+  Extrapolator(Atter<T, C, BC> const &atter, size_t degree)
+      : value_left{atter.at(degree)},
+        value_right{atter.at(atter.size() - degree - 1)}
   {
   }
 
@@ -66,9 +66,9 @@ private:
   T period{};
 
 public:
-  Extrapolator(Atter<T, C, BC> const &atter)
-      : value_left{atter.at(atter.get_degree())},
-        value_right{atter.at(atter.size() - atter.get_degree() - 1)},
+  Extrapolator(Atter<T, C, BC> const &atter, size_t degree)
+      : value_left{atter.at(degree)},
+        value_right{atter.at(atter.size() - degree - 1)},
         period{this->value_right - this->value_left}
   {
   }
