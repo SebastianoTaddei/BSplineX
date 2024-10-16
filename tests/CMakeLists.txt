@@ -37,3 +37,13 @@ target_link_libraries(test_deboor PRIVATE
 )
 catch_discover_tests(test_deboor)
 
+file(GLOB_RECURSE
+  BSPLINE_TESTS
+  "${CMAKE_CURRENT_SOURCE_DIR}/bspline/*.cpp"
+)
+add_executable(test_bspline ${BSPLINE_TESTS})
+target_link_libraries(test_bspline PRIVATE
+  bsplinex Catch2::Catch2WithMain
+)
+catch_discover_tests(test_bspline)
+
