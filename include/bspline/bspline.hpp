@@ -1,6 +1,9 @@
 #ifndef BSPLINE_HPP
 #define BSPLINE_HPP
 
+// Standard includes
+#include <sstream>
+
 // BSplineX includes
 #include "control_points/control_points.hpp"
 #include "deboor/deboor.hpp"
@@ -28,17 +31,51 @@ public:
       : knots{knots_data, degree}, control_points{control_points_data, degree},
         degree{degree}, deboor{this->knots, this->control_points, this->degree}
   {
-    if (this->control_points.size() != this->knots.size() - 1)
-    {
-      throw std::runtime_error(
-          "Found control_points_data.size() != knots_data.size() - degree - 1"
-      );
-    }
+    this->check_sizes();
   }
 
   T evaluate(T value)
   {
     return this->deboor.deboor(this->knots.find(value), value);
+  }
+
+private:
+  void check_sizes()
+  {
+    if (this->control_points.size() != this->knots.size() - this->degree - 1)
+    {
+      std::stringstream ss{};
+      ss << "Found control_points.size() != knots.size() - degree - 1 ("
+         << this->control_points.size()
+         << " != " << this->knots.size() - this->degree - 1 << "). ";
+
+      switch (BC)
+      {
+      case bsplinex::BoundaryCondition::OPEN:
+      {
+        ss << "With BoundaryCondition::OPEN no padding is added, therefore you "
+              "need to respect: control_points_data.size() = knots_data.size() "
+              "- degree - 1";
+        break;
+      }
+      case bsplinex::BoundaryCondition::CLAMPED:
+      {
+        ss << "With BoundaryCondition::CLAMPED padding is added to the knots, "
+              "therefore you need to respect: control_points_data.size() = "
+              "knots_data.size() + degree - 1";
+        break;
+      }
+      case bsplinex::BoundaryCondition::PERIODIC:
+      {
+        ss << "With BoundaryCondition::PERIODIC padding is added to the knots "
+              "and control points, therefore you need to respect: "
+              "control_points_data.size() = knots_data.size() - 1";
+        break;
+      }
+      };
+
+      throw std::runtime_error(ss.str());
+    }
   }
 };
 
