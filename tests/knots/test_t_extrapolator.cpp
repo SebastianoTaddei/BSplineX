@@ -27,7 +27,7 @@ TEST_CASE(
       Curve::NON_UNIFORM,
       BoundaryCondition::CLAMPED,
       Extrapolation::NONE>
-      extrapolator{atter};
+      extrapolator{atter, degree};
 
   SECTION("extrapolator.extrapolate()")
   {
@@ -53,7 +53,7 @@ TEST_CASE(
       Curve::NON_UNIFORM,
       BoundaryCondition::CLAMPED,
       Extrapolation::CONSTANT>
-      extrapolator{atter};
+      extrapolator{atter, degree};
 
   SECTION("extrapolator.extrapolate()")
   {
@@ -79,7 +79,7 @@ TEST_CASE(
       Curve::NON_UNIFORM,
       BoundaryCondition::PERIODIC,
       Extrapolation::PERIODIC>
-      extrapolator{atter};
+      extrapolator{atter, degree};
   double period = data.at(data.size() - 1) - data.at(0);
 
   SECTION("extrapolator.extrapolate()")

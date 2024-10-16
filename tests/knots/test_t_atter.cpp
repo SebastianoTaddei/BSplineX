@@ -21,7 +21,6 @@ TEST_CASE(
   };
 
   SECTION("atter.size()") { REQUIRE(atter.size() == data.size() + 2 * degree); }
-  SECTION("atter.get_degree()") { REQUIRE(atter.get_degree() == degree); }
   SECTION("atter.at(...)")
   {
     REQUIRE_THAT(atter.at(0), WithinRel(-11.8));

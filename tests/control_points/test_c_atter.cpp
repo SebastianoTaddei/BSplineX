@@ -20,7 +20,6 @@ TEST_CASE(
   Atter<double, BoundaryCondition::PERIODIC> atter{data, degree};
 
   SECTION("atter.size()") { REQUIRE(atter.size() == data.size() + degree); }
-  SECTION("atter.get_degree()") { REQUIRE(atter.get_degree() == degree); }
   SECTION("atter.at(...)")
   {
     for (size_t i{0}; i < data.size(); i++)

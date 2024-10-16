@@ -24,7 +24,7 @@ TEST_CASE("knots::Finder<T, C, BC, EXT> finder{atter}", "[t_finder]")
       Curve::NON_UNIFORM,
       BoundaryCondition::PERIODIC,
       Extrapolation::PERIODIC>
-      finder{atter};
+      finder{atter, degree};
 
   SECTION("finder.find()")
   {
