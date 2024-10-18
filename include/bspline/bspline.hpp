@@ -36,7 +36,8 @@ public:
 
   T evaluate(T value)
   {
-    return this->deboor.deboor(this->knots.find(value), value);
+    auto index_value_pair = this->knots.find(value);
+    return this->deboor.deboor(index_value_pair.first, index_value_pair.second);
   }
 
 private:

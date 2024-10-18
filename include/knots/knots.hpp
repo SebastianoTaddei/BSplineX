@@ -46,7 +46,7 @@ public:
   {
   }
 
-  size_t find(T value) const { return this->finder.find(value); }
+  auto find(T value) const { return this->finder.find(value); }
 
   T at(size_t index) const { return this->atter.at(index); }
 

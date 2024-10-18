@@ -4,6 +4,7 @@
 // Standard includes
 #include <algorithm>
 #include <cstddef>
+#include <utility>
 
 // BSplineX includes
 #include "knots/t_atter.hpp"
@@ -33,7 +34,7 @@ public:
   {
   }
 
-  size_t find(T value) const
+  std::pair<size_t, T> find(T value) const
   {
     if (value < this->value_left || value >= this->value_right)
     {
@@ -46,7 +47,7 @@ public:
         value
     );
 
-    return upper - this->atter.begin() - 1;
+    return {upper - this->atter.begin() - 1, value};
   }
 };
 
