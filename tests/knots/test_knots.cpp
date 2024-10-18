@@ -40,12 +40,12 @@ TEST_CASE(
   }
   SECTION("knots.find()")
   {
-    REQUIRE(knots.find(-1.0) == 10);
-    REQUIRE(knots.find(0.1) == 3);
-    REQUIRE(knots.find(2.0) == 4);
-    REQUIRE(knots.find(2.2) == 6);
-    REQUIRE(knots.find(6.3) == 10);
-    REQUIRE(knots.find(13.2) == 3);
-    REQUIRE(knots.find(14.0) == 3);
+    REQUIRE(knots.find(-1.0).first == 10);
+    REQUIRE(knots.find(0.1).first == 3);
+    REQUIRE(knots.find(2.0).first == 4);
+    REQUIRE(knots.find(2.2).first == 6);
+    REQUIRE(knots.find(6.3).first == 10);
+    REQUIRE(knots.find(13.2).first == 3);
+    REQUIRE(knots.find(14.0).first == 3);
   }
 }

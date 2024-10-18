@@ -28,12 +28,12 @@ TEST_CASE("knots::Finder<T, C, BC, EXT> finder{atter}", "[t_finder]")
 
   SECTION("finder.find()")
   {
-    REQUIRE(finder.find(-1.0) == 10);
-    REQUIRE(finder.find(0.1) == 3);
-    REQUIRE(finder.find(2.0) == 4);
-    REQUIRE(finder.find(2.2) == 6);
-    REQUIRE(finder.find(6.3) == 10);
-    REQUIRE(finder.find(13.2) == 3);
-    REQUIRE(finder.find(14.0) == 3);
+    REQUIRE(finder.find(-1.0).first == 10);
+    REQUIRE(finder.find(0.1).first == 3);
+    REQUIRE(finder.find(2.0).first == 4);
+    REQUIRE(finder.find(2.2).first == 6);
+    REQUIRE(finder.find(6.3).first == 10);
+    REQUIRE(finder.find(13.2).first == 3);
+    REQUIRE(finder.find(14.0).first == 3);
   }
 }
