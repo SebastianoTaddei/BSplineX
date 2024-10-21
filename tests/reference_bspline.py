@@ -8,6 +8,8 @@ from scipy.interpolate import BSpline
 import numpy as np
 import argparse
 
+DIST_R = 1e-20
+
 
 def parse_args():
     """
@@ -101,7 +103,11 @@ def ref_open(knots: list, control_points: list, degree: int, extrapolate: str) -
 
     spline = BSpline(knots, control_points, degree, extrapolate=extrapolate)
 
-    x_values = np.arange(knots[degree], knots[-degree - 1], 0.1)
+    x_values = np.linspace(
+        knots[degree],
+        knots[-degree - 1] - DIST_R,
+        int(np.ceil(knots[-degree - 1] - DIST_R - knots[degree])),
+    )
     y_values = spline(x_values)
 
     return x_values, y_values
@@ -138,7 +144,11 @@ def ref_clamped(
 
     spline = BSpline(knots, control_points, degree, extrapolate=extrapolate)
 
-    x_values = np.arange(knots[degree], knots[-degree - 1], 0.1)
+    x_values = np.linspace(
+        knots[degree],
+        knots[-degree - 1] - DIST_R,
+        int(np.ceil(knots[-degree - 1] - DIST_R - knots[degree])),
+    )
     y_values = spline(x_values)
 
     return x_values, y_values
@@ -182,11 +192,17 @@ def ref_periodic(
     spline = BSpline(knots, control_points, degree, extrapolate=extrapolate)
 
     if extrapolate == "periodic":
-        x_values = np.arange(
-            knots[degree] - 3 * period, knots[-degree - 1] + 3 * period, 0.1
+        x_values = np.linspace(
+            knots[degree] - 3 * period,
+            knots[-degree - 1] + 3 * period,
+            int(np.ceil(knots[-degree - 1] - knots[degree] + 6 * period)),
         )
     else:
-        x_values = np.arange(knots[degree], knots[-degree - 1], 0.1)
+        x_values = np.linspace(
+            knots[degree],
+            knots[-degree - 1] - DIST_R,
+            int(np.ceil(knots[-degree - 1] - DIST_R - knots[degree])),
+        )
     y_values = spline(x_values)
 
     return x_values, y_values
