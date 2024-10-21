@@ -43,7 +43,7 @@ public:
 
     auto upper = std::upper_bound(
         this->atter.begin() + this->index_left,
-        this->atter.begin() + (this->index_right + 1),
+        this->atter.begin() + this->index_right,
         value
     );
 
