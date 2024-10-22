@@ -66,13 +66,13 @@ public:
     this->degree    = degree;
   }
 
-  T left(size_t index) const
+  T left([[maybe_unused]] size_t index) const
   {
     assertm(index < this->degree, "Out of bounds");
     return this->pad_left;
   }
 
-  T right(size_t index) const
+  T right([[maybe_unused]] size_t index) const
   {
     assertm(index < this->degree, "Out of bounds");
     return this->pad_right;
