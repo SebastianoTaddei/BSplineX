@@ -3,6 +3,7 @@
 
 // Standard includes
 #include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <utility>
 
@@ -48,6 +49,38 @@ public:
     );
 
     return {upper - this->atter.begin() - 1, value};
+  }
+};
+
+template <typename T, BoundaryCondition BC, Extrapolation EXT>
+class Finder<T, Curve::UNIFORM, BC, EXT>
+{
+private:
+  Extrapolator<T, Curve::UNIFORM, BC, EXT> extrapolator;
+  T value_left{};
+  T value_right{};
+  T step_size{};
+  size_t degree{};
+
+public:
+  Finder(Atter<T, Curve::UNIFORM, BC> const &atter, size_t degree)
+      : extrapolator{atter, degree}, value_left{atter.at(degree)},
+        value_right{atter.at(atter.size() - degree - 1)},
+        step_size{atter.at(degree + 1) - atter.at(degree)}, degree{degree}
+  {
+  }
+
+  std::pair<size_t, T> find(T value) const
+  {
+    if (value < this->value_left || value >= this->value_right)
+    {
+      value = this->extrapolator.extrapolate(value);
+    }
+
+    return {
+        std::floor((value - this->value_left) / this->step_size) + this->degree,
+        value
+    };
   }
 };
 
