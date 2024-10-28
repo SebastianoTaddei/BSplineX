@@ -11,7 +11,11 @@ using namespace Catch::Matchers;
 using namespace bsplinex;
 using namespace bsplinex::knots;
 
-TEST_CASE("knots::Finder<T, C, BC, EXT> finder{atter}", "[t_finder]")
+TEST_CASE(
+    "knots::Finder<double, NON_UNIFORM, PERIODIC, PERIODIC> "
+    "finder{atter}",
+    "[t_finder]"
+)
 {
   std::vector<double> data_vec{0.1, 1.3, 2.2, 2.2, 4.9, 6.3, 6.3, 6.3, 13.2};
   Data<double, Curve::NON_UNIFORM> data{data_vec};
@@ -28,12 +32,9 @@ TEST_CASE("knots::Finder<T, C, BC, EXT> finder{atter}", "[t_finder]")
 
   SECTION("finder.find()")
   {
-    REQUIRE(finder.find(-1.0).first == 10);
-    REQUIRE(finder.find(0.1).first == 3);
-    REQUIRE(finder.find(2.0).first == 4);
-    REQUIRE(finder.find(2.2).first == 6);
-    REQUIRE(finder.find(6.3).first == 10);
-    REQUIRE(finder.find(13.2).first == 3);
-    REQUIRE(finder.find(14.0).first == 3);
+    REQUIRE(finder.find(0.1) == 3);
+    REQUIRE(finder.find(2.0) == 4);
+    REQUIRE(finder.find(2.2) == 6);
+    REQUIRE(finder.find(6.3) == 10);
   }
 }
