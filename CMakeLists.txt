@@ -13,7 +13,23 @@ option(BUILD_TESTS "Build tests" OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Debug")
+  message("CMAKE_BUILD_TYPE not specified, defaulting to ${CMAKE_BUILD_TYPE}")
 endif()
+
+if(NOT CMALE_INSTALL_PREFIX)
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/lib")
+  message("CMAKE_INSTALL_PREFIX not specified, defaulting to ${CMAKE_CURRENT_SOURCE_DIR}")
+endif()
+
+include(FetchContent)
+set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
+fetchcontent_declare(
+  Eigen
+  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+  GIT_TAG        3.4.0
+  GIT_PROGRESS   TRUE
+)
+fetchcontent_makeavailable(Eigen)
 
 add_library(bsplinex INTERFACE)
 
@@ -22,6 +38,7 @@ target_include_directories(bsplinex INTERFACE
 )
 file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 target_sources(bsplinex INTERFACE ${HEADER_FILES})
+target_link_libraries(bsplinex INTERFACE Eigen3::Eigen)
 
 if(BUILD_TESTS)
   add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
