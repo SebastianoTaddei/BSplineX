@@ -48,6 +48,21 @@ TEST_CASE(
       REQUIRE_THAT(bspline.evaluate(x_values.at(i)), WithinRel(y_values.at(i)));
     }
   }
+
+  SECTION("bspline.compute_basis(...)")
+  {
+    for (size_t i{0}; i < x_values.size(); i++)
+    {
+      std::vector<double> basis = bspline.compute_basis(x_values.at(i));
+      REQUIRE(basis.size() == c_data.size());
+      double res{0.0};
+      for (size_t j{0}; j < basis.size(); j++)
+      {
+        res += basis.at(j) * c_data.at(j);
+      }
+      REQUIRE_THAT(res, WithinRel(y_values.at(i)));
+    }
+  }
 }
 
 TEST_CASE(
