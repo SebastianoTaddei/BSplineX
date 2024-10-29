@@ -54,6 +54,32 @@ public:
 
     return this->support[this->degree];
   }
+
+  std::vector<T> basis_functions(size_t index, T value)
+  {
+    std::vector<T> basis(this->control_points.size(), 0.0);
+
+    basis.at(index) = 1.0;
+    for (size_t d{1}; d <= this->degree; d++)
+    {
+      basis.at(index - d) = (knots.at(index + 1) - value) /
+                            (knots.at(index + 1) - knots.at(index - d + 1)) *
+                            basis.at(index - d + 1);
+      for (size_t i{index - d + 1}; i < index; i++)
+      {
+        basis.at(i) = (value - knots.at(i)) / (knots.at(i + d) - knots.at(i)) *
+                          basis.at(i) +
+                      (knots.at(i + d + 1) - value) /
+                          (knots.at(i + d + 1) - knots.at(i + 1)) *
+                          basis.at(i + 1);
+      }
+      basis.at(index) = (value - knots.at(index)) /
+                        (knots.at(index + d) - knots.at(index)) *
+                        basis.at(index);
+    }
+
+    return basis;
+  }
 };
 
 } // namespace bsplinex::deboor

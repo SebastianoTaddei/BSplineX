@@ -40,6 +40,16 @@ public:
     return this->deboor.deboor(index_value_pair.first, index_value_pair.second);
   }
 
+  std::vector<T> compute_basis(T value)
+  {
+    auto index_value_pair = this->knots.find(value);
+    return this->deboor.basis_functions(
+        index_value_pair.first, index_value_pair.second
+    );
+  }
+
+  // void fit(std::vector<T> const &x, std::vector<T> const &y) { return; }
+
 private:
   void check_sizes()
   {
