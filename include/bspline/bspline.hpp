@@ -4,6 +4,9 @@
 // Standard includes
 #include <sstream>
 
+// Third-party includes
+#include <Eigen/Dense>
+
 // BSplineX includes
 #include "control_points/control_points.hpp"
 #include "deboor/deboor.hpp"
@@ -48,7 +51,31 @@ public:
     );
   }
 
-  // void fit(std::vector<T> const &x, std::vector<T> const &y) { return; }
+  void fit(std::vector<T> const &x, std::vector<T> const &y)
+  {
+    Eigen::MatrixX<T> A{};
+    A.resize(y.size(), control_points.size());
+    Eigen::VectorX<T> b{};
+    b.resize(y.size());
+
+    for (size_t i{0}; i < y.size(); i++)
+    {
+      auto basis = this->compute_basis(x.at(i));
+      b(i)       = y.at(i);
+      for (size_t j{0}; j < control_points.size(); j++)
+      {
+        A(i, j) = basis.at(j);
+      }
+    }
+
+    Eigen::VectorX<T> res = A.colPivHouseholderQr().solve(b);
+
+    this->control_points.set_data(
+        {res.data(), res.data() + res.rows() * res.cols()}
+    );
+
+    return;
+  }
 
 private:
   void check_sizes()

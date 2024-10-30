@@ -32,13 +32,22 @@ template <typename T, BoundaryCondition BC> class ControlPoints
 {
 private:
   Atter<T, BC> atter;
+  size_t degree;
 
 public:
-  ControlPoints(Data<T> data, size_t degree) : atter{data, degree} {}
+  ControlPoints(Data<T> data, size_t degree)
+      : atter{data, degree}, degree{degree}
+  {
+  }
 
   T at(size_t index) const { return this->atter.at(index); }
 
   size_t size() const { return this->atter.size(); }
+
+  void set_data(std::vector<T> const &data)
+  {
+    this->atter = Atter<T, BC>{{data}, this->degree};
+  }
 };
 
 } // namespace bsplinex::control_points

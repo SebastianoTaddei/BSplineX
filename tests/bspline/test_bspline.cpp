@@ -63,6 +63,8 @@ TEST_CASE(
       REQUIRE_THAT(res, WithinRel(y_values.at(i)));
     }
   }
+
+  SECTION("bspline.fit(...)") { bspline.fit(x_values, y_values); }
 }
 
 TEST_CASE(
