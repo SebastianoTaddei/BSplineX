@@ -65,6 +65,7 @@ TEST_CASE(
   size_t knots_num{0};
   std::vector<double> ctrl_pts{};
   std::vector<double> x_data{};
+  std::vector<double> y_data{};
   double res{0.0};
   double eval_elems{0.0};
   double start{45.0};
@@ -85,6 +86,7 @@ TEST_CASE(
       eval_elems = std::pow(10.0, i);
       fill(start, stop, eval_elems, x_data);
       res = 0.0;
+
       BENCHMARK(
           "bspline.evaluate - knots: " + std::to_string(knots_num) +
           " evals: " + std::to_string((size_t)eval_elems)
@@ -95,6 +97,21 @@ TEST_CASE(
           res = bspline.evaluate(x);
         }
         return res;
+      };
+
+      y_data.clear();
+      y_data.reserve(x_data.size());
+      for (auto x : x_data)
+      {
+        y_data.push_back(bspline.evaluate(x));
+      }
+
+      BENCHMARK(
+          "bspline.fit - knots: " + std::to_string(knots_num) +
+          " points: " + std::to_string((size_t)eval_elems)
+      )
+      {
+        return bspline.fit(x_data, y_data);
       };
     }
   }

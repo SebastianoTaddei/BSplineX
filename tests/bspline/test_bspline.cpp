@@ -53,7 +53,7 @@ TEST_CASE(
   {
     for (size_t i{0}; i < x_values.size(); i++)
     {
-      std::vector<double> basis = bspline.compute_basis(x_values.at(i));
+      std::vector<double> basis = bspline.basis(x_values.at(i));
       REQUIRE(basis.size() == c_data.size());
       double res{0.0};
       for (size_t j{0}; j < basis.size(); j++)
@@ -64,7 +64,15 @@ TEST_CASE(
     }
   }
 
-  SECTION("bspline.fit(...)") { bspline.fit(x_values, y_values); }
+  SECTION("bspline.fit(...)")
+  {
+    bspline.fit(x_values, y_values);
+    auto control_points = bspline.get_control_points();
+    for (size_t i{0}; i < c_data.size(); i++)
+    {
+      REQUIRE_THAT(control_points.at(i), WithinRel(c_data.at(i), 1e-6));
+    }
+  }
 }
 
 TEST_CASE(
@@ -253,6 +261,21 @@ TEST_CASE(
     for (size_t i{0}; i < x_values.size(); i++)
     {
       REQUIRE_THAT(bspline.evaluate(x_values.at(i)), WithinRel(y_values.at(i)));
+    }
+  }
+
+  SECTION("bspline.fit(...)")
+  {
+    bspline.fit(x_values, y_values);
+    auto control_points = bspline.get_control_points();
+    size_t i{0};
+    for (; i < c_data.size(); i++)
+    {
+      REQUIRE_THAT(control_points.at(i), WithinRel(c_data.at(i), 1e-6));
+    }
+    for (size_t j{0}; j < degree; j++)
+    {
+      REQUIRE_THAT(control_points.at(i + j), WithinRel(c_data.at(j), 1e-6));
     }
   }
 }
