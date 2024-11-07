@@ -61,6 +61,9 @@ public:
       throw std::runtime_error("x and y must have the same size");
     }
 
+    // TODO: it seems in this case having the data in column-major brings a 16%
+    // improvement in performance, we should test writing to this vector in
+    // column-major and see if we keep the speedup as it may be worth it
     std::vector<T> raw_matrix(this->control_points.size() * x.size(), 0.0);
 
     for (size_t i{0}; i < x.size(); i++)
@@ -77,42 +80,12 @@ public:
         A(raw_matrix.data(), x.size(), this->control_points.size());
     Eigen::Map<Eigen::VectorX<T>> b(y.data(), x.size());
 
-    // Eigen::MatrixX<T> A{};
-    //
-    // if constexpr (BC == BoundaryCondition::PERIODIC)
-    //{
-    //   A.resize(y.size(), control_points.size() - this->degree);
-    // }
-    // else
-    //{
-    //   A.resize(y.size(), control_points.size());
-    // }
-    // Eigen::VectorX<T> b{};
-    // b.resize(y.size());
-
-    // for (size_t i{0}; i < y.size(); i++)
-    //{
-    //   auto basis = this->basis(x.at(i));
-    //   b(i)       = y.at(i);
-    //   for (size_t j{0}; j < control_points.size(); j++)
-    //   {
-    //     if constexpr (BC == BoundaryCondition::PERIODIC)
-    //     {
-    //       A(i, j % (control_points.size() - this->degree)) += basis.at(j);
-    //     }
-    //     else
-    //     {
-    //       A(i, j) = basis.at(j);
-    //     }
-    //   }
-    // }
-
     Eigen::VectorX<T> res;
     if constexpr (BC == BoundaryCondition::PERIODIC)
     {
       A.leftCols(this->degree) += A.rightCols(this->degree);
       res = A.leftCols(this->control_points.size() - this->degree)
-                .colPivHouseholderQr()
+                .fullPivHouseholderQr()
                 .solve(b);
     }
     else
