@@ -29,6 +29,7 @@ fetchcontent_declare(
   GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
   GIT_TAG        3.4.0
   GIT_PROGRESS   TRUE
+  FIND_PACKAGE_ARGS
 )
 fetchcontent_makeavailable(Eigen)
 

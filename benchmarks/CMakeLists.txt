@@ -6,6 +6,7 @@ fetchcontent_declare(
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
   GIT_TAG        v3.7.1
   GIT_PROGRESS   TRUE
+  FIND_PACKAGE_ARGS
 )
 fetchcontent_makeavailable(Catch2)
 
@@ -20,6 +21,9 @@ file(GLOB_RECURSE
   "${CMAKE_CURRENT_SOURCE_DIR}/bspline/bench_*.cpp"
 )
 add_executable(bench_bspline ${BSPLINE_BENCHS})
+
+# SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer")
+
 target_link_libraries(bench_bspline PRIVATE
   bsplinex Catch2::Catch2WithMain
 )

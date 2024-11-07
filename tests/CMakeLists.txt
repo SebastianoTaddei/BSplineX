@@ -6,6 +6,7 @@ fetchcontent_declare(
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
   GIT_TAG        v3.7.1
   GIT_PROGRESS   TRUE
+  FIND_PACKAGE_ARGS
 )
 fetchcontent_makeavailable(Catch2)
 
