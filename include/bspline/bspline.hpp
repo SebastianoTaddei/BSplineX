@@ -8,8 +8,16 @@
 // Third-party includes
 #include <Eigen/Dense>
 
+// For some reason Eigen has a couple of set but unused variables
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+#include <Eigen/Sparse>
+#pragma clang diagnostic pop
+#pragma GCC diagnostic pop
+
 // BSplineX includes
-#include "Eigen/src/Core/util/Constants.h"
 #include "control_points/control_points.hpp"
 #include "knots/knots.hpp"
 #include "types.hpp"
@@ -47,9 +55,18 @@ public:
 
   std::vector<T> basis(T value)
   {
-    std::vector<T> basis_functions(this->control_points.size(), 0.0);
+    std::vector<T> basis_functions(this->degree + 1, (T)0);
 
-    this->compute_basis(value, basis_functions.begin(), basis_functions.end());
+    size_t index = this->compute_basis(
+        value, basis_functions.begin(), basis_functions.end()
+    );
+
+    basis_functions.insert(basis_functions.begin(), index, (T)0);
+    basis_functions.insert(
+        basis_functions.end(),
+        this->control_points.size() - index - this->degree - 1,
+        (T)0
+    );
 
     return basis_functions;
   }
@@ -64,34 +81,43 @@ public:
     // TODO: it seems in this case having the data in column-major brings a 16%
     // improvement in performance, we should test writing to this vector in
     // column-major and see if we keep the speedup as it may be worth it
-    std::vector<T> raw_matrix(this->control_points.size() * x.size(), 0.0);
+    std::vector<T> nnz_basis(this->degree + 1, (T)0);
+    Eigen::SparseMatrix<T> A(x.size(), this->control_points.size());
+    A.reserve(this->control_points.size() * (this->degree + 1));
+    Eigen::Map<Eigen::VectorX<T>> b(y.data(), x.size());
+    // Eigen::MatrixX<T> A =
+    //     Eigen::MatrixX<T>::Zero(x.size(), this->control_points.size());
 
+    size_t index{0};
     for (size_t i{0}; i < x.size(); i++)
     {
-      this->compute_basis(
-          x.at(i),
-          raw_matrix.begin() + i * this->control_points.size(),
-          raw_matrix.begin() + (i + 1) * this->control_points.size()
-      );
+      index = this->compute_basis(x.at(i), nnz_basis.begin(), nnz_basis.end());
+      for (size_t j{0}; j <= this->degree; j++)
+      {
+        A.coeffRef(i, j + index) = nnz_basis.at(j);
+        // A(i, j + index) = nnz_basis.at(j);
+      }
+      std::fill(nnz_basis.begin(), nnz_basis.end(), (T)0);
     }
-
-    Eigen::Map<
-        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>
-        A(raw_matrix.data(), x.size(), this->control_points.size());
-    Eigen::Map<Eigen::VectorX<T>> b(y.data(), x.size());
 
     Eigen::VectorX<T> res;
-    if constexpr (BC == BoundaryCondition::PERIODIC)
-    {
-      A.leftCols(this->degree) += A.rightCols(this->degree);
-      res = A.leftCols(this->control_points.size() - this->degree)
-                .fullPivHouseholderQr()
-                .solve(b);
-    }
-    else
-    {
-      res = A.colPivHouseholderQr().solve(b);
-    }
+    // if constexpr (BC == BoundaryCondition::PERIODIC)
+    //{
+    //   A.leftCols(this->degree) += A.rightCols(this->degree);
+    //   res = A.leftCols(this->control_points.size() - this->degree)
+    //             .fullPivHouseholderQr()
+    //             .solve(b);
+    // }
+    // else
+    //{
+    //   res = A.colPivHouseholderQr().solve(b);
+    // }
+    // res = A.colPivHouseholderQr().solve(b);
+    Eigen::SparseQR<Eigen::SparseMatrix<T>, Eigen::COLAMDOrdering<int>> solver{
+    };
+    A.makeCompressed();
+    solver.compute(A);
+    res = solver.solve(b);
 
     this->control_points.set_data(
         {res.data(), res.data() + res.rows() * res.cols()}
@@ -165,10 +191,10 @@ private:
   }
 
   template <typename It>
-  void compute_basis(T value, It begin, [[maybe_unused]] It end)
+  size_t compute_basis(T value, [[maybe_unused]] It begin, It end)
   {
     assertm(
-        (end - begin) == (long long)this->control_points.size(),
+        (end - begin) == (long long)(this->degree + 1),
         "Unexpected number of basis asked"
     );
 
@@ -179,26 +205,28 @@ private:
 
     auto [index, val] = this->knots.find(value);
 
-    assertm(begin + index < end, "Index outside of boundaries");
+    // assertm(begin + index < end, "Index outside of boundaries");
 
-    *(begin + index) = 1.0;
+    *(end - 1) = 1.0;
     for (size_t d{1}; d <= this->degree; d++)
     {
-      *(begin + index - d) = (knots.at(index + 1) - val) /
-                             (knots.at(index + 1) - knots.at(index - d + 1)) *
-                             *(begin + index - d + 1);
+      *(end - 1 - d) = (knots.at(index + 1) - val) /
+                       (knots.at(index + 1) - knots.at(index - d + 1)) *
+                       *(end - 1 - d + 1);
       for (size_t i{index - d + 1}; i < index; i++)
       {
-        *(begin + i) = (val - knots.at(i)) / (knots.at(i + d) - knots.at(i)) *
-                           *(begin + i) +
-                       (knots.at(i + d + 1) - val) /
-                           (knots.at(i + d + 1) - knots.at(i + 1)) *
-                           *(begin + i + 1);
+        *(end - 1 - index + i) = (val - knots.at(i)) /
+                                     (knots.at(i + d) - knots.at(i)) *
+                                     *(end - 1 - index + i) +
+                                 (knots.at(i + d + 1) - val) /
+                                     (knots.at(i + d + 1) - knots.at(i + 1)) *
+                                     *(end - 1 - index + i + 1);
       }
-      *(begin + index) = (val - knots.at(index)) /
-                         (knots.at(index + d) - knots.at(index)) *
-                         *(begin + index);
+      *(end - 1) = (val - knots.at(index)) /
+                   (knots.at(index + d) - knots.at(index)) * *(end - 1);
     }
+
+    return index - this->degree;
   }
 };
 

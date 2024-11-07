@@ -70,7 +70,7 @@ TEST_CASE(
   double eval_elems{0.0};
   double start{45.0};
   double stop{49.0};
-  for (size_t j{3}; j < 11; j++)
+  for (size_t j{3}; j < 12; j++)
   {
     knots_num = (size_t)std::pow(2.0, j);
     fill(start, stop, knots_num - degree - 1, ctrl_pts);
