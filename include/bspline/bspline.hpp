@@ -22,6 +22,8 @@
 #include "knots/knots.hpp"
 #include "types.hpp"
 
+constexpr size_t DENSE_MAX_COL = 512;
+
 namespace bsplinex::bspline
 {
 
@@ -78,46 +80,57 @@ public:
       throw std::runtime_error("x and y must have the same size");
     }
 
-    // TODO: it seems in this case having the data in column-major brings a 16%
-    // improvement in performance, we should test writing to this vector in
-    // column-major and see if we keep the speedup as it may be worth it
     std::vector<T> nnz_basis(this->degree + 1, (T)0);
-    Eigen::SparseMatrix<T> A(x.size(), this->control_points.size());
-    A.reserve(this->control_points.size() * (this->degree + 1));
-    Eigen::Map<Eigen::VectorX<T>> b(y.data(), x.size());
-    // Eigen::MatrixX<T> A =
-    //     Eigen::MatrixX<T>::Zero(x.size(), this->control_points.size());
-
-    size_t index{0};
-    for (size_t i{0}; i < x.size(); i++)
+    Eigen::Map<Eigen::VectorX<T>> b(y.data(), y.size());
+    Eigen::VectorX<T> res;
+    size_t num_cols{this->control_points.size()};
+    if constexpr (BC == BoundaryCondition::PERIODIC)
     {
-      index = this->compute_basis(x.at(i), nnz_basis.begin(), nnz_basis.end());
-      for (size_t j{0}; j <= this->degree; j++)
-      {
-        A.coeffRef(i, j + index) = nnz_basis.at(j);
-        // A(i, j + index) = nnz_basis.at(j);
-      }
-      std::fill(nnz_basis.begin(), nnz_basis.end(), (T)0);
+      num_cols -= this->degree;
     }
 
-    Eigen::VectorX<T> res;
-    // if constexpr (BC == BoundaryCondition::PERIODIC)
-    //{
-    //   A.leftCols(this->degree) += A.rightCols(this->degree);
-    //   res = A.leftCols(this->control_points.size() - this->degree)
-    //             .fullPivHouseholderQr()
-    //             .solve(b);
-    // }
-    // else
-    //{
-    //   res = A.colPivHouseholderQr().solve(b);
-    // }
-    // res = A.colPivHouseholderQr().solve(b);
-    Eigen::SparseQR<Eigen::SparseMatrix<T>, Eigen::COLAMDOrdering<int>> solver{
-    };
-    A.makeCompressed();
-    solver.compute(A);
-    res = solver.solve(b);
+    if (num_cols <= DENSE_MAX_COL)
+    {
+      Eigen::MatrixX<T> A = Eigen::MatrixX<T>::Zero(x.size(), num_cols);
+
+      size_t index{0};
+      for (size_t i{0}; i < x.size(); i++)
+      {
+        index =
+            this->compute_basis(x.at(i), nnz_basis.begin(), nnz_basis.end());
+        for (size_t j{0}; j <= this->degree; j++)
+        {
+          // TODO: avoid modulo
+          A(i, (j + index) % num_cols) += nnz_basis.at(j);
+        }
+        std::fill(nnz_basis.begin(), nnz_basis.end(), (T)0);
+      }
+
+      res = A.colPivHouseholderQr().solve(b);
+    }
+    else
+    {
+      Eigen::SparseMatrix<T> A(x.size(), num_cols);
+      A.reserve(num_cols * (this->degree + 1));
+
+      size_t index{0};
+      for (size_t i{0}; i < x.size(); i++)
+      {
+        index =
+            this->compute_basis(x.at(i), nnz_basis.begin(), nnz_basis.end());
+        for (size_t j{0}; j <= this->degree; j++)
+        {
+          A.coeffRef(i, (j + index) % num_cols) += nnz_basis.at(j);
+        }
+        std::fill(nnz_basis.begin(), nnz_basis.end(), (T)0);
+      }
+      A.makeCompressed();
+
+      Eigen::SparseQR<Eigen::SparseMatrix<T>, Eigen::COLAMDOrdering<int>>
+          solver{};
+      solver.compute(A);
+      res = solver.solve(b);
+    }
 
     this->control_points.set_data(
         {res.data(), res.data() + res.rows() * res.cols()}
