@@ -54,14 +54,15 @@ class Finder<T, Curve::UNIFORM, BC, EXT>
 private:
   T value_left{};
   T value_right{};
-  T step_size{};
+  T step_size_inv{};
   size_t degree{};
 
 public:
   Finder(Atter<T, Curve::UNIFORM, BC> const &atter, size_t degree)
       : value_left{atter.at(degree)},
         value_right{atter.at(atter.size() - degree - 1)},
-        step_size{atter.at(degree + 1) - atter.at(degree)}, degree{degree}
+        step_size_inv{T(1) / (atter.at(degree + 1) - atter.at(degree))},
+        degree{degree}
   {
   }
 
@@ -72,7 +73,7 @@ public:
         "Value outside of the domain"
     );
 
-    return (size_t)((value - this->value_left) / this->step_size) +
+    return (size_t)((value - this->value_left) * this->step_size_inv) +
            this->degree;
   }
 };
