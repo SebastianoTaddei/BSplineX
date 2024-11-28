@@ -9,13 +9,21 @@
 #include <Eigen/Dense>
 
 // For some reason Eigen has a couple of set but unused variables
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
+#ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-but-set-variable"
+#endif
 #include <Eigen/Sparse>
+#ifdef __clang__
 #pragma clang diagnostic pop
+#endif
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
+#endif
 
 // BSplineX includes
 #include "control_points/control_points.hpp"
