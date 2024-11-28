@@ -12,6 +12,7 @@ set(THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party")
 
 option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_BENCHMARKS "Build benchmarks" OFF)
+option(BUILD_EXAMPLES "Build examples" OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Debug")
@@ -51,6 +52,10 @@ endif()
 
 if(BUILD_BENCHMARKS)
   add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/benchmarks)
+endif()
+
+if(BUILD_EXAMPLES)
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
 endif()
 
 if(MSVC)
