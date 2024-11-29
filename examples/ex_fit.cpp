@@ -1,4 +1,4 @@
-#include "bspline/bspline.hpp"
+#include "bsplinex.hpp"
 #include <iostream>
 
 int main()
@@ -7,12 +7,9 @@ int main()
   const std::vector<double> control_points(11); // dummy control points
 
   // uniform, periodic B-spline where knots are [0.1, 1.1, ..., 10.1, 11.1]
-  bsplinex::bspline::BSpline<
-      double,
-      bsplinex::Curve::UNIFORM,
-      bsplinex::BoundaryCondition::PERIODIC,
-      bsplinex::Extrapolation::PERIODIC>
-      bspline{{0.1, 12.0, 1.0}, {control_points}, degree};
+  bsplinex::UniformPeriodic<> bspline{
+      {0.1, 12.0, 1.0}, {control_points}, degree
+  };
 
   // fit some points
   const std::vector<double> x_fit{2.3, 3.4, 4.5, 5.6, 6.7, 7.8, 8.9};
