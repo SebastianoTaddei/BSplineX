@@ -48,21 +48,21 @@ target_link_libraries(your_target BSplineX)
 
 ```cpp
 #include <iostream>
-#include "bspline/bspline.hpp"
+#include "bsplinex.hpp"
 
 using namespace bsplinex;
 
 int main()
 {
   // Define the B-Spline degree
-  size_t degree{3};
+  constexpr size_t degree{3};
 
   // Create a uniform knot sequence in [0.0, 10.0] of 10 knots
   // Remember that knots must be ordered in ascending order
-  size_t num_knots{10};
-  double min_knot{0.0};
-  double max_knot{10.0};
-  knots::Data<double, Curve::UNIFORM> knots{0.0, 10.0, num_knots);
+  constexpr size_t num_knots{10};
+  constexpr double min_knot{0.0};
+  constexpr double max_knot{10.0};
+  knots::Data<double, Curve::UNIFORM> knots{min_knot, max_knot, num_knots);
   
   // Create some control points
   // There must be knots.size() - degree - 1 control points
@@ -70,10 +70,8 @@ int main()
   
   // We can now create our uniform B-Spline
   // For example let's make it clamped and with constant extrapolation
-  BSpline<
+  UniformClamped<
     double,
-    Curve::UNIFORM,
-    BoundaryCondition::CLAMPED,
     Extrapolation::CONSTANT
   > bspline{knots, control_points};
 
@@ -103,10 +101,8 @@ In the previous example, the knots are easy to understand: they are you discreti
   control_points::Data<double> ctrl_points(knots.size() - degree - 1, 0.0);
   
   // Create the B-Spline
-  BSpline<
+  UniformClamped<
     double,
-    Curve::UNIFORM,
-    BoundaryCondition::CLAMPED,
     Extrapolation::CONSTANT
   > bspline{knots, control_points};
 
