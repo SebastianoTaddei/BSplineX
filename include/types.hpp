@@ -1,8 +1,9 @@
-#ifndef BSPLINEX_TYPES_HPP
-#define BSPLINEX_TYPES_HPP
+#ifndef TYPES_HPP
+#define TYPES_HPP
 
 namespace bsplinex
 {
+
 enum class BoundaryCondition
 {
   CLAMPED  = 0,
@@ -22,6 +23,7 @@ enum class Extrapolation
   PERIODIC = 1,
   NONE     = 2
 };
+
 } // namespace bsplinex
 
 #endif
