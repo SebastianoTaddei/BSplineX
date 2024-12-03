@@ -40,11 +40,11 @@ using ClampedNonUniformConstant =
 
 template <typename T = double>
 using PeriodicUniform =
-    bspline::BSpline<T, Curve::UNIFORM, BoundaryCondition::PERIODIC, Extrapolation::NONE>;
+    bspline::BSpline<T, Curve::UNIFORM, BoundaryCondition::PERIODIC, Extrapolation::PERIODIC>;
 
 template <typename T = double>
 using PeriodicNonUniform =
-    bspline::BSpline<T, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC, Extrapolation::NONE>;
+    bspline::BSpline<T, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC, Extrapolation::PERIODIC>;
 
 } // namespace bsplinex::types
 
