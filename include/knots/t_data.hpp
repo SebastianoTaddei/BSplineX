@@ -12,7 +12,8 @@
 namespace bsplinex::knots
 {
 
-template <typename T, Curve C> class Data
+template <typename T, Curve C>
+class Data
 {
 public:
   virtual T at(size_t index)                              = 0;
@@ -20,7 +21,8 @@ public:
   virtual std::vector<T> slice(size_t first, size_t last) = 0;
 };
 
-template <typename T> class Data<T, Curve::UNIFORM>
+template <typename T>
+class Data<T, Curve::UNIFORM>
 {
 private:
   T begin{};
@@ -43,8 +45,7 @@ public:
 
   // Specifying the num-elems means the domain will be [begin, end]
   Data(T begin, T end, size_t num_elems)
-      : begin{begin}, end{end}, num_elems{num_elems},
-        step_size{(end - begin) / num_elems}
+      : begin{begin}, end{end}, num_elems{num_elems}, step_size{(end - begin) / num_elems}
   {
     assertm(begin < end, "Wrong interval");
 
@@ -79,7 +80,8 @@ public:
   }
 };
 
-template <typename T> class Data<T, Curve::NON_UNIFORM>
+template <typename T>
+class Data<T, Curve::NON_UNIFORM>
 {
 private:
   std::vector<T> raw_data{};
@@ -100,9 +102,7 @@ public:
     assertm(first <= last, "Invalid range");
     assertm(last <= this->raw_data.size(), "Out of bounds");
 
-    return std::vector<T>{
-        this->raw_data.begin() + first, this->raw_data.begin() + last
-    };
+    return std::vector<T>{this->raw_data.begin() + first, this->raw_data.begin() + last};
   }
 };
 

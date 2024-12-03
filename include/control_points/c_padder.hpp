@@ -13,7 +13,8 @@
 namespace bsplinex::control_points
 {
 
-template <typename T, BoundaryCondition BC> class Padder
+template <typename T, BoundaryCondition BC>
+class Padder
 {
 public:
   Padder(Data<T> &, size_t) {}
@@ -31,16 +32,14 @@ public:
   [[nodiscard]] size_t size_right() const { return 0; }
 };
 
-template <typename T> class Padder<T, BoundaryCondition::PERIODIC>
+template <typename T>
+class Padder<T, BoundaryCondition::PERIODIC>
 {
 private:
   std::vector<T> pad_right{};
 
 public:
-  Padder(Data<T> &data, size_t degree)
-  {
-    this->pad_right = data.slice(0, degree);
-  }
+  Padder(Data<T> &data, size_t degree) { this->pad_right = data.slice(0, degree); }
 
   T right(size_t index) const
   {

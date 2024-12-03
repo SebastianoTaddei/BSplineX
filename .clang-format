@@ -8,3 +8,4 @@ SeparateDefinitionBlocks: Always
 BinPackArguments: false
 BinPackParameters: false
 ColumnLimit: 100
+BreakTemplateDeclarations: Yes

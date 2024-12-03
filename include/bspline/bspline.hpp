@@ -35,7 +35,8 @@ constexpr size_t DENSE_MAX_COL = 512;
 namespace bsplinex::bspline
 {
 
-template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT> class BSpline
+template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT>
+class BSpline
 {
 private:
   knots::Knots<T, C, BC, EXT> knots;
@@ -190,7 +191,8 @@ private:
     return this->support[this->degree];
   }
 
-  template <typename It> size_t compute_basis(T value, [[maybe_unused]] It begin, It end)
+  template <typename It>
+  size_t compute_basis(T value, [[maybe_unused]] It begin, It end)
   {
     assertm((end - begin) == (long long)(this->degree + 1), "Unexpected number of basis asked");
 

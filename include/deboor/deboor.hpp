@@ -45,10 +45,8 @@ public:
       for (size_t j = this->degree; j >= r; j--)
       {
         alpha = (value - this->knots.at(j + index - this->degree)) /
-                (this->knots.at(j + 1 + index - r) -
-                 this->knots.at(j + index - this->degree));
-        this->support[j] =
-            (1.0 - alpha) * this->support[j - 1] + alpha * this->support[j];
+                (this->knots.at(j + 1 + index - r) - this->knots.at(j + index - this->degree));
+        this->support[j] = (1.0 - alpha) * this->support[j - 1] + alpha * this->support[j];
       }
     }
 
@@ -67,15 +65,12 @@ public:
                             basis.at(index - d + 1);
       for (size_t i{index - d + 1}; i < index; i++)
       {
-        basis.at(i) = (value - knots.at(i)) / (knots.at(i + d) - knots.at(i)) *
-                          basis.at(i) +
-                      (knots.at(i + d + 1) - value) /
-                          (knots.at(i + d + 1) - knots.at(i + 1)) *
+        basis.at(i) = (value - knots.at(i)) / (knots.at(i + d) - knots.at(i)) * basis.at(i) +
+                      (knots.at(i + d + 1) - value) / (knots.at(i + d + 1) - knots.at(i + 1)) *
                           basis.at(i + 1);
       }
-      basis.at(index) = (value - knots.at(index)) /
-                        (knots.at(index + d) - knots.at(index)) *
-                        basis.at(index);
+      basis.at(index) =
+          (value - knots.at(index)) / (knots.at(index + d) - knots.at(index)) * basis.at(index);
     }
 
     return basis;

@@ -13,7 +13,8 @@
 namespace bsplinex::knots
 {
 
-template <typename T, Curve C, BoundaryCondition BC> class Padder
+template <typename T, Curve C, BoundaryCondition BC>
+class Padder
 {
 public:
   virtual T left(size_t index) const              = 0;
@@ -23,7 +24,8 @@ public:
   [[nodiscard]] virtual size_t size_right() const = 0;
 };
 
-template <typename T, Curve C> class Padder<T, C, BoundaryCondition::OPEN>
+template <typename T, Curve C>
+class Padder<T, C, BoundaryCondition::OPEN>
 {
 public:
   Padder(Data<T, C> &, size_t) {}
@@ -51,7 +53,8 @@ public:
   [[nodiscard]] size_t size_right() const { return 0; }
 };
 
-template <typename T, Curve C> class Padder<T, C, BoundaryCondition::CLAMPED>
+template <typename T, Curve C>
+class Padder<T, C, BoundaryCondition::CLAMPED>
 {
 private:
   T pad_left{};
@@ -78,17 +81,15 @@ public:
     return this->pad_right;
   }
 
-  [[nodiscard]] size_t size() const
-  {
-    return this->size_left() + this->size_right();
-  }
+  [[nodiscard]] size_t size() const { return this->size_left() + this->size_right(); }
 
   [[nodiscard]] size_t size_left() const { return this->degree; }
 
   [[nodiscard]] size_t size_right() const { return this->degree; }
 };
 
-template <typename T, Curve C> class Padder<T, C, BoundaryCondition::PERIODIC>
+template <typename T, Curve C>
+class Padder<T, C, BoundaryCondition::PERIODIC>
 {
 private:
   std::vector<T> pad_left{};
@@ -119,10 +120,7 @@ public:
     return this->pad_right[index];
   }
 
-  [[nodiscard]] size_t size() const
-  {
-    return this->size_left() + this->size_right();
-  }
+  [[nodiscard]] size_t size() const { return this->size_left() + this->size_right(); }
 
   [[nodiscard]] size_t size_left() const { return this->pad_left.size(); }
 

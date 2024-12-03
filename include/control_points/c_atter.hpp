@@ -10,7 +10,8 @@
 namespace bsplinex::control_points
 {
 
-template <typename T, BoundaryCondition BC> class Atter
+template <typename T, BoundaryCondition BC>
+class Atter
 {
 private:
   Data<T> data;
@@ -32,10 +33,7 @@ public:
     }
   }
 
-  [[nodiscard]] size_t size() const
-  {
-    return this->data.size() + this->padder.size();
-  }
+  [[nodiscard]] size_t size() const { return this->data.size() + this->padder.size(); }
 };
 
 } // namespace bsplinex::control_points

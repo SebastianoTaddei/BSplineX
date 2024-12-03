@@ -109,7 +109,7 @@ TEST_CASE(
         Curve::NON_UNIFORM,
         BoundaryCondition::OPEN,
         Extrapolation::NONE>
-        big_bspline{big_knots, big_ctrl_pts, degree};
+        big_bspline{{big_knots}, {big_ctrl_pts}, degree};
 
     // Prepare a uniform distribution
     std::uniform_real_distribution unif{

@@ -10,16 +10,15 @@
 namespace bsplinex::knots
 {
 
-template <typename T, Curve C, BoundaryCondition BC> class Atter
+template <typename T, Curve C, BoundaryCondition BC>
+class Atter
 {
 private:
   Data<T, C> data;
   Padder<T, C, BC> padder;
 
 public:
-  Atter(Data<T, C> data, size_t degree) : data{data}, padder{this->data, degree}
-  {
-  }
+  Atter(Data<T, C> data, size_t degree) : data{data}, padder{this->data, degree} {}
 
   T at(size_t index) const
   {
@@ -30,9 +29,7 @@ public:
     }
     else if (index > this->data.size() - 1 + this->padder.size_left())
     {
-      return this->padder.right(
-          index - this->data.size() - this->padder.size_left()
-      );
+      return this->padder.right(index - this->data.size() - this->padder.size_left());
     }
     else
     {
@@ -40,10 +37,7 @@ public:
     }
   }
 
-  [[nodiscard]] size_t size() const
-  {
-    return this->data.size() + this->padder.size();
-  }
+  [[nodiscard]] size_t size() const { return this->data.size() + this->padder.size(); }
 
   class iterator
   {
@@ -52,12 +46,9 @@ public:
     size_t index{0};
 
   public:
-    iterator(Atter<T, C, BC> const *atter, size_t index)
-        : atter{atter}, index{index}
-    {
-    }
+    iterator(Atter<T, C, BC> const *atter, size_t index) : atter{atter}, index{index} {}
 
-    iterator(iterator const &b) : atter{b.atter}, index{b.index} {}
+    iterator(iterator const &b) = default;
 
     iterator &operator++()
     {
@@ -113,10 +104,7 @@ public:
 
     int operator-(iterator const &b) { return this->index - b.index; }
 
-    bool operator==(iterator const &other) const
-    {
-      return this->index == other.index;
-    }
+    bool operator==(iterator const &other) const { return this->index == other.index; }
 
     iterator &operator=(iterator const &b)
     {

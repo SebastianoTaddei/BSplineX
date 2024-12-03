@@ -11,7 +11,8 @@
 namespace bsplinex::control_points
 {
 
-template <typename T> class Data
+template <typename T>
+class Data
 {
 private:
   std::vector<T> raw_data{};
@@ -32,9 +33,7 @@ public:
     assertm(first <= last, "Invalid range");
     assertm(last <= this->raw_data.size(), "Out of bounds");
 
-    return std::vector<T>{
-        this->raw_data.begin() + first, this->raw_data.begin() + last
-    };
+    return std::vector<T>{this->raw_data.begin() + first, this->raw_data.begin() + last};
   }
 };
 
