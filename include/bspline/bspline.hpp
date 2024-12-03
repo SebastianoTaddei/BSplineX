@@ -35,8 +35,7 @@ constexpr size_t DENSE_MAX_COL = 512;
 namespace bsplinex::bspline
 {
 
-template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT>
-class BSpline
+template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT> class BSpline
 {
 private:
   knots::Knots<T, C, BC, EXT> knots;
@@ -45,13 +44,8 @@ private:
   std::vector<T> support{};
 
 public:
-  BSpline(
-      knots::Data<T, C> knots_data,
-      control_points::Data<T> control_points_data,
-      size_t degree
-  )
-      : knots{knots_data, degree}, control_points{control_points_data, degree},
-        degree{degree}
+  BSpline(knots::Data<T, C> knots_data, control_points::Data<T> control_points_data, size_t degree)
+      : knots{knots_data, degree}, control_points{control_points_data, degree}, degree{degree}
   {
     this->check_sizes();
     this->support.resize(this->degree + 1);
@@ -67,15 +61,11 @@ public:
   {
     std::vector<T> basis_functions(this->degree + 1, (T)0);
 
-    size_t index = this->compute_basis(
-        value, basis_functions.begin(), basis_functions.end()
-    );
+    size_t index = this->compute_basis(value, basis_functions.begin(), basis_functions.end());
 
     basis_functions.insert(basis_functions.begin(), index, (T)0);
     basis_functions.insert(
-        basis_functions.end(),
-        this->control_points.size() - index - this->degree - 1,
-        (T)0
+        basis_functions.end(), this->control_points.size() - index - this->degree - 1, (T)0
     );
 
     return basis_functions;
@@ -104,8 +94,7 @@ public:
       size_t index{0};
       for (size_t i{0}; i < x.size(); i++)
       {
-        index =
-            this->compute_basis(x.at(i), nnz_basis.begin(), nnz_basis.end());
+        index = this->compute_basis(x.at(i), nnz_basis.begin(), nnz_basis.end());
         for (size_t j{0}; j <= this->degree; j++)
         {
           // TODO: avoid modulo
@@ -124,8 +113,7 @@ public:
       size_t index{0};
       for (size_t i{0}; i < x.size(); i++)
       {
-        index =
-            this->compute_basis(x.at(i), nnz_basis.begin(), nnz_basis.end());
+        index = this->compute_basis(x.at(i), nnz_basis.begin(), nnz_basis.end());
         for (size_t j{0}; j <= this->degree; j++)
         {
           A.coeffRef(i, (j + index) % num_cols) += nnz_basis.at(j);
@@ -134,23 +122,17 @@ public:
       }
       A.makeCompressed();
 
-      Eigen::SparseQR<Eigen::SparseMatrix<T>, Eigen::COLAMDOrdering<int>>
-          solver{};
+      Eigen::SparseQR<Eigen::SparseMatrix<T>, Eigen::COLAMDOrdering<int>> solver{};
       solver.compute(A);
       res = solver.solve(b);
     }
 
-    this->control_points.set_data(
-        {res.data(), res.data() + res.rows() * res.cols()}
-    );
+    this->control_points.set_data({res.data(), res.data() + res.rows() * res.cols()});
 
     return;
   }
 
-  control_points::ControlPoints<T, BC> const &get_control_points()
-  {
-    return this->control_points;
-  }
+  control_points::ControlPoints<T, BC> const &get_control_points() { return this->control_points; }
 
 private:
   void check_sizes()
@@ -162,8 +144,7 @@ private:
 
     std::stringstream ss{};
     ss << "Found control_points.size() != knots.size() - degree - 1 ("
-       << this->control_points.size()
-       << " != " << this->knots.size() - this->degree - 1 << "). ";
+       << this->control_points.size() << " != " << this->knots.size() - this->degree - 1 << "). ";
 
     // clang-format off
 
@@ -201,23 +182,17 @@ private:
       for (size_t j = this->degree; j >= r; j--)
       {
         alpha = (value - this->knots.at(j + index - this->degree)) /
-                (this->knots.at(j + 1 + index - r) -
-                 this->knots.at(j + index - this->degree));
-        this->support[j] =
-            (1.0 - alpha) * this->support[j - 1] + alpha * this->support[j];
+                (this->knots.at(j + 1 + index - r) - this->knots.at(j + index - this->degree));
+        this->support[j] = (1.0 - alpha) * this->support[j - 1] + alpha * this->support[j];
       }
     }
 
     return this->support[this->degree];
   }
 
-  template <typename It>
-  size_t compute_basis(T value, [[maybe_unused]] It begin, It end)
+  template <typename It> size_t compute_basis(T value, [[maybe_unused]] It begin, It end)
   {
-    assertm(
-        (end - begin) == (long long)(this->degree + 1),
-        "Unexpected number of basis asked"
-    );
+    assertm((end - begin) == (long long)(this->degree + 1), "Unexpected number of basis asked");
 
     assertm(
         std::all_of(begin, end, [](T i) { return (T)0 == i; }),
@@ -232,19 +207,15 @@ private:
     for (size_t d{1}; d <= this->degree; d++)
     {
       *(end - 1 - d) = (knots.at(index + 1) - val) /
-                       (knots.at(index + 1) - knots.at(index - d + 1)) *
-                       *(end - 1 - d + 1);
+                       (knots.at(index + 1) - knots.at(index - d + 1)) * *(end - 1 - d + 1);
       for (size_t i{index - d + 1}; i < index; i++)
       {
-        *(end - 1 - index + i) = (val - knots.at(i)) /
-                                     (knots.at(i + d) - knots.at(i)) *
-                                     *(end - 1 - index + i) +
-                                 (knots.at(i + d + 1) - val) /
-                                     (knots.at(i + d + 1) - knots.at(i + 1)) *
-                                     *(end - 1 - index + i + 1);
+        *(end - 1 - index + i) =
+            (val - knots.at(i)) / (knots.at(i + d) - knots.at(i)) * *(end - 1 - index + i) +
+            (knots.at(i + d + 1) - val) / (knots.at(i + d + 1) - knots.at(i + 1)) *
+                *(end - 1 - index + i + 1);
       }
-      *(end - 1) = (val - knots.at(index)) /
-                   (knots.at(index + d) - knots.at(index)) * *(end - 1);
+      *(end - 1) = (val - knots.at(index)) / (knots.at(index + d) - knots.at(index)) * *(end - 1);
     }
 
     return index - this->degree;
