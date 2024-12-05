@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=64", "swig>=4"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "BSplineX"
+version = "0.1.0"
+authors = [{ name = "Sebastiano Taddei" }, { name = "Gabriele Masina" }]
+description = "The B-Spline library you have always dreamed of were performance and easy-to-use interfaces live in harmony."
+readme = "README.md"
+
+[tool.setuptools_scm]
