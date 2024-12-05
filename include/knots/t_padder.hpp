@@ -28,22 +28,20 @@ template <typename T, Curve C>
 class Padder<T, C, BoundaryCondition::OPEN>
 {
 public:
+  Padder() = default;
+
   Padder(Data<T, C> &, size_t) {}
 
   T left(size_t) const
   {
-    throw std::runtime_error(
-        "OPEN knots padder has zero length, this function is here "
-        "only for compatibility reasons."
-    );
+    throw std::runtime_error("OPEN knots padder has zero length, this function is here "
+                             "only for compatibility reasons.");
   }
 
   T right(size_t) const
   {
-    throw std::runtime_error(
-        "OPEN knots padder has zero length, this function is here "
-        "only for compatibility reasons."
-    );
+    throw std::runtime_error("OPEN knots padder has zero length, this function is here "
+                             "only for compatibility reasons.");
   }
 
   [[nodiscard]] size_t size() const { return 0; }
@@ -62,6 +60,8 @@ private:
   size_t degree{0};
 
 public:
+  Padder() = default;
+
   Padder(Data<T, C> &data, size_t degree)
   {
     this->pad_left  = data.at(0);

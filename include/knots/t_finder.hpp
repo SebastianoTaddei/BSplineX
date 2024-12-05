@@ -22,6 +22,8 @@ private:
   size_t index_right{0};
 
 public:
+  Finder() = default;
+
   Finder(Atter<T, C, BC> const &atter, size_t degree)
       : atter{atter}, index_left{degree}, index_right{this->atter.size() - degree - 1}
   {
@@ -54,6 +56,8 @@ private:
   size_t degree{};
 
 public:
+  Finder() = default;
+
   Finder(Atter<T, Curve::UNIFORM, BC> const &atter, size_t degree)
       : value_left{atter.at(degree)}, value_right{atter.at(atter.size() - degree - 1)},
         step_size_inv{T(1) / (atter.at(degree + 1) - atter.at(degree))}, degree{degree}

@@ -45,6 +45,8 @@ private:
   std::vector<T> support{};
 
 public:
+  BSpline() = default;
+
   BSpline(knots::Data<T, C> knots_data, control_points::Data<T> control_points_data, size_t degree)
       : knots{knots_data, degree}, control_points{control_points_data, degree}, degree{degree}
   {

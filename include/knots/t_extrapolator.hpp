@@ -25,6 +25,8 @@ template <typename T, Curve C, BoundaryCondition BC>
 class Extrapolator<T, C, BC, Extrapolation::NONE>
 {
 public:
+  Extrapolator() = default;
+
   Extrapolator(Atter<T, C, BC> const &, size_t) {}
 
   T extrapolate(T) const { throw std::runtime_error("Extrapolation explicitly set to NONE"); }
@@ -38,6 +40,8 @@ private:
   T value_right{};
 
 public:
+  Extrapolator() = default;
+
   Extrapolator(Atter<T, C, BC> const &atter, size_t degree)
       : value_left{atter.at(degree)}, value_right{atter.at(atter.size() - degree - 1)}
   {
@@ -61,6 +65,8 @@ private:
   T period{};
 
 public:
+  Extrapolator() = default;
+
   Extrapolator(Atter<T, C, BC> const &atter, size_t degree)
       : value_left{atter.at(degree)}, value_right{atter.at(atter.size() - degree - 1)},
         period{this->value_right - this->value_left}

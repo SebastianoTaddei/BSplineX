@@ -1,5 +1,6 @@
 # Braces on a new line
 BreakBeforeBraces: Allman
+
 AlignConsecutiveAssignments:
   Enabled: true
   AlignCompound: true
@@ -8,4 +9,4 @@ SeparateDefinitionBlocks: Always
 BinPackArguments: false
 BinPackParameters: false
 ColumnLimit: 100
-BreakTemplateDeclarations: Yes
+AlwaysBreakTemplateDeclarations: Yes

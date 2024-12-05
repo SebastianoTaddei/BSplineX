@@ -18,6 +18,8 @@ private:
   Padder<T, C, BC> padder;
 
 public:
+  Atter() = default;
+
   Atter(Data<T, C> data, size_t degree) : data{data}, padder{this->data, degree} {}
 
   T at(size_t index) const

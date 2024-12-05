@@ -17,14 +17,14 @@ template <typename T, BoundaryCondition BC>
 class Padder
 {
 public:
+  Padder() = default;
+
   Padder(Data<T> &, size_t) {}
 
   T right(size_t) const
   {
-    throw std::runtime_error(
-        "Generic control points padder has zero length, this function is here "
-        "only for compatibility reasons."
-    );
+    throw std::runtime_error("Generic control points padder has zero length, this function is here "
+                             "only for compatibility reasons.");
   }
 
   [[nodiscard]] size_t size() const { return 0; }
@@ -39,6 +39,8 @@ private:
   std::vector<T> pad_right{};
 
 public:
+  Padder() = default;
+
   Padder(Data<T> &data, size_t degree) { this->pad_right = data.slice(0, degree); }
 
   T right(size_t index) const

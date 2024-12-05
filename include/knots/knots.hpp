@@ -48,6 +48,8 @@ private:
   T value_right{};
 
 public:
+  Knots() = default;
+
   Knots(Data<T, C> data, size_t degree)
       : atter{data, degree}, extrapolator{this->atter, degree}, finder{this->atter, degree},
         value_left{this->atter.at(degree)},

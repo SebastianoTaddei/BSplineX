@@ -31,6 +31,8 @@ private:
   T step_size{};
 
 public:
+  Data() = default;
+
   // Specifying the step-size means the domain will be [begin, end[
   Data(T begin, T end, T step)
   {
@@ -87,6 +89,8 @@ private:
   std::vector<T> raw_data{};
 
 public:
+  Data() = default;
+
   Data(std::vector<T> const &data) : raw_data{data} {}
 
   T at(size_t index) const

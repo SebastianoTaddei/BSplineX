@@ -36,6 +36,8 @@ private:
   size_t degree;
 
 public:
+  ControlPoints() = default;
+
   ControlPoints(Data<T> data, size_t degree) : atter{data, degree}, degree{degree} {}
 
   T at(size_t index) const { return this->atter.at(index); }
