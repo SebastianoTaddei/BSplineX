@@ -17,8 +17,16 @@ using namespace bsplinex;
 %include "bspline/bspline.hpp"
 %include "bspline/bspline_factory.hpp"
 %include "bspline/bspline_types.hpp"
-
+%include "exception.i"
 using namespace bsplinex;
+
+%exception {
+  try {
+    $action
+  } catch (const std::exception& e) {
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
+}
 
 //  ██████╗ ██████╗ ███████╗███╗   ██╗
 // ██╔═══██╗██╔══██╗██╔════╝████╗  ██║
