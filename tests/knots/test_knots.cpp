@@ -9,20 +9,14 @@ using namespace Catch::Matchers;
 using namespace bsplinex;
 using namespace bsplinex::knots;
 
-TEST_CASE(
-    "knots::Knots<T, C, BC, EXT> knots{knots::Data<T, C> data, degree}",
-    "[knots]"
-)
+TEST_CASE("knots::Knots<T, C, BC, EXT> knots{knots::Data<T, C> data, degree}", "[knots]")
 {
   std::vector<double> data_vec{0.1, 1.3, 2.2, 2.2, 4.9, 6.3, 6.3, 6.3, 13.2};
   Data<double, Curve::NON_UNIFORM> data{data_vec};
   size_t degree{3};
-  Knots<
-      double,
-      Curve::NON_UNIFORM,
-      BoundaryCondition::PERIODIC,
-      Extrapolation::PERIODIC>
-      knots{data, degree};
+  Knots<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC, Extrapolation::PERIODIC> knots{
+      data, degree
+  };
 
   SECTION("knots.size()") { REQUIRE(knots.size() == data.size() + 2 * degree); }
   SECTION("knots.at(...)")

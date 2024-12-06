@@ -9,16 +9,12 @@ using namespace Catch::Matchers;
 using namespace bsplinex;
 using namespace bsplinex::knots;
 
-TEST_CASE(
-    "knots::Atter<T, C, BC> atter{knots::Data<T, C> data, degree}", "[t_atter]"
-)
+TEST_CASE("knots::Atter<T, C, BC> atter{knots::Data<T, C> data, degree}", "[t_atter]")
 {
   std::vector<double> data_vec{0.1, 1.3, 2.2, 4.9, 13.2};
   Data<double, Curve::NON_UNIFORM> data{data_vec};
   size_t degree{3};
-  Atter<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC> atter{
-      data, degree
-  };
+  Atter<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC> atter{data, degree};
 
   SECTION("atter.size()") { REQUIRE(atter.size() == data.size() + 2 * degree); }
   SECTION("atter.at(...)")
@@ -52,9 +48,7 @@ TEST_CASE("knots::Atter::iterator", "[t_atter]")
   std::vector<double> data_vec{0.1, 1.3, 2.2, 4.9, 13.2};
   Data<double, Curve::NON_UNIFORM> data{data_vec};
   size_t degree{3};
-  Atter<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC> atter{
-      data, degree
-  };
+  Atter<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC> atter{data, degree};
 
   SECTION("*iterator")
   {

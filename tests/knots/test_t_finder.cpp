@@ -20,15 +20,10 @@ TEST_CASE(
   std::vector<double> data_vec{0.1, 1.3, 2.2, 2.2, 4.9, 6.3, 6.3, 6.3, 13.2};
   Data<double, Curve::NON_UNIFORM> data{data_vec};
   size_t degree{3};
-  Atter<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC> atter{
-      data, degree
+  Atter<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC> atter{data, degree};
+  Finder<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC, Extrapolation::PERIODIC> finder{
+      atter, degree
   };
-  Finder<
-      double,
-      Curve::NON_UNIFORM,
-      BoundaryCondition::PERIODIC,
-      Extrapolation::PERIODIC>
-      finder{atter, degree};
 
   SECTION("finder.find()")
   {

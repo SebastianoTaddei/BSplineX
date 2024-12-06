@@ -9,10 +9,7 @@ using namespace Catch::Matchers;
 using namespace bsplinex;
 using namespace bsplinex::control_points;
 
-TEST_CASE(
-    "control_points::Atter<T, BC> atter{control_points::Data<T> data, degree}",
-    "[c_atter]"
-)
+TEST_CASE("control_points::Atter<T, BC> atter{control_points::Data<T> data, degree}", "[c_atter]")
 {
   std::vector<double> data_vec{0.1, 1.3, 2.2, 4.9, 13.2};
   Data<double> data{data_vec};

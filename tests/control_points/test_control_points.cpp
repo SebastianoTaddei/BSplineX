@@ -18,14 +18,9 @@ TEST_CASE(
   std::vector<double> data_vec{0.1, 1.3, 2.2, 4.9, 13.2};
   Data<double> data{data_vec};
   size_t degree{3};
-  ControlPoints<double, BoundaryCondition::PERIODIC> control_points{
-      data, degree
-  };
+  ControlPoints<double, BoundaryCondition::PERIODIC> control_points{data, degree};
 
-  SECTION("control_points.size()")
-  {
-    REQUIRE(control_points.size() == data.size() + degree);
-  }
+  SECTION("control_points.size()") { REQUIRE(control_points.size() == data.size() + degree); }
   SECTION("control_points.at(...)")
   {
     for (size_t i{0}; i < data.size(); i++)

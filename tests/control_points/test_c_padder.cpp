@@ -12,9 +12,7 @@ using namespace bsplinex;
 using namespace bsplinex::control_points;
 
 TEST_CASE(
-    "control_points::Padder<T, BC> padder{control_points::Data<T> data, "
-    "degree}",
-    "[c_padder]"
+    "control_points::Padder<T, BC> padder{control_points::Data<T> data, degree}", "[c_padder]"
 )
 {
   std::vector<double> data_vec{0.1, 1.3, 2.2, 4.9, 13.2};
@@ -23,14 +21,11 @@ TEST_CASE(
 
   SECTION("padder.size()") { REQUIRE(padder.size() == 0); }
   SECTION("padder.size_right()") { REQUIRE(padder.size_right() == 0); }
-  SECTION("padder.right()")
-  {
-    REQUIRE_THROWS_AS(padder.right(0), std::runtime_error);
-  }
+  SECTION("padder.right()") { REQUIRE_THROWS_AS(padder.right(0), std::runtime_error); }
 }
 
 TEST_CASE(
-    "control_points::Padder<T, BoundaryCondition::PERIODIC> "
+    "control_points::Padder<T, BoundaryCondition::PERIODIC>
     "padder{control_points::Data<T> data, degree}",
     "[c_padder]"
 )

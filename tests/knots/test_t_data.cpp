@@ -9,9 +9,7 @@
 using namespace bsplinex;
 using namespace bsplinex::knots;
 
-TEST_CASE(
-    "knots::Data<double, Curve::UNIFORM> data{begin, end, step}", "[t_data]"
-)
+TEST_CASE("knots::Data<double, Curve::UNIFORM> data{begin, end, step}", "[t_data]")
 {
   Data<double, Curve::UNIFORM> data{0.0, 10.0, 2.3};
 
@@ -34,10 +32,7 @@ TEST_CASE(
   }
 }
 
-TEST_CASE(
-    "knots::Data<double, Curve::UNIFORM> data{begin, end, num_elems}",
-    "[t_data]"
-)
+TEST_CASE("knots::Data<double, Curve::UNIFORM> data{begin, end, num_elems}", "[t_data]")
 {
   Data<double, Curve::UNIFORM> data{0.0, 10.0, (size_t)5};
 

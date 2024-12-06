@@ -24,14 +24,8 @@ TEST_CASE(
   SECTION("padder.size()") { REQUIRE(padder.size() == 0); }
   SECTION("padder.size_left()") { REQUIRE(padder.size_left() == 0); }
   SECTION("padder.size_right()") { REQUIRE(padder.size_right() == 0); }
-  SECTION("padder.left()")
-  {
-    REQUIRE_THROWS_AS(padder.left(0), std::runtime_error);
-  }
-  SECTION("padder.right()")
-  {
-    REQUIRE_THROWS_AS(padder.right(0), std::runtime_error);
-  }
+  SECTION("padder.left()") { REQUIRE_THROWS_AS(padder.left(0), std::runtime_error); }
+  SECTION("padder.right()") { REQUIRE_THROWS_AS(padder.right(0), std::runtime_error); }
 }
 
 TEST_CASE(
@@ -42,9 +36,7 @@ TEST_CASE(
 {
   std::vector<double> data_vec{0.1, 1.3, 2.2, 4.9, 13.2};
   Data<double, Curve::NON_UNIFORM> data{data_vec};
-  Padder<double, Curve::NON_UNIFORM, BoundaryCondition::CLAMPED> padder{
-      data, 3
-  };
+  Padder<double, Curve::NON_UNIFORM, BoundaryCondition::CLAMPED> padder{data, 3};
 
   SECTION("padder.size()") { REQUIRE(padder.size() == 6); }
   SECTION("padder.size_left()") { REQUIRE(padder.size_left() == 3); }
@@ -73,9 +65,7 @@ TEST_CASE(
 {
   std::vector<double> data_vec{0.1, 1.3, 2.2, 4.9, 13.2};
   Data<double, Curve::NON_UNIFORM> data{data_vec};
-  Padder<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC> padder{
-      data, 3
-  };
+  Padder<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC> padder{data, 3};
 
   SECTION("padder.size()") { REQUIRE(padder.size() == 6); }
   SECTION("padder.size_left()") { REQUIRE(padder.size_left() == 3); }
