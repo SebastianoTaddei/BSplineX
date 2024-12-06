@@ -17,7 +17,7 @@ template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT>
 class Finder
 {
 private:
-  Atter<T, C, BC> const &atter;
+  Atter<T, C, BC> const *atter{nullptr};
   size_t index_left{0};
   size_t index_right{0};
 
@@ -25,7 +25,7 @@ public:
   Finder() = default;
 
   Finder(Atter<T, C, BC> const &atter, size_t degree)
-      : atter{atter}, index_left{degree}, index_right{this->atter.size() - degree - 1}
+      : atter{&atter}, index_left{degree}, index_right{this->atter->size() - degree - 1}
   {
   }
 
@@ -34,15 +34,15 @@ public:
     // TODO: we have to decide if we want to include the right value of the
     // domain or not
     assertm(
-        value >= this->atter.at(this->index_left) && value <= this->atter.at(this->index_right),
+        value >= this->atter->at(this->index_left) && value <= this->atter->at(this->index_right),
         "Value outside of the domain"
     );
 
     auto upper = std::upper_bound(
-        this->atter.begin() + this->index_left, this->atter.begin() + this->index_right, value
+        this->atter->begin() + this->index_left, this->atter->begin() + this->index_right, value
     );
 
-    return upper - this->atter.begin() - 1;
+    return upper - this->atter->begin() - 1;
   }
 };
 

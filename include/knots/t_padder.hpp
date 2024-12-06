@@ -96,6 +96,8 @@ private:
   std::vector<T> pad_right{};
 
 public:
+  Padder() = default;
+
   Padder(Data<T, C> &data, size_t degree)
   {
     T period        = data.at(data.size() - 1) - data.at(0);
