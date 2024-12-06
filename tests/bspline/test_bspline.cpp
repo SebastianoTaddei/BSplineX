@@ -5,6 +5,7 @@
 
 // BSplineX includes
 #include "bspline/bspline.hpp"
+#include "bspline/bspline_types.hpp"
 
 using namespace Catch::Matchers;
 using namespace bsplinex;
@@ -30,12 +31,7 @@ TEST_CASE(
   std::vector<double> c_data_vec{0.1, 1.3, 2.2, 4.9, 13.2};
   control_points::Data<double> c_data{c_data_vec};
 
-  BSpline<
-      double,
-      Curve::NON_UNIFORM,
-      BoundaryCondition::OPEN,
-      Extrapolation::NONE>
-      bspline{t_data, c_data, degree};
+  types::OpenNonUniform<double> bspline{t_data, c_data, degree};
 
   // clang-format off
   std::vector<double> x_values{2.2, 2.3000000000000003, 2.4000000000000004, 2.5000000000000004, 2.6000000000000005, 2.7000000000000006, 2.8000000000000007, 2.900000000000001, 3.000000000000001, 3.100000000000001, 3.200000000000001, 3.300000000000001, 3.4000000000000012, 3.5000000000000013, 3.6000000000000014, 3.7000000000000015, 3.8000000000000016, 3.9000000000000017, 4.000000000000002, 4.100000000000001, 4.200000000000002, 4.3000000000000025, 4.400000000000002, 4.500000000000002, 4.600000000000002, 4.700000000000003, 4.8000000000000025, 4.900000000000002, 5.000000000000003, 5.100000000000003, 5.200000000000003, 5.3000000000000025, 5.400000000000003, 5.5000000000000036, 5.600000000000003, 5.700000000000003, 5.800000000000003, 5.900000000000004, 6.0000000000000036, 6.100000000000003, 6.200000000000004};
@@ -75,9 +71,7 @@ TEST_CASE(
     }
     for (size_t i{0}; i < x_values.size(); i++)
     {
-      REQUIRE_THAT(
-          bspline.evaluate(x_values.at(i)), WithinRel(y_values.at(i), 1e-6)
-      );
+      REQUIRE_THAT(bspline.evaluate(x_values.at(i)), WithinRel(y_values.at(i), 1e-6));
     }
   }
 
@@ -93,40 +87,22 @@ TEST_CASE(
     // Generated big knots and ctrl points
     std::vector<double> big_ctrl_pts(13);
     std::vector<double> big_knots(big_ctrl_pts.size() + 3 + 1);
-    std::generate(
-        big_ctrl_pts.begin(),
-        big_ctrl_pts.end(),
-        [&norm, &rng]() { return norm(rng); }
-    );
-    std::generate(
-        big_knots.begin(),
-        big_knots.end(),
-        [n = 0]() mutable { return (double)n++; }
-    );
+    std::generate(big_ctrl_pts.begin(), big_ctrl_pts.end(), [&norm, &rng]() { return norm(rng); });
+    std::generate(big_knots.begin(), big_knots.end(), [n = 0]() mutable { return (double)n++; });
 
-    BSpline<
-        double,
-        Curve::NON_UNIFORM,
-        BoundaryCondition::OPEN,
-        Extrapolation::NONE>
-        big_bspline{{big_knots}, {big_ctrl_pts}, degree};
+    types::OpenNonUniform<double> big_bspline{{big_knots}, {big_ctrl_pts}, degree};
 
     // Prepare a uniform distribution
-    std::uniform_real_distribution unif{
-        big_knots.at(3), big_knots.at(big_knots.size() - 4)
-    };
+    std::uniform_real_distribution unif{big_knots.at(3), big_knots.at(big_knots.size() - 4)};
 
     // Randomly sample points
     std::vector<double> big_x(1000);
     std::vector<double> big_y(big_x.size());
-    std::generate(
-        big_x.begin(), big_x.end(), [&unif, &rng]() { return unif(rng); }
-    );
+    std::generate(big_x.begin(), big_x.end(), [&unif, &rng]() { return unif(rng); });
     std::generate(
         big_y.begin(),
         big_y.end(),
-        [i = 0, &big_bspline, &big_x]() mutable
-        { return big_bspline.evaluate(big_x.at(i++)); }
+        [i = 0, &big_bspline, &big_x]() mutable { return big_bspline.evaluate(big_x.at(i++)); }
     );
 
     big_bspline.fit(big_x, big_y);
@@ -137,9 +113,7 @@ TEST_CASE(
     }
     for (size_t i{0}; i < big_x.size(); i++)
     {
-      REQUIRE_THAT(
-          big_bspline.evaluate(big_x.at(i)), WithinRel(big_y.at(i), 1e-6)
-      );
+      REQUIRE_THAT(big_bspline.evaluate(big_x.at(i)), WithinRel(big_y.at(i), 1e-6));
     }
   }
 
@@ -154,40 +128,22 @@ TEST_CASE(
     // Generated big knots and ctrl points
     std::vector<double> big_ctrl_pts(713);
     std::vector<double> big_knots(big_ctrl_pts.size() + 3 + 1);
-    std::generate(
-        big_ctrl_pts.begin(),
-        big_ctrl_pts.end(),
-        [&norm, &rng]() { return norm(rng); }
-    );
-    std::generate(
-        big_knots.begin(),
-        big_knots.end(),
-        [n = 0]() mutable { return (double)n++; }
-    );
+    std::generate(big_ctrl_pts.begin(), big_ctrl_pts.end(), [&norm, &rng]() { return norm(rng); });
+    std::generate(big_knots.begin(), big_knots.end(), [n = 0]() mutable { return (double)n++; });
 
-    BSpline<
-        double,
-        Curve::NON_UNIFORM,
-        BoundaryCondition::OPEN,
-        Extrapolation::NONE>
-        big_bspline{big_knots, big_ctrl_pts, degree};
+    types::OpenNonUniform<double> big_bspline{big_knots, big_ctrl_pts, degree};
 
     // Prepare a uniform distribution
-    std::uniform_real_distribution unif{
-        big_knots.at(3), big_knots.at(big_knots.size() - 4)
-    };
+    std::uniform_real_distribution unif{big_knots.at(3), big_knots.at(big_knots.size() - 4)};
 
     // Randomly sample points
     std::vector<double> big_x(10000);
     std::vector<double> big_y(big_x.size());
-    std::generate(
-        big_x.begin(), big_x.end(), [&unif, &rng]() { return unif(rng); }
-    );
+    std::generate(big_x.begin(), big_x.end(), [&unif, &rng]() { return unif(rng); });
     std::generate(
         big_y.begin(),
         big_y.end(),
-        [i = 0, &big_bspline, &big_x]() mutable
-        { return big_bspline.evaluate(big_x.at(i++)); }
+        [i = 0, &big_bspline, &big_x]() mutable { return big_bspline.evaluate(big_x.at(i++)); }
     );
 
     big_bspline.fit(big_x, big_y);
@@ -198,9 +154,7 @@ TEST_CASE(
     }
     for (size_t i{0}; i < big_x.size(); i++)
     {
-      REQUIRE_THAT(
-          big_bspline.evaluate(big_x.at(i)), WithinRel(big_y.at(i), 1e-6)
-      );
+      REQUIRE_THAT(big_bspline.evaluate(big_x.at(i)), WithinRel(big_y.at(i), 1e-6));
     }
   }
 }
@@ -220,12 +174,7 @@ TEST_CASE(
   std::vector<double> c_data_vec{0.1, 1.3, 2.2, 4.9, 13.2};
   control_points::Data<double> c_data{c_data_vec};
 
-  BSpline<
-      double,
-      Curve::NON_UNIFORM,
-      BoundaryCondition::OPEN,
-      Extrapolation::CONSTANT>
-      bspline{t_data, c_data, degree};
+  types::OpenNonUniformConstant<double> bspline{t_data, c_data, degree};
 
   // clang-format off
   std::vector<double> x_values{-1.0, 0.0, 1.0, 2.2, 3.225, 4.25, 5.275, 6.3, 6.4, 6.9, 7.1};
@@ -253,17 +202,10 @@ TEST_CASE(
   std::vector<double> t_data_vec{0.1, 1.3, 2.2, 2.2, 4.9, 6.3, 6.3, 6.3, 13.2};
   knots::Data<double, Curve::NON_UNIFORM> t_data{t_data_vec};
 
-  std::vector<double> c_data_vec{
-      0.1, 1.3, 2.2, 2.5, 3.2, 4.3, 4.9, 5.6, 5.4, 0.3, 13.2
-  };
+  std::vector<double> c_data_vec{0.1, 1.3, 2.2, 2.5, 3.2, 4.3, 4.9, 5.6, 5.4, 0.3, 13.2};
   control_points::Data<double> c_data{c_data_vec};
 
-  BSpline<
-      double,
-      Curve::NON_UNIFORM,
-      BoundaryCondition::CLAMPED,
-      Extrapolation::NONE>
-      bspline{t_data, c_data, degree};
+  types::ClampedNonUniform<double> bspline{t_data, c_data, degree};
 
   // clang-format off
   std::vector<double> x_values{0.1, 0.2, 0.30000000000000004, 0.4, 0.5, 0.6000000000000001, 0.7000000000000001, 0.8, 0.9, 1.0, 1.1, 1.2000000000000002, 1.3, 1.4000000000000001, 1.5, 1.6, 1.7000000000000002, 1.8, 1.9000000000000001, 2.0, 2.1, 2.2, 2.3000000000000003, 2.4000000000000004, 2.5, 2.6, 2.7, 2.8000000000000003, 2.9000000000000004, 3.0, 3.1, 3.2, 3.3000000000000003, 3.4000000000000004, 3.5, 3.6, 3.7, 3.8000000000000003, 3.9000000000000004, 4.0, 4.1000000000000005, 4.2, 4.3, 4.4, 4.5, 4.6000000000000005, 4.7, 4.800000000000001, 4.9, 5.0, 5.1000000000000005, 5.2, 5.300000000000001, 5.4, 5.5, 5.6000000000000005, 5.7, 5.800000000000001, 5.9, 6.0, 6.1000000000000005, 6.2, 6.300000000000001, 6.4, 6.5, 6.6000000000000005, 6.7, 6.800000000000001, 6.9, 7.0, 7.1000000000000005, 7.2, 7.300000000000001, 7.4, 7.5, 7.6000000000000005, 7.7, 7.800000000000001, 7.9, 8.0, 8.1, 8.200000000000001, 8.3, 8.4, 8.5, 8.6, 8.700000000000001, 8.8, 8.9, 9.0, 9.1, 9.200000000000001, 9.3, 9.4, 9.5, 9.600000000000001, 9.700000000000001, 9.8, 9.9, 10.0, 10.100000000000001, 10.200000000000001, 10.3, 10.4, 10.5, 10.600000000000001, 10.700000000000001, 10.8, 10.9, 11.0, 11.100000000000001, 11.200000000000001, 11.3, 11.4, 11.5, 11.600000000000001, 11.700000000000001, 11.8, 11.9, 12.0, 12.100000000000001, 12.200000000000001, 12.3, 12.4, 12.5, 12.600000000000001, 12.700000000000001, 12.8, 12.9, 13.0, 13.100000000000001};
@@ -292,17 +234,10 @@ TEST_CASE(
   std::vector<double> t_data_vec{0.1, 1.3, 2.2, 2.2, 4.9, 6.3, 6.3, 6.3, 13.2};
   knots::Data<double, Curve::NON_UNIFORM> t_data{t_data_vec};
 
-  std::vector<double> c_data_vec{
-      0.1, 1.3, 2.2, 2.5, 3.2, 4.3, 4.9, 5.6, 5.4, 0.3, 13.2
-  };
+  std::vector<double> c_data_vec{0.1, 1.3, 2.2, 2.5, 3.2, 4.3, 4.9, 5.6, 5.4, 0.3, 13.2};
   control_points::Data<double> c_data{c_data_vec};
 
-  BSpline<
-      double,
-      Curve::NON_UNIFORM,
-      BoundaryCondition::CLAMPED,
-      Extrapolation::CONSTANT>
-      bspline{t_data, c_data, degree};
+  types::ClampedNonUniformConstant<double> bspline{t_data, c_data, degree};
 
   // clang-format off
   std::vector<double> x_values{-1.0, -0.5, 0.0, 0.1, 1.1076923076923078, 2.1153846153846154, 3.123076923076923, 4.13076923076923, 5.138461538461538, 6.146153846153846, 7.153846153846153, 8.161538461538461, 9.169230769230769, 10.176923076923076, 11.184615384615384, 12.192307692307692, 13.2, 13.3, 13.5, 14.27};
@@ -333,12 +268,10 @@ TEST_CASE(
   std::vector<double> c_data_vec{0.1, 1.3, 2.2, 3.2, 4.3, 5.6, 0.3, 13.2};
   control_points::Data<double> c_data{c_data_vec};
 
-  BSpline<
-      double,
-      Curve::NON_UNIFORM,
-      BoundaryCondition::PERIODIC,
-      Extrapolation::NONE>
-      bspline{t_data, c_data, degree};
+  // Note: currently we do not have a typedef for this combination of template parameters
+  BSpline<double, Curve::NON_UNIFORM, BoundaryCondition::PERIODIC, Extrapolation::NONE> bspline{
+      t_data, c_data, degree
+  };
 
   // To generate this reference data use the `reference.py` script in this
   // folder
@@ -372,12 +305,7 @@ TEST_CASE(
   std::vector<double> c_data_vec{0.1, 1.3, 2.2, 3.2, 4.3, 5.6, 0.3, 13.2};
   control_points::Data<double> c_data{c_data_vec};
 
-  BSpline<
-      double,
-      Curve::NON_UNIFORM,
-      BoundaryCondition::PERIODIC,
-      Extrapolation::PERIODIC>
-      bspline{t_data, c_data, degree};
+  types::PeriodicNonUniform<double> bspline{t_data, c_data, degree};
 
   // To generate this reference data use the `reference.py` script in this
   // folder
