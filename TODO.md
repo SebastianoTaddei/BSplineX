@@ -1,9 +1,14 @@
 # To do
 
-Roadmap to version 1.0.0
+Short term:
 
 - [ ] JSON serialization
 - [ ] 1D interpolation
-- [ ] Python API
-- [ ] Allow to pass no control points since if you fit them you can just internally initialise them to zero
+- [x] Python API
+- [x] Allow to pass no control points since if you fit them you can just internally initialise them to zero
 - [ ] Understand how to install this library with CMake
+
+Mid term:
+
+- [ ] 2D path interpolation with curvilinear coordinates
+- [ ] 3D path interpolation with curvilinear coordinates
