@@ -48,35 +48,22 @@ target_link_libraries(your_target BSplineX)
 
 ```cpp
 #include <iostream>
-#include "bsplinex.hpp"
-
-using namespace bsplinex;
+#include <vector>
+#include "BSplineX/bsplinex.hpp"
 
 int main()
 {
-  // Define the B-Spline degree
+  // Create a uniform clamped B-Spline with a 10 knots sequence in [0.0, 10.0]
+  // with knots.size() - degree - 1 control points
   constexpr size_t degree{3};
-
-  // Create a uniform knot sequence in [0.0, 10.0] of 10 knots
-  // Remember that knots must be ordered in ascending order
   constexpr size_t num_knots{10};
   constexpr double min_knot{0.0};
   constexpr double max_knot{10.0};
-  knots::Data<double, Curve::UNIFORM> knots{min_knot, max_knot, num_knots);
-  
-  // Create some control points
-  // There must be knots.size() - degree - 1 control points
-  control_points::Data<double> ctrl_points{{1.0, 0.3, 0.6, 0.9, 0.28, 9.32}};
-  
-  // We can now create our uniform B-Spline
-  // For example let's make it clamped and with constant extrapolation
-  UniformClamped<
-    double,
-    Extrapolation::CONSTANT
-  > bspline{knots, control_points};
+  std::vector<double> ctrl_points{1.0, 0.3, 0.6, 0.9, 0.28, 9.32};
 
-  // Obviously you can directly create the B-Spline by simply nesting the list initialisers
-  // (e.g., bspline{{knots_data}, {ctrl_points_data}})
+  auto bspline = bsplinex::factory::clamped_uniform_constant(
+    degree, min_knot, max_knot, num_knots, ctrl_points
+  );
 
   // Now you can simply evaluate the B-Spline
   double x{3.26};
@@ -97,16 +84,12 @@ In the previous example, the knots are easy to understand: they are you discreti
 ```cpp
 ...
  
-  // Create control points that are all zeros
-  control_points::Data<double> ctrl_points(knots.size() - degree - 1, 0.0);
-  
-  // Create the B-Spline
-  UniformClamped<
-    double,
-    Extrapolation::CONSTANT
-  > bspline{knots, control_points};
+  // Create the B-Spline without specifying the control points
+  auto bspline = bsplinex::factory::clamped_uniform_constant(
+    degree, min_knot, max_knot, num_knots
+  );
 
-  // Assume somewhere above you have loaded x- and y-values to fit you B-Spline to
+  // Assume somewhere you have loaded x- and y-values to fit you B-Spline to
 
   // Fit the B-Spline
   bspline.fit(x, y);
