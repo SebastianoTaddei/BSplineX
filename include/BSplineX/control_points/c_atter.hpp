@@ -2,10 +2,10 @@
 #define C_ATTER_HPP
 
 // BSplineX includes
-#include "control_points/c_data.hpp"
-#include "control_points/c_padder.hpp"
-#include "defines.hpp"
-#include "types.hpp"
+#include "BSplineX/control_points/c_data.hpp"
+#include "BSplineX/control_points/c_padder.hpp"
+#include "BSplineX/defines.hpp"
+#include "BSplineX/types.hpp"
 
 namespace bsplinex::control_points
 {

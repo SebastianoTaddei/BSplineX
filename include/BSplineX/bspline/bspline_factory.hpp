@@ -5,7 +5,7 @@
 #include <vector>
 
 // BSplineX
-#include "bspline/bspline_types.hpp"
+#include "BSplineX/bspline/bspline_types.hpp"
 
 namespace bsplinex::factory
 {

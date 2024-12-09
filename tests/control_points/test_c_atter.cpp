@@ -3,7 +3,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 // BSplineX includes
-#include "control_points/c_atter.hpp"
+#include "BSplineX/control_points/c_atter.hpp"
 
 using namespace Catch::Matchers;
 using namespace bsplinex;

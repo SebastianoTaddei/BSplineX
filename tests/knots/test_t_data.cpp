@@ -4,7 +4,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 // BSplineX includes
-#include "knots/t_data.hpp"
+#include "BSplineX/knots/t_data.hpp"
 
 using namespace bsplinex;
 using namespace bsplinex::knots;

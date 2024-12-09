@@ -26,9 +26,9 @@
 #endif
 
 // BSplineX includes
-#include "control_points/control_points.hpp"
-#include "knots/knots.hpp"
-#include "types.hpp"
+#include "BSplineX/control_points/control_points.hpp"
+#include "BSplineX/knots/knots.hpp"
+#include "BSplineX/types.hpp"
 
 constexpr size_t DENSE_MAX_COL = 512;
 

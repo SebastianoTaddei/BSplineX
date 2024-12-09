@@ -2,10 +2,10 @@
 #define T_ATTER_HPP
 
 // BSplineX includes
-#include "defines.hpp"
-#include "knots/t_data.hpp"
-#include "knots/t_padder.hpp"
-#include "types.hpp"
+#include "BSplineX/defines.hpp"
+#include "BSplineX/knots/t_data.hpp"
+#include "BSplineX/knots/t_padder.hpp"
+#include "BSplineX/types.hpp"
 
 namespace bsplinex::knots
 {

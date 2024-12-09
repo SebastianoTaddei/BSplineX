@@ -1,7 +1,7 @@
 #ifndef BSPLINE_TYPES_HPP
 #define BSPLINE_TYPES_HPP
 
-#include "bspline/bspline.hpp"
+#include "BSplineX/bspline/bspline.hpp"
 
 namespace bsplinex::types
 {

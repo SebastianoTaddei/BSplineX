@@ -6,9 +6,9 @@
 #include <vector>
 
 // BSplineX includes
-#include "defines.hpp"
-#include "knots/t_data.hpp"
-#include "types.hpp"
+#include "BSplineX/defines.hpp"
+#include "BSplineX/knots/t_data.hpp"
+#include "BSplineX/types.hpp"
 
 namespace bsplinex::knots
 {

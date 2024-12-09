@@ -1,4 +1,4 @@
-#include "bsplinex.hpp"
+#include "BSplineX/bsplinex.hpp"
 #include <iostream>
 
 int main()

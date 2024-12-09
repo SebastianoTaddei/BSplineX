@@ -6,7 +6,7 @@
 #include <vector>
 
 // BSplineX includes
-#include "defines.hpp"
+#include "BSplineX/defines.hpp"
 
 namespace bsplinex::control_points
 {

@@ -4,8 +4,8 @@
 #include <random>
 
 // BSplineX includes
-#include "bspline/bspline.hpp"
-#include "bspline/bspline_types.hpp"
+#include "BSplineX/bspline/bspline.hpp"
+#include "BSplineX/bspline/bspline_types.hpp"
 
 using namespace Catch::Matchers;
 using namespace bsplinex;

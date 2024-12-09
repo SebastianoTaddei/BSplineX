@@ -5,8 +5,8 @@
 #include <cstddef>
 
 // BSplineX includes
-#include "control_points/c_atter.hpp"
-#include "types.hpp"
+#include "BSplineX/control_points/c_atter.hpp"
+#include "BSplineX/types.hpp"
 
 /**
  * Naming convention:

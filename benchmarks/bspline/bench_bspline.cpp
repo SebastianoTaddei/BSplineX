@@ -7,7 +7,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 // BSplineX includes
-#include "bspline/bspline.hpp"
+#include "BSplineX/bspline/bspline.hpp"
 
 using namespace bsplinex;
 using namespace bsplinex::bspline;
@@ -29,30 +29,23 @@ TEST_CASE(
 
   BENCHMARK_ADVANCED("bspline.construct")(Catch::Benchmark::Chronometer meter)
   {
-    std::vector<Catch::Benchmark::storage_for<BSpline<
-        double,
-        Curve::UNIFORM,
-        BoundaryCondition::OPEN,
-        Extrapolation::NONE>>>
+    std::vector<Catch::Benchmark::storage_for<
+        BSpline<double, Curve::UNIFORM, BoundaryCondition::OPEN, Extrapolation::NONE>>>
         storage(meter.runs());
     meter.measure([&](int i) { storage[i].construct(t_data, c_data, degree); });
   };
 
   BENCHMARK_ADVANCED("bspline.destroy")(Catch::Benchmark::Chronometer meter)
   {
-    std::vector<Catch::Benchmark::destructable_object<BSpline<
-        double,
-        Curve::UNIFORM,
-        BoundaryCondition::OPEN,
-        Extrapolation::NONE>>>
+    std::vector<Catch::Benchmark::destructable_object<
+        BSpline<double, Curve::UNIFORM, BoundaryCondition::OPEN, Extrapolation::NONE>>>
         storage(meter.runs());
     for (auto &&o : storage)
       o.construct(t_data, c_data, degree);
     meter.measure([&](int i) { storage[i].destruct(); });
   };
 
-  auto fill =
-      [](double start, double stop, size_t steps, std::vector<double> &vec)
+  auto fill = [](double start, double stop, size_t steps, std::vector<double> &vec)
   {
     double step = (stop - start) / (double)steps;
     vec.resize(steps);
@@ -74,12 +67,9 @@ TEST_CASE(
   {
     knots_num = (size_t)std::pow(2.0, j);
     fill(start, stop, knots_num - degree - 1, ctrl_pts);
-    BSpline<
-        double,
-        Curve::UNIFORM,
-        BoundaryCondition::OPEN,
-        Extrapolation::NONE>
-        bspline{{0.0, 100.0, knots_num}, {ctrl_pts}, degree};
+    BSpline<double, Curve::UNIFORM, BoundaryCondition::OPEN, Extrapolation::NONE> bspline{
+        {0.0, 100.0, knots_num}, {ctrl_pts}, degree
+    };
 
     for (size_t i{4}; i < 5; i++)
     {
@@ -124,44 +114,32 @@ TEST_CASE(
 )
 {
   size_t degree{3};
-  knots::Data<double, Curve::NON_UNIFORM> t_data{
-      {0.1, 1.3, 2.2, 2.2, 4.9, 6.3, 6.3, 6.3, 13.2}
-  };
+  knots::Data<double, Curve::NON_UNIFORM> t_data{{0.1, 1.3, 2.2, 2.2, 4.9, 6.3, 6.3, 6.3, 13.2}};
   control_points::Data<double> c_data{{0.1, 1.3, 2.2, 4.9, 13.2}};
 
   BENCHMARK_ADVANCED("bspline.construct")(Catch::Benchmark::Chronometer meter)
   {
-    std::vector<Catch::Benchmark::storage_for<BSpline<
-        double,
-        Curve::NON_UNIFORM,
-        BoundaryCondition::OPEN,
-        Extrapolation::NONE>>>
+    std::vector<Catch::Benchmark::storage_for<
+        BSpline<double, Curve::NON_UNIFORM, BoundaryCondition::OPEN, Extrapolation::NONE>>>
         storage(meter.runs());
     meter.measure([&](int i) { storage[i].construct(t_data, c_data, degree); });
   };
 
   BENCHMARK_ADVANCED("bspline.destroy")(Catch::Benchmark::Chronometer meter)
   {
-    std::vector<Catch::Benchmark::destructable_object<BSpline<
-        double,
-        Curve::NON_UNIFORM,
-        BoundaryCondition::OPEN,
-        Extrapolation::NONE>>>
+    std::vector<Catch::Benchmark::destructable_object<
+        BSpline<double, Curve::NON_UNIFORM, BoundaryCondition::OPEN, Extrapolation::NONE>>>
         storage(meter.runs());
     for (auto &&o : storage)
       o.construct(t_data, c_data, degree);
     meter.measure([&](int i) { storage[i].destruct(); });
   };
 
-  BSpline<
-      double,
-      Curve::NON_UNIFORM,
-      BoundaryCondition::OPEN,
-      Extrapolation::NONE>
-      bspline{t_data, c_data, degree};
+  BSpline<double, Curve::NON_UNIFORM, BoundaryCondition::OPEN, Extrapolation::NONE> bspline{
+      t_data, c_data, degree
+  };
 
-  auto fill =
-      [](double start, double stop, size_t steps, std::vector<double> &vec)
+  auto fill = [](double start, double stop, size_t steps, std::vector<double> &vec)
   {
     double step = (stop - start) / (double)steps;
     vec.resize(steps);
@@ -184,12 +162,9 @@ TEST_CASE(
     knots_num = (size_t)std::pow(2.0, j);
     fill(0.0, 100.0, knots_num, knots);
     fill(start, stop, knots_num - degree - 1, ctrl_pts);
-    BSpline<
-        double,
-        Curve::NON_UNIFORM,
-        BoundaryCondition::OPEN,
-        Extrapolation::NONE>
-        bspline{{knots}, {ctrl_pts}, degree};
+    BSpline<double, Curve::NON_UNIFORM, BoundaryCondition::OPEN, Extrapolation::NONE> bspline{
+        {knots}, {ctrl_pts}, degree
+    };
 
     for (size_t i{4}; i < 5; i++)
     {

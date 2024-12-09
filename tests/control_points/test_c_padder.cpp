@@ -5,7 +5,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 // BSplineX includes
-#include "control_points/c_padder.hpp"
+#include "BSplineX/control_points/c_padder.hpp"
 
 using namespace Catch::Matchers;
 using namespace bsplinex;
@@ -25,7 +25,7 @@ TEST_CASE(
 }
 
 TEST_CASE(
-    "control_points::Padder<T, BoundaryCondition::PERIODIC>
+    "control_points::Padder<T, BoundaryCondition::PERIODIC>"
     "padder{control_points::Data<T> data, degree}",
     "[c_padder]"
 )

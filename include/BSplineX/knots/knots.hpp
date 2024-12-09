@@ -5,10 +5,10 @@
 #include <utility>
 
 // BSplineX includes
-#include "knots/t_atter.hpp"
-#include "knots/t_extrapolator.hpp"
-#include "knots/t_finder.hpp"
-#include "types.hpp"
+#include "BSplineX/knots/t_atter.hpp"
+#include "BSplineX/knots/t_extrapolator.hpp"
+#include "BSplineX/knots/t_finder.hpp"
+#include "BSplineX/types.hpp"
 
 /**
  * Naming convention:

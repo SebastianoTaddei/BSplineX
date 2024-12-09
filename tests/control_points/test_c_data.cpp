@@ -4,7 +4,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 // BSplineX includes
-#include "control_points/c_data.hpp"
+#include "BSplineX/control_points/c_data.hpp"
 
 using namespace bsplinex;
 using namespace bsplinex::control_points;
