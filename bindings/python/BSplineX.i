@@ -2,9 +2,9 @@
 
 // Injected C++ code
 %{
-#include "bspline/bspline.hpp"
-#include "bspline/bspline_types.hpp"
-#include "bspline/bspline_factory.hpp"
+#include "BSplineX/bspline/bspline.hpp"
+#include "BSplineX/bspline/bspline_types.hpp"
+#include "BSplineX/bspline/bspline_factory.hpp"
 using namespace bsplinex;
 %}
 
@@ -14,9 +14,9 @@ using namespace bsplinex;
 %template() std::vector<double>;
 
 
-%include "bspline/bspline.hpp"
-%include "bspline/bspline_factory.hpp"
-%include "bspline/bspline_types.hpp"
+%include "BSplineX/bspline/bspline.hpp"
+%include "BSplineX/bspline/bspline_factory.hpp"
+%include "BSplineX/bspline/bspline_types.hpp"
 %include "exception.i"
 using namespace bsplinex;
 
