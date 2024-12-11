@@ -64,7 +64,7 @@ public:
       value = this->extrapolator.extrapolate(value);
     }
 
-    return {this->finder.find(value), value};
+    return std::pair<size_t, T>{this->finder.find(value), value};
   }
 
   std::pair<T, T> domain() { return {value_left, value_right}; }

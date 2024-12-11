@@ -4,6 +4,7 @@
 // Standard includes
 #include <algorithm>
 #include <cstddef>
+#include <iostream>
 
 // BSplineX includes
 #include "BSplineX/defines.hpp"
@@ -37,6 +38,16 @@ public:
         value >= this->atter->at(this->index_left) && value <= this->atter->at(this->index_right),
         "Value outside of the domain"
     );
+
+    if (!this->atter)
+    {
+      std::cout << "Helo" << std::endl;
+    }
+    else
+    {
+      auto tmp = this->atter->begin();
+      std::cout << "Mega helo" << std::endl;
+    }
 
     auto upper = std::upper_bound(
         this->atter->begin() + this->index_left, this->atter->begin() + this->index_right, value

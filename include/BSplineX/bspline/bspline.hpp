@@ -39,8 +39,8 @@ template <typename T, Curve C, BoundaryCondition BC, Extrapolation EXT>
 class BSpline
 {
 private:
-  knots::Knots<T, C, BC, EXT> knots;
-  control_points::ControlPoints<T, BC> control_points;
+  knots::Knots<T, C, BC, EXT> knots{};
+  control_points::ControlPoints<T, BC> control_points{};
   size_t degree{0};
   std::vector<T> support{};
 
