@@ -28,6 +28,7 @@
 // BSplineX includes
 #include "BSplineX/control_points/control_points.hpp"
 #include "BSplineX/knots/knots.hpp"
+#include "BSplineX/macros.h"
 #include "BSplineX/types.hpp"
 
 constexpr size_t DENSE_MAX_COL = 512;
@@ -45,13 +46,67 @@ private:
   std::vector<T> support{};
 
 public:
-  BSpline() = default;
+  BSpline() { DEBUG_LOG_CALL("bspline::BSpline::BSpline()"); }
 
   BSpline(knots::Data<T, C> knots_data, control_points::Data<T> control_points_data, size_t degree)
       : knots{knots_data, degree}, control_points{control_points_data, degree}, degree{degree}
   {
+    DEBUG_LOG_CALL(
+        "bsplinex::bspline::BSpline<T, C, BC, EXT>::BSpline(bsplinex::knots::Data<T, C> "
+        "knots_data, bsplinex::control_points::Data<T> control_points_data, size_t degree)"
+    );
     this->check_sizes();
     this->support.resize(this->degree + 1);
+  }
+
+  BSpline(BSpline const &other)
+      : knots(other.knots), control_points(other.control_points), degree(other.degree),
+        support(other.support)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::bspline::BSpline<T, C, BC, EXT>::BSpline(bsplinex::bspline::BSpline<T, C, BC, "
+        "EXT> const &other)"
+    );
+  }
+
+  BSpline(BSpline &&other) noexcept
+      : knots(std::move(other.knots)), control_points(std::move(other.control_points)),
+        degree(other.degree), support(std::move(other.support))
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::bspline::BSpline<T, C, BC, EXT>::BSpline(bsplinex::bspline::BSpline<T, C, BC, "
+        "EXT> &&other) noexcept"
+    );
+  }
+
+  BSpline &operator=(BSpline const &other)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::bspline::BSpline<T, C, BC, EXT>& bsplinex::bspline::BSpline<T, C, BC, "
+        "EXT>::operator=(bsplinex::bspline::BSpline<T, C, BC, EXT> const& other)"
+    );
+    if (this == &other)
+      return *this;
+    knots          = other.knots;
+    control_points = other.control_points;
+    degree         = other.degree;
+    support        = other.support;
+    return *this;
+  }
+
+  BSpline &operator=(BSpline &&other) noexcept
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::bspline::BSpline<T, C, BC, EXT>& bsplinex::bspline::BSpline<T, C, BC, "
+        "EXT>::operator=(bsplinex::bspline::BSpline<T, C, BC, EXT>&& other) noexcept"
+    );
+    if (this == &other)
+      return *this;
+    knots          = std::move(other.knots);
+    control_points = std::move(other.control_points);
+    degree         = other.degree;
+    support        = std::move(other.support);
+    return *this;
   }
 
   T evaluate(T value)

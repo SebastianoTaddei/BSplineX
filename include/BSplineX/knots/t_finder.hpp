@@ -23,11 +23,61 @@ private:
   size_t index_right{0};
 
 public:
-  Finder() = default;
+  Finder() { DEBUG_LOG_CALL("bsplinex::knots::Finder<T, C, BC, EXT>::Finder()"); }
 
   Finder(Atter<T, C, BC> const &atter, size_t degree)
       : atter{&atter}, index_left{degree}, index_right{this->atter->size() - degree - 1}
   {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, C, BC, EXT>::Finder(bsplinex::knots::Atter<T, C, BC> const "
+        "&atter, size_t degree)"
+    );
+  }
+
+  Finder(const Finder &other)
+      : atter(other.atter), index_left(other.index_left), index_right(other.index_right)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, C, BC, EXT>::Finder(const bsplinex::knots::Finder<T, C, BC, "
+        "EXT> &other)"
+    );
+  }
+
+  Finder(Finder &&other) noexcept
+      : atter(other.atter), index_left(other.index_left), index_right(other.index_right)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, C, BC, EXT>::Finder(bsplinex::knots::Finder<T, C, BC, "
+        "EXT> &&other) noexcept"
+    );
+  }
+
+  Finder &operator=(const Finder &other)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, C, BC, EXT>& bsplinex::knots::Finder<T, C, BC, "
+        "EXT>::operator=(const bsplinex::knots::Finder<T, C, BC, EXT> &other)"
+    );
+    if (this == &other)
+      return *this;
+    atter       = other.atter;
+    index_left  = other.index_left;
+    index_right = other.index_right;
+    return *this;
+  }
+
+  Finder &operator=(Finder &&other) noexcept
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, C, BC, EXT>& bsplinex::knots::Finder<T, C, BC, "
+        "EXT>::operator=(bsplinex::knots::Finder<T, C, BC, EXT> &&other) noexcept"
+    )
+    if (this == &other)
+      return *this;
+    atter       = other.atter;
+    index_left  = other.index_left;
+    index_right = other.index_right;
+    return *this;
   }
 
   size_t find(T value) const
@@ -38,16 +88,6 @@ public:
         value >= this->atter->at(this->index_left) && value <= this->atter->at(this->index_right),
         "Value outside of the domain"
     );
-
-    if (!this->atter)
-    {
-      std::cout << "Helo" << std::endl;
-    }
-    else
-    {
-      auto tmp = this->atter->begin();
-      std::cout << "Mega helo" << std::endl;
-    }
 
     auto upper = std::upper_bound(
         this->atter->begin() + this->index_left, this->atter->begin() + this->index_right, value
@@ -67,12 +107,72 @@ private:
   size_t degree{};
 
 public:
-  Finder() = default;
+  Finder()
+  {
+    DEBUG_LOG_CALL("bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>::Finder()");
+  }
 
   Finder(Atter<T, Curve::UNIFORM, BC> const &atter, size_t degree)
       : value_left{atter.at(degree)}, value_right{atter.at(atter.size() - degree - 1)},
         step_size_inv{T(1) / (atter.at(degree + 1) - atter.at(degree))}, degree{degree}
   {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>::Finder(Atter<T, "
+        "Curve::UNIFORM, BC> const& atter, size_t degree)"
+    );
+  }
+
+  Finder(const Finder &other)
+      : value_left(other.value_left), value_right(other.value_right),
+        step_size_inv(other.step_size_inv), degree(other.degree)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>::Finder(const "
+        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>& other)"
+    );
+  }
+
+  Finder(Finder &&other) noexcept
+      : value_left(other.value_left), value_right(other.value_right),
+        step_size_inv(other.step_size_inv), degree(other.degree)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, "
+        "EXT>::Finder(bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>&& other) "
+        "noexcept"
+    );
+  }
+
+  Finder &operator=(const Finder &other)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>& bsplinex::knots::Finder<T, "
+        "bsplinex::Curve::UNIFORM, BC, EXT>::operator=(const bsplinex::knots::Finder<T, "
+        "bsplinex::Curve::UNIFORM, BC, EXT>& other)"
+    );
+    if (this == &other)
+      return *this;
+    value_left    = other.value_left;
+    value_right   = other.value_right;
+    step_size_inv = other.step_size_inv;
+    degree        = other.degree;
+    return *this;
+  }
+
+  Finder &operator=(Finder &&other) noexcept
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>& bsplinex::knots::Finder<T, "
+        "bsplinex::Curve::UNIFORM, BC, EXT>::operator=(bsplinex::knots::Finder<T, "
+        "bsplinex::Curve::UNIFORM, BC, EXT>&& other) noexcept"
+    );
+    if (this == &other)
+      return *this;
+    value_left    = other.value_left;
+    value_right   = other.value_right;
+    step_size_inv = other.step_size_inv;
+    degree        = other.degree;
+    return *this;
   }
 
   size_t find(T value) const

@@ -5,6 +5,7 @@
 #include "BSplineX/defines.hpp"
 #include "BSplineX/knots/t_data.hpp"
 #include "BSplineX/knots/t_padder.hpp"
+#include "BSplineX/macros.h"
 #include "BSplineX/types.hpp"
 
 namespace bsplinex::knots
@@ -18,9 +19,54 @@ private:
   Padder<T, C, BC> padder;
 
 public:
-  Atter() = default;
+  Atter() { DEBUG_LOG_CALL("bsplinex::knots::Atter<T, C, BC>::Atter()"); }
 
-  Atter(Data<T, C> data, size_t degree) : data{data}, padder{this->data, degree} {}
+  Atter(Data<T, C> data, size_t degree) : data{data}, padder{this->data, degree}
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Atter<T, C, BC>::Atter(bsplinex::knots::Data<T, C> data, size_t degree)"
+    );
+  }
+
+  Atter(Atter const &other) : data(other.data), padder(other.padder)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Atter<T, C, BC>::Atter(bsplinex::knots::Atter<T, C, BC> const &other)"
+    );
+  }
+
+  Atter(Atter &&other) noexcept : data(std::move(other.data)), padder(std::move(other.padder))
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Atter<T, C, BC>::Atter(bsplinex::knots::Atter<T, C, BC> &&other) noexcept"
+    );
+  }
+
+  Atter &operator=(Atter const &other)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Atter<T, C, BC>& bsplinex::knots::Atter<T, C, "
+        "BC>::operator=(bsplinex::knots::Atter<T, C, BC> const &other)"
+    );
+    if (this == &other)
+      return *this;
+    data   = other.data;
+    padder = other.padder;
+    return *this;
+  }
+
+  Atter &operator=(Atter &&other) noexcept
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Atter<T, C, BC>& bsplinex::knots::Atter<T, C, "
+        "BC>::operator=(bsplinex::knots::Atter<T, C, BC> &&other) noexcept"
+    );
+    if (this == &other)
+      return *this;
+    data   = std::move(other.data);
+    padder = std::move(other.padder);
+    return *this;
+  }
 
   T at(size_t index) const
   {

@@ -7,6 +7,7 @@
 
 // BSplineX includes
 #include "BSplineX/defines.hpp"
+#include "BSplineX/macros.h"
 #include "BSplineX/types.hpp"
 
 namespace bsplinex::knots
@@ -31,11 +32,14 @@ private:
   T step_size{};
 
 public:
-  Data() = default;
+  Data() { DEBUG_LOG_CALL("bsplinex::knots::Data<T, bsplinex::Curve::UNIFORM>::Data()"); }
 
   // Specifying the step-size means the domain will be [begin, end[
   Data(T begin, T end, T step)
   {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::UNIFORM>::Data(T begin, T end, T step)"
+    );
     assertm(step > 0, "Negative step-size");
     assertm(begin < end, "Wrong interval");
 
@@ -49,12 +53,65 @@ public:
   Data(T begin, T end, size_t num_elems)
       : begin{begin}, end{end}, num_elems{num_elems}, step_size{(end - begin) / num_elems}
   {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::UNIFORM>::Data(T begin, T end, size_t num_elems)"
+    );
     assertm(begin < end, "Wrong interval");
 
     this->begin     = begin;
     this->end       = end;
     this->num_elems = num_elems;
     this->step_size = (end - begin) / (num_elems - 1);
+  }
+
+  Data(const Data &other)
+      : begin(other.begin), end(other.end), num_elems(other.num_elems), step_size(other.step_size)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::UNIFORM>::Data(const bsplinex::knots::Data<T, "
+        "bsplinex::Curve::UNIFORM> &other)"
+    );
+  }
+
+  Data(Data &&other) noexcept
+      : begin(other.begin), end(other.end), num_elems(other.num_elems), step_size(other.step_size)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::UNIFORM>::Data(bsplinex::knots::Data<T, "
+        "bsplinex::Curve::UNIFORM> &&other) noexcept"
+    );
+  }
+
+  Data &operator=(const Data &other)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::UNIFORM>& bsplinex::knots::Data<T, "
+        "bsplinex::Curve::UNIFORM>::operator=(const bsplinex::knots::Data<T, "
+        "bsplinex::Curve::UNIFORM>& other)"
+    );
+    if (this == &other)
+      return *this;
+    begin     = other.begin;
+    end       = other.end;
+    num_elems = other.num_elems;
+    step_size = other.step_size;
+    return *this;
+  }
+
+  Data &operator=(Data &&other) noexcept
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::UNIFORM>& bsplinex::knots::Data<T, "
+        "bsplinex::Curve::UNIFORM>::operator=(bsplinex::knots::Data<T, bsplinex::Curve::UNIFORM>&& "
+        "other) noexcept"
+    );
+    if (this == &other)
+      return *this;
+    begin     = other.begin;
+    end       = other.end;
+    num_elems = other.num_elems;
+    step_size = other.step_size;
+    return *this;
   }
 
   T at(size_t index) const
@@ -89,9 +146,56 @@ private:
   std::vector<T> raw_data{};
 
 public:
-  Data() = default;
+  Data() { DEBUG_LOG_CALL("bsplinex::knots::Data<T, bsplinex::Curve::NON_UNIFORM>::Data()"); }
 
-  Data(std::vector<T> const &data) : raw_data(data) {}
+  Data(std::vector<T> const &data) : raw_data(data)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::NON_UNIFORM>::Data(std::vector<T> const& data)"
+    );
+  }
+
+  Data(const Data &other) : raw_data(other.raw_data)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::NON_UNIFORM>::Data(const "
+        "bsplinex::knots::Data<T, bsplinex::Curve::NON_UNIFORM> &other)"
+    );
+  }
+
+  Data(Data &&other) noexcept : raw_data(std::move(other.raw_data))
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::NON_UNIFORM>::Data(bsplinex::knots::Data<T, "
+        "bsplinex::Curve::NON_UNIFORM> &&other) noexcept"
+    );
+  }
+
+  Data &operator=(const Data &other)
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::NON_UNIFORM>& bsplinex::knots::Data<T, "
+        "bsplinex::Curve::NON_UNIFORM>::operator=(const bsplinex::knots::Data<T, "
+        "bsplinex::Curve::NON_UNIFORM> &other)"
+    );
+    if (this == &other)
+      return *this;
+    raw_data = other.raw_data;
+    return *this;
+  }
+
+  Data &operator=(Data &&other) noexcept
+  {
+    DEBUG_LOG_CALL(
+        "bsplinex::knots::Data<T, bsplinex::Curve::NON_UNIFORM>& bsplinex::knots::Data<T, "
+        "bsplinex::Curve::NON_UNIFORM>::operator=(bsplinex::knots::Data<T, "
+        "bsplinex::Curve::NON_UNIFORM> &&other) noexcept"
+    )
+    if (this == &other)
+      return *this;
+    raw_data = std::move(other.raw_data);
+    return *this;
+  }
 
   T at(size_t index) const
   {
