@@ -49,27 +49,21 @@ private:
   T value_right{};
 
 public:
-  Knots() { DEBUG_LOG_CALL("knots::Knots::Knots()"); }
+  Knots() { DEBUG_LOG_CALL(); }
 
   Knots(Data<T, C> data, size_t degree)
       : atter{data, degree}, extrapolator{this->atter, degree}, finder{this->atter, degree},
         value_left{this->atter.at(degree)},
         value_right{this->atter.at(this->atter.size() - degree - 1)}
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Knots<T, C, BC, EXT>::Knots(bsplinex::knots::Data<T, C> data, size_t "
-        "degree)"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Knots(Knots const &other)
       : atter(other.atter), extrapolator(other.extrapolator), finder(other.finder),
         value_left(other.value_left), value_right(other.value_right)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Knots<T, C, BC, EXT>::Knots(bsplinex::knots::Knots<T, C, BC, EXT> const& "
-        "other)"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Knots(Knots &&other) noexcept
@@ -77,18 +71,12 @@ public:
         finder(std::move(other.finder)), value_left(std::move(other.value_left)),
         value_right(std::move(other.value_right))
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Knots<T, C, BC, EXT>::Knots(bsplinex::knots::Knots<T, C, BC, EXT>&& "
-        "other) noexcept"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Knots &operator=(Knots const &other)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Knots<T, C, BC, EXT>& bsplinex::knots::Knots<T, C, BC, "
-        "EXT>::operator=(bsplinex::knots::Knots<T, C, BC, EXT> const& other)"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     atter        = other.atter;
@@ -101,10 +89,7 @@ public:
 
   Knots &operator=(Knots &&other) noexcept
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Knots<T, C, BC, EXT>& bsplinex::knots::Knots<T, C, BC, "
-        "EXT>::operator=(bsplinex::knots::Knots<T, C, BC, EXT>&& other) noexcept"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     atter        = std::move(other.atter);

@@ -23,41 +23,29 @@ private:
   size_t index_right{0};
 
 public:
-  Finder() { DEBUG_LOG_CALL("bsplinex::knots::Finder<T, C, BC, EXT>::Finder()"); }
+  Finder() { DEBUG_LOG_CALL(); }
 
   Finder(Atter<T, C, BC> const &atter, size_t degree)
       : atter{&atter}, index_left{degree}, index_right{this->atter->size() - degree - 1}
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, C, BC, EXT>::Finder(bsplinex::knots::Atter<T, C, BC> const "
-        "&atter, size_t degree)"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Finder(const Finder &other)
       : atter(other.atter), index_left(other.index_left), index_right(other.index_right)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, C, BC, EXT>::Finder(const bsplinex::knots::Finder<T, C, BC, "
-        "EXT> &other)"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Finder(Finder &&other) noexcept
       : atter(other.atter), index_left(other.index_left), index_right(other.index_right)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, C, BC, EXT>::Finder(bsplinex::knots::Finder<T, C, BC, "
-        "EXT> &&other) noexcept"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Finder &operator=(const Finder &other)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, C, BC, EXT>& bsplinex::knots::Finder<T, C, BC, "
-        "EXT>::operator=(const bsplinex::knots::Finder<T, C, BC, EXT> &other)"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     atter       = other.atter;
@@ -68,10 +56,7 @@ public:
 
   Finder &operator=(Finder &&other) noexcept
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, C, BC, EXT>& bsplinex::knots::Finder<T, C, BC, "
-        "EXT>::operator=(bsplinex::knots::Finder<T, C, BC, EXT> &&other) noexcept"
-    )
+    DEBUG_LOG_CALL()
     if (this == &other)
       return *this;
     atter       = other.atter;
@@ -109,47 +94,33 @@ private:
 public:
   Finder()
   {
-    DEBUG_LOG_CALL("bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>::Finder()");
+    DEBUG_LOG_CALL();
   }
 
   Finder(Atter<T, Curve::UNIFORM, BC> const &atter, size_t degree)
       : value_left{atter.at(degree)}, value_right{atter.at(atter.size() - degree - 1)},
         step_size_inv{T(1) / (atter.at(degree + 1) - atter.at(degree))}, degree{degree}
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>::Finder(Atter<T, "
-        "Curve::UNIFORM, BC> const& atter, size_t degree)"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Finder(const Finder &other)
       : value_left(other.value_left), value_right(other.value_right),
         step_size_inv(other.step_size_inv), degree(other.degree)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>::Finder(const "
-        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>& other)"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Finder(Finder &&other) noexcept
       : value_left(other.value_left), value_right(other.value_right),
         step_size_inv(other.step_size_inv), degree(other.degree)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, "
-        "EXT>::Finder(bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>&& other) "
-        "noexcept"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Finder &operator=(const Finder &other)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>& bsplinex::knots::Finder<T, "
-        "bsplinex::Curve::UNIFORM, BC, EXT>::operator=(const bsplinex::knots::Finder<T, "
-        "bsplinex::Curve::UNIFORM, BC, EXT>& other)"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     value_left    = other.value_left;
@@ -161,11 +132,7 @@ public:
 
   Finder &operator=(Finder &&other) noexcept
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Finder<T, bsplinex::Curve::UNIFORM, BC, EXT>& bsplinex::knots::Finder<T, "
-        "bsplinex::Curve::UNIFORM, BC, EXT>::operator=(bsplinex::knots::Finder<T, "
-        "bsplinex::Curve::UNIFORM, BC, EXT>&& other) noexcept"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     value_left    = other.value_left;

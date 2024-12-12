@@ -19,35 +19,23 @@ private:
   Padder<T, C, BC> padder;
 
 public:
-  Atter() { DEBUG_LOG_CALL("bsplinex::knots::Atter<T, C, BC>::Atter()"); }
+  Atter() { DEBUG_LOG_CALL(); }
 
   Atter(Data<T, C> data, size_t degree) : data{data}, padder{this->data, degree}
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Atter<T, C, BC>::Atter(bsplinex::knots::Data<T, C> data, size_t degree)"
-    );
+    DEBUG_LOG_CALL();
   }
 
-  Atter(Atter const &other) : data(other.data), padder(other.padder)
-  {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Atter<T, C, BC>::Atter(bsplinex::knots::Atter<T, C, BC> const &other)"
-    );
-  }
+  Atter(Atter const &other) : data(other.data), padder(other.padder) { DEBUG_LOG_CALL(); }
 
   Atter(Atter &&other) noexcept : data(std::move(other.data)), padder(std::move(other.padder))
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Atter<T, C, BC>::Atter(bsplinex::knots::Atter<T, C, BC> &&other) noexcept"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Atter &operator=(Atter const &other)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Atter<T, C, BC>& bsplinex::knots::Atter<T, C, "
-        "BC>::operator=(bsplinex::knots::Atter<T, C, BC> const &other)"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     data   = other.data;
@@ -57,10 +45,7 @@ public:
 
   Atter &operator=(Atter &&other) noexcept
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Atter<T, C, BC>& bsplinex::knots::Atter<T, C, "
-        "BC>::operator=(bsplinex::knots::Atter<T, C, BC> &&other) noexcept"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     data   = std::move(other.data);

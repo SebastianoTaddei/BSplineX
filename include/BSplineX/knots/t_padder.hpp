@@ -28,43 +28,17 @@ template <typename T, Curve C>
 class Padder<T, C, BoundaryCondition::OPEN>
 {
 public:
-  Padder()
-  {
-    DEBUG_LOG_CALL("bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::OPEN>::Padder()");
-  }
+  Padder() { DEBUG_LOG_CALL(); }
 
-  Padder(Data<T, C> &, size_t)
-  {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::OPEN>::Padder(bsplinex::knots::Data<T, C>&, size_t)"
-    );
-  }
+  Padder(Data<T, C> &, size_t) { DEBUG_LOG_CALL(); }
 
-  Padder(const Padder &other)
-  {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::OPEN>::Padder(const "
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::OPEN>& other)"
-    );
-  }
+  Padder(const Padder &other) { DEBUG_LOG_CALL(); }
 
-  Padder(Padder &&other) noexcept
-  {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::OPEN>::Padder(bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::OPEN>&& other) noexcept"
-    );
-  }
+  Padder(Padder &&other) noexcept { DEBUG_LOG_CALL(); }
 
   Padder &operator=(const Padder &other)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::OPEN>& "
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::OPEN>::operator=(const "
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::OPEN>& other)"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     return *this;
@@ -72,12 +46,7 @@ public:
 
   Padder &operator=(Padder &&other) noexcept
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::OPEN>& "
-        "bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::OPEN>::operator=(bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::OPEN>&& other) noexcept"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     return *this;
@@ -113,18 +82,11 @@ private:
   size_t degree{0};
 
 public:
-  Padder()
-  {
-    DEBUG_LOG_CALL("bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::CLAMPED>::Padder()");
-  }
+  Padder() { DEBUG_LOG_CALL(); }
 
   Padder(Data<T, C> &data, size_t degree)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::CLAMPED>::Padder(bsplinex::knots::Data<T, C> &data, size_t "
-        "degree)"
-    );
+    DEBUG_LOG_CALL();
     this->pad_left  = data.at(0);
     this->pad_right = data.at(data.size() - 1);
     this->degree    = degree;
@@ -133,29 +95,18 @@ public:
   Padder(const Padder &other)
       : pad_left(other.pad_left), pad_right(other.pad_right), degree(other.degree)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::CLAMPED>::Padder(const "
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::CLAMPED>& other)"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Padder(Padder &&other) noexcept
       : pad_left(other.pad_left), pad_right(other.pad_right), degree(other.degree)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::CLAMPED>::Padder(bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::CLAMPED>&& other) noexcept"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Padder &operator=(const Padder &other)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::CLAMPED>& "
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::CLAMPED>::operator=(const "
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::CLAMPED>& other)"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     pad_left  = other.pad_left;
@@ -166,12 +117,7 @@ public:
 
   Padder &operator=(Padder &&other) noexcept
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::CLAMPED>& "
-        "bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::CLAMPED>::operator=(bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::CLAMPED>&& other) noexcept"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     pad_left  = other.pad_left;
@@ -207,20 +153,11 @@ private:
   std::vector<T> pad_right{};
 
 public:
-  Padder()
-  {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::PERIODIC>::Padder()"
-    );
-  }
+  Padder() { DEBUG_LOG_CALL(); }
 
   Padder(Data<T, C> &data, size_t degree)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::PERIODIC>::Padder(bsplinex::knots::Data<T, C>& data, size_t "
-        "degree)"
-    );
+    DEBUG_LOG_CALL();
     T period        = data.at(data.size() - 1) - data.at(0);
     this->pad_left  = data.slice(data.size() - degree - 1, data.size() - 1);
     this->pad_right = data.slice(1, degree + 1);
@@ -233,29 +170,18 @@ public:
 
   Padder(const Padder &other) : pad_left(other.pad_left), pad_right(other.pad_right)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::PERIODIC>::Padder(const "
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::PERIODIC>& other)"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Padder(Padder &&other) noexcept
       : pad_left(std::move(other.pad_left)), pad_right(std::move(other.pad_right))
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::PERIODIC>::Padder(bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::PERIODIC>&& other) noexcept"
-    );
+    DEBUG_LOG_CALL();
   }
 
   Padder &operator=(const Padder &other)
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::PERIODIC>& "
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::PERIODIC>::operator=(const "
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::PERIODIC>& other)"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     pad_left  = other.pad_left;
@@ -265,12 +191,7 @@ public:
 
   Padder &operator=(Padder &&other) noexcept
   {
-    DEBUG_LOG_CALL(
-        "bsplinex::knots::Padder<T, C, bsplinex::BoundaryCondition::PERIODIC>& "
-        "bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::PERIODIC>::operator=(bsplinex::knots::Padder<T, C, "
-        "bsplinex::BoundaryCondition::PERIODIC>&& other) noexcept"
-    );
+    DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
     pad_left  = std::move(other.pad_left);
