@@ -15,13 +15,13 @@ template <typename T, Curve C, BoundaryCondition BC>
 class Atter
 {
 private:
-  Data<T, C> data;
-  Padder<T, C, BC> padder;
+  Data<T, C> data{};
+  Padder<T, C, BC> padder{};
 
 public:
   Atter() { DEBUG_LOG_CALL(); }
 
-  Atter(Data<T, C> data, size_t degree) : data{data}, padder{this->data, degree}
+  Atter(Data<T, C> const &data, size_t degree) : data{data}, padder{this->data, degree}
   {
     DEBUG_LOG_CALL();
   }
@@ -32,6 +32,8 @@ public:
   {
     DEBUG_LOG_CALL();
   }
+
+  ~Atter() noexcept { DEBUG_LOG_CALL(); }
 
   Atter &operator=(Atter const &other)
   {

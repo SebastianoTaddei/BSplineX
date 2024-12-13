@@ -13,6 +13,7 @@ set(THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party")
 option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(BUILD_EXAMPLES "Build examples" OFF)
+option(BSPLINEX_DEBUG_LOG_CALL "Debug class contructors/destructors" OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Debug")
@@ -45,6 +46,10 @@ target_include_directories(bsplinex INTERFACE
 file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 target_sources(bsplinex INTERFACE ${HEADER_FILES})
 target_link_libraries(bsplinex INTERFACE eigenlib)
+
+if(BSPLINEX_DEBUG_LOG_CALL)
+  target_compile_definitions(bsplinex INTERFACE -DBSPLINEX_DEBUG_LOG_CALL)
+endif()
 
 if(BUILD_TESTS)
   add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)

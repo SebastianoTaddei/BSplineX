@@ -8,6 +8,7 @@
 // BSplineX includes
 #include "BSplineX/defines.hpp"
 #include "BSplineX/knots/t_data.hpp"
+#include "BSplineX/macros.h"
 #include "BSplineX/types.hpp"
 
 namespace bsplinex::knots
@@ -30,13 +31,15 @@ class Padder<T, C, BoundaryCondition::OPEN>
 public:
   Padder() { DEBUG_LOG_CALL(); }
 
-  Padder(Data<T, C> &, size_t) { DEBUG_LOG_CALL(); }
+  Padder(Data<T, C> const &, size_t) { DEBUG_LOG_CALL(); }
 
-  Padder(const Padder &other) { DEBUG_LOG_CALL(); }
+  Padder([[maybe_unused]] Padder const &other) { DEBUG_LOG_CALL(); }
 
-  Padder(Padder &&other) noexcept { DEBUG_LOG_CALL(); }
+  Padder([[maybe_unused]] Padder &&other) noexcept { DEBUG_LOG_CALL(); }
 
-  Padder &operator=(const Padder &other)
+  ~Padder() noexcept { DEBUG_LOG_CALL(); }
+
+  Padder &operator=(Padder const &other)
   {
     DEBUG_LOG_CALL();
     if (this == &other)
@@ -84,7 +87,7 @@ private:
 public:
   Padder() { DEBUG_LOG_CALL(); }
 
-  Padder(Data<T, C> &data, size_t degree)
+  Padder(Data<T, C> const &data, size_t degree)
   {
     DEBUG_LOG_CALL();
     this->pad_left  = data.at(0);
@@ -103,6 +106,8 @@ public:
   {
     DEBUG_LOG_CALL();
   }
+
+  ~Padder() noexcept { DEBUG_LOG_CALL(); }
 
   Padder &operator=(const Padder &other)
   {
@@ -155,7 +160,7 @@ private:
 public:
   Padder() { DEBUG_LOG_CALL(); }
 
-  Padder(Data<T, C> &data, size_t degree)
+  Padder(Data<T, C> const &data, size_t degree)
   {
     DEBUG_LOG_CALL();
     T period        = data.at(data.size() - 1) - data.at(0);
@@ -178,6 +183,8 @@ public:
   {
     DEBUG_LOG_CALL();
   }
+
+  ~Padder() noexcept { DEBUG_LOG_CALL(); }
 
   Padder &operator=(const Padder &other)
   {

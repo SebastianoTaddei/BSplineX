@@ -48,7 +48,11 @@ private:
 public:
   BSpline() { DEBUG_LOG_CALL(); }
 
-  BSpline(knots::Data<T, C> knots_data, control_points::Data<T> control_points_data, size_t degree)
+  BSpline(
+      knots::Data<T, C> const &knots_data,
+      control_points::Data<T> const &control_points_data,
+      size_t degree
+  )
       : knots{knots_data, degree}, control_points{control_points_data, degree}, degree{degree}
   {
     DEBUG_LOG_CALL();
@@ -69,6 +73,8 @@ public:
   {
     DEBUG_LOG_CALL();
   }
+
+  ~BSpline() noexcept { DEBUG_LOG_CALL(); }
 
   BSpline &operator=(BSpline const &other)
   {
@@ -120,6 +126,11 @@ public:
     {
       throw std::runtime_error("x and y must have the same size");
     }
+
+    // NOTE: bertolazzi says that the LU algorithm uses roughly half the computations as QR. it is
+    // less stable, but for a band matrix it may be fine. plus he suggests to sort the input points
+    // as that may improve performance substantially, especially if we develop a specialised LU band
+    // algorithm.
 
     std::vector<T> nnz_basis(this->degree + 1, (T)0);
     Eigen::Map<Eigen::VectorX<T>> b(y.data(), y.size());

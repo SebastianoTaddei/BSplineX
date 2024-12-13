@@ -9,6 +9,7 @@
 // BSplineX includes
 #include "BSplineX/defines.hpp"
 #include "BSplineX/knots/t_atter.hpp"
+#include "BSplineX/macros.h"
 #include "BSplineX/types.hpp"
 
 namespace bsplinex::knots
@@ -42,6 +43,8 @@ public:
   {
     DEBUG_LOG_CALL();
   }
+
+  ~Finder() noexcept { DEBUG_LOG_CALL(); }
 
   Finder &operator=(const Finder &other)
   {
@@ -92,10 +95,7 @@ private:
   size_t degree{};
 
 public:
-  Finder()
-  {
-    DEBUG_LOG_CALL();
-  }
+  Finder() { DEBUG_LOG_CALL(); }
 
   Finder(Atter<T, Curve::UNIFORM, BC> const &atter, size_t degree)
       : value_left{atter.at(degree)}, value_right{atter.at(atter.size() - degree - 1)},

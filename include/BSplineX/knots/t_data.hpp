@@ -17,9 +17,9 @@ template <typename T, Curve C>
 class Data
 {
 public:
-  virtual T at(size_t index)                              = 0;
-  virtual size_t size()                                   = 0;
-  virtual std::vector<T> slice(size_t first, size_t last) = 0;
+  virtual T at(size_t index) const                              = 0;
+  virtual size_t size() const                                   = 0;
+  virtual std::vector<T> slice(size_t first, size_t last) const = 0;
 };
 
 template <typename T>
@@ -71,6 +71,8 @@ public:
   {
     DEBUG_LOG_CALL();
   }
+
+  ~Data() noexcept { DEBUG_LOG_CALL(); }
 
   Data &operator=(const Data &other)
   {
@@ -135,6 +137,8 @@ public:
   Data(const Data &other) : raw_data(other.raw_data) { DEBUG_LOG_CALL(); }
 
   Data(Data &&other) noexcept : raw_data(std::move(other.raw_data)) { DEBUG_LOG_CALL(); }
+
+  ~Data() noexcept { DEBUG_LOG_CALL(); }
 
   Data &operator=(const Data &other)
   {

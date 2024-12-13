@@ -51,7 +51,7 @@ private:
 public:
   Knots() { DEBUG_LOG_CALL(); }
 
-  Knots(Data<T, C> data, size_t degree)
+  Knots(Data<T, C> const &data, size_t degree)
       : atter{data, degree}, extrapolator{this->atter, degree}, finder{this->atter, degree},
         value_left{this->atter.at(degree)},
         value_right{this->atter.at(this->atter.size() - degree - 1)}
@@ -73,6 +73,8 @@ public:
   {
     DEBUG_LOG_CALL();
   }
+
+  ~Knots() { DEBUG_LOG_CALL(); }
 
   Knots &operator=(Knots const &other)
   {
