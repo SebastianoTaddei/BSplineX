@@ -7,7 +7,6 @@
 
 // BSplineX includes
 #include "BSplineX/defines.hpp"
-#include "BSplineX/macros.h"
 #include "BSplineX/types.hpp"
 
 namespace bsplinex::knots

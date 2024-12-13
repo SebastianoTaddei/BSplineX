@@ -5,7 +5,6 @@
 #include "BSplineX/defines.hpp"
 #include "BSplineX/knots/t_data.hpp"
 #include "BSplineX/knots/t_padder.hpp"
-#include "BSplineX/macros.h"
 #include "BSplineX/types.hpp"
 
 namespace bsplinex::knots

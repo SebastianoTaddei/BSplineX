@@ -8,7 +8,6 @@
 #include "BSplineX/knots/t_atter.hpp"
 #include "BSplineX/knots/t_extrapolator.hpp"
 #include "BSplineX/knots/t_finder.hpp"
-#include "BSplineX/macros.h"
 #include "BSplineX/types.hpp"
 
 /**
