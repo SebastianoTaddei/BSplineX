@@ -32,7 +32,7 @@ public:
     DEBUG_LOG_CALL();
   }
 
-  Finder(const Finder &other)
+  Finder(Finder const &other)
       : atter(other.atter), index_left(other.index_left), index_right(other.index_right)
   {
     DEBUG_LOG_CALL();
@@ -46,7 +46,7 @@ public:
 
   ~Finder() noexcept { DEBUG_LOG_CALL(); }
 
-  Finder &operator=(const Finder &other)
+  Finder &operator=(Finder const &other)
   {
     DEBUG_LOG_CALL();
     if (this == &other)
@@ -104,7 +104,7 @@ public:
     DEBUG_LOG_CALL();
   }
 
-  Finder(const Finder &other)
+  Finder(Finder const &other)
       : value_left(other.value_left), value_right(other.value_right),
         step_size_inv(other.step_size_inv), degree(other.degree)
   {
@@ -118,7 +118,7 @@ public:
     DEBUG_LOG_CALL();
   }
 
-  Finder &operator=(const Finder &other)
+  Finder &operator=(Finder const &other)
   {
     DEBUG_LOG_CALL();
     if (this == &other)

@@ -95,7 +95,7 @@ public:
     this->degree    = degree;
   }
 
-  Padder(const Padder &other)
+  Padder(Padder const &other)
       : pad_left(other.pad_left), pad_right(other.pad_right), degree(other.degree)
   {
     DEBUG_LOG_CALL();
@@ -109,7 +109,7 @@ public:
 
   ~Padder() noexcept { DEBUG_LOG_CALL(); }
 
-  Padder &operator=(const Padder &other)
+  Padder &operator=(Padder const &other)
   {
     DEBUG_LOG_CALL();
     if (this == &other)
@@ -173,7 +173,7 @@ public:
     }
   }
 
-  Padder(const Padder &other) : pad_left(other.pad_left), pad_right(other.pad_right)
+  Padder(Padder const &other) : pad_left(other.pad_left), pad_right(other.pad_right)
   {
     DEBUG_LOG_CALL();
   }
@@ -186,7 +186,7 @@ public:
 
   ~Padder() noexcept { DEBUG_LOG_CALL(); }
 
-  Padder &operator=(const Padder &other)
+  Padder &operator=(Padder const &other)
   {
     DEBUG_LOG_CALL();
     if (this == &other)

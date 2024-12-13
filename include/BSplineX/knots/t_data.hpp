@@ -60,7 +60,7 @@ public:
     this->step_size = (end - begin) / (num_elems - 1);
   }
 
-  Data(const Data &other)
+  Data(Data const &other)
       : begin(other.begin), end(other.end), num_elems(other.num_elems), step_size(other.step_size)
   {
     DEBUG_LOG_CALL();
@@ -74,7 +74,7 @@ public:
 
   ~Data() noexcept { DEBUG_LOG_CALL(); }
 
-  Data &operator=(const Data &other)
+  Data &operator=(Data const &other)
   {
     DEBUG_LOG_CALL();
     if (this == &other)
@@ -134,13 +134,13 @@ public:
 
   Data(std::vector<T> const &data) : raw_data(data) { DEBUG_LOG_CALL(); }
 
-  Data(const Data &other) : raw_data(other.raw_data) { DEBUG_LOG_CALL(); }
+  Data(Data const &other) : raw_data(other.raw_data) { DEBUG_LOG_CALL(); }
 
   Data(Data &&other) noexcept : raw_data(std::move(other.raw_data)) { DEBUG_LOG_CALL(); }
 
   ~Data() noexcept { DEBUG_LOG_CALL(); }
 
-  Data &operator=(const Data &other)
+  Data &operator=(Data const &other)
   {
     DEBUG_LOG_CALL();
     if (this == &other)
