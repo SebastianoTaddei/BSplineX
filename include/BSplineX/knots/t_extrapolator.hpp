@@ -60,6 +60,8 @@ public:
     DEBUG_LOG_CALL();
   }
 
+  ~Extrapolator() { DEBUG_LOG_CALL(); }
+
   Extrapolator &operator=(Extrapolator const &other)
   {
     DEBUG_LOG_CALL();
@@ -118,6 +120,8 @@ public:
   {
     DEBUG_LOG_CALL();
   }
+
+  ~Extrapolator() { DEBUG_LOG_CALL(); }
 
   Extrapolator &operator=(Extrapolator const &other)
   {
