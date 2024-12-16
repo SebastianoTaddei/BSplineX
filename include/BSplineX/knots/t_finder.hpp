@@ -4,7 +4,6 @@
 // Standard includes
 #include <algorithm>
 #include <cstddef>
-#include <iostream>
 
 // BSplineX includes
 #include "BSplineX/defines.hpp"
@@ -31,41 +30,15 @@ public:
     DEBUG_LOG_CALL();
   }
 
-  Finder(Finder const &other)
-      : atter(other.atter), index_left(other.index_left), index_right(other.index_right)
-  {
-    DEBUG_LOG_CALL();
-  }
+  Finder(Finder const &other) = delete;
 
-  Finder(Finder &&other) noexcept
-      : atter(other.atter), index_left(other.index_left), index_right(other.index_right)
-  {
-    DEBUG_LOG_CALL();
-  }
+  Finder(Finder &&other) = delete;
 
   ~Finder() noexcept { DEBUG_LOG_CALL(); }
 
-  Finder &operator=(Finder const &other)
-  {
-    DEBUG_LOG_CALL();
-    if (this == &other)
-      return *this;
-    atter       = other.atter;
-    index_left  = other.index_left;
-    index_right = other.index_right;
-    return *this;
-  }
+  Finder &operator=(Finder const &other) = delete;
 
-  Finder &operator=(Finder &&other) noexcept
-  {
-    DEBUG_LOG_CALL()
-    if (this == &other)
-      return *this;
-    atter       = other.atter;
-    index_left  = other.index_left;
-    index_right = other.index_right;
-    return *this;
-  }
+  Finder &operator=(Finder &&other) = delete;
 
   size_t find(T value) const
   {
@@ -103,43 +76,13 @@ public:
     DEBUG_LOG_CALL();
   }
 
-  Finder(Finder const &other)
-      : value_left(other.value_left), value_right(other.value_right),
-        step_size_inv(other.step_size_inv), degree(other.degree)
-  {
-    DEBUG_LOG_CALL();
-  }
+  Finder(Finder const &other) = delete;
 
-  Finder(Finder &&other) noexcept
-      : value_left(other.value_left), value_right(other.value_right),
-        step_size_inv(other.step_size_inv), degree(other.degree)
-  {
-    DEBUG_LOG_CALL();
-  }
+  Finder(Finder &&other) = delete;
 
-  Finder &operator=(Finder const &other)
-  {
-    DEBUG_LOG_CALL();
-    if (this == &other)
-      return *this;
-    value_left    = other.value_left;
-    value_right   = other.value_right;
-    step_size_inv = other.step_size_inv;
-    degree        = other.degree;
-    return *this;
-  }
+  Finder &operator=(Finder const &other) = delete;
 
-  Finder &operator=(Finder &&other) noexcept
-  {
-    DEBUG_LOG_CALL();
-    if (this == &other)
-      return *this;
-    value_left    = other.value_left;
-    value_right   = other.value_right;
-    step_size_inv = other.step_size_inv;
-    degree        = other.degree;
-    return *this;
-  }
+  Finder &operator=(Finder &&other) = delete;
 
   size_t find(T value) const
   {

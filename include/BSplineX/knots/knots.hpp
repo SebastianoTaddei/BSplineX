@@ -46,6 +46,7 @@ private:
   Finder<T, C, BC, EXT> finder;
   T value_left{};
   T value_right{};
+  size_t degree{};
 
 public:
   Knots() { DEBUG_LOG_CALL(); }
@@ -53,22 +54,22 @@ public:
   Knots(Data<T, C> const &data, size_t degree)
       : atter{data, degree}, extrapolator{this->atter, degree}, finder{this->atter, degree},
         value_left{this->atter.at(degree)},
-        value_right{this->atter.at(this->atter.size() - degree - 1)}
+        value_right{this->atter.at(this->atter.size() - degree - 1)}, degree{degree}
   {
     DEBUG_LOG_CALL();
   }
 
   Knots(Knots const &other)
-      : atter(other.atter), extrapolator(other.extrapolator), finder(other.finder),
-        value_left(other.value_left), value_right(other.value_right)
+      : atter(other.atter), extrapolator(other.extrapolator), finder(this->atter, other.degree),
+        value_left(other.value_left), value_right(other.value_right), degree{other.degree}
   {
     DEBUG_LOG_CALL();
   }
 
   Knots(Knots &&other) noexcept
       : atter(std::move(other.atter)), extrapolator(std::move(other.extrapolator)),
-        finder(std::move(other.finder)), value_left(std::move(other.value_left)),
-        value_right(std::move(other.value_right))
+        finder(this->atter, other.degree), value_left(std::move(other.value_left)),
+        value_right(std::move(other.value_right)), degree{other.degree}
   {
     DEBUG_LOG_CALL();
   }
@@ -80,11 +81,12 @@ public:
     DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
-    atter        = other.atter;
-    extrapolator = other.extrapolator;
-    finder       = other.finder;
-    value_left   = other.value_left;
-    value_right  = other.value_right;
+    this->atter        = other.atter;
+    this->extrapolator = other.extrapolator;
+    new (&this->finder) Finder<T, C, BC, EXT>(this->atter, other.degree);
+    this->value_left  = other.value_left;
+    this->value_right = other.value_right;
+    this->degree      = other.degree;
     return *this;
   }
 
@@ -93,11 +95,12 @@ public:
     DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
-    atter        = std::move(other.atter);
-    extrapolator = std::move(other.extrapolator);
-    finder       = std::move(other.finder);
-    value_left   = std::move(other.value_left);
-    value_right  = std::move(other.value_right);
+    this->atter        = std::move(other.atter);
+    this->extrapolator = std::move(other.extrapolator);
+    new (&this->finder) Finder<T, C, BC, EXT>(this->atter, other.degree);
+    this->value_left  = std::move(other.value_left);
+    this->value_right = std::move(other.value_right);
+    this->degree      = other.degree;
     return *this;
   }
 
