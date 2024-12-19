@@ -6,6 +6,8 @@ project(bsplinex
   HOMEPAGE_URL "https://github.com/SebastianoTaddei/BSplineX"
 )
 
+cmake_policy(SET CMP0135 NEW)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party")
@@ -20,23 +22,12 @@ if(NOT CMAKE_BUILD_TYPE)
   message("CMAKE_BUILD_TYPE not specified, defaulting to ${CMAKE_BUILD_TYPE}")
 endif()
 
-if(NOT CMALE_INSTALL_PREFIX)
+if(NOT CMAKE_INSTALL_PREFIX)
   set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/lib")
   message("CMAKE_INSTALL_PREFIX not specified, defaulting to ${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 
-# include(FetchContent)
-# set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
-# fetchcontent_declare(
-#   Eigen
-#   GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-#   GIT_TAG        3.4.0
-#   GIT_PROGRESS   TRUE
-#   FIND_PACKAGE_ARGS
-# )
-# fetchcontent_makeavailable(Eigen)
-
-include(${CMAKE_CURRENT_SOURCE_DIR}/eigen.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/eigen.cmake)
 
 add_library(bsplinex INTERFACE)
 
