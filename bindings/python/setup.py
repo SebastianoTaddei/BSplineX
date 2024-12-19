@@ -25,7 +25,7 @@ bsplinex_module = Extension(
     library_dirs=[],
     libraries=[],
     swig_opts=["-c++", f"-I{include_dirs[0]}"],
-    extra_compile_args=["-std=c++17", "-DBSPLINEX_DEBUG_LOG_CALL"],
+    extra_compile_args=["-std=c++17"],
 )
 
 setup(

@@ -9,4 +9,7 @@ authors = [{ name = "Sebastiano Taddei" }, { name = "Gabriele Masina" }]
 description = "The B-Spline library you have always dreamed of were performance and easy-to-use interfaces live in harmony."
 readme = "README.md"
 
+[project.optional-dependencies]
+examples = ["matplotlib", "numpy"]
+
 [tool.setuptools_scm]
