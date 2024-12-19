@@ -27,8 +27,8 @@
 
 // BSplineX includes
 #include "BSplineX/control_points/control_points.hpp"
-#include "BSplineX/knots/knots.hpp"
 #include "BSplineX/defines.hpp"
+#include "BSplineX/knots/knots.hpp"
 #include "BSplineX/types.hpp"
 
 constexpr size_t DENSE_MAX_COL = 512;
@@ -120,7 +120,7 @@ public:
     return basis_functions;
   }
 
-  void fit(std::vector<T> const &x, std::vector<T> &y)
+  void fit(std::vector<T> const &x, std::vector<T> const &y)
   {
     if (x.size() != y.size())
     {
@@ -133,7 +133,7 @@ public:
     // algorithm.
 
     std::vector<T> nnz_basis(this->degree + 1, (T)0);
-    Eigen::Map<Eigen::VectorX<T>> b(y.data(), y.size());
+    Eigen::Map<Eigen::VectorX<T> const> b(y.data(), y.size());
     Eigen::VectorX<T> res;
     size_t num_cols{this->control_points.size()};
     if constexpr (BC == BoundaryCondition::PERIODIC)
