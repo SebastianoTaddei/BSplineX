@@ -1,0 +1,9 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# List dependencies
+find_dependency(Eigen3 REQUIRED)
+
+# Provide the target
+include("${CMAKE_CURRENT_LIST_DIR}/BSplineXTargets.cmake")

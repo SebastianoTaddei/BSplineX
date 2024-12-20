@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(bsplinex
+project(BSplineX
   VERSION 0.0.0
   DESCRIPTION "A header-only library to harness the power of BSplines"
   HOMEPAGE_URL "https://github.com/SebastianoTaddei/BSplineX"
@@ -29,17 +29,18 @@ endif()
 
 include("${BSPLINEX_CMAKE_MODULES_DIR}/eigen.cmake")
 
-add_library(bsplinex INTERFACE)
+add_library(BSplineX INTERFACE)
 
-target_include_directories(bsplinex INTERFACE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
+target_include_directories(BSplineX INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
 )
 file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
-target_sources(bsplinex INTERFACE ${HEADER_FILES})
-target_link_libraries(bsplinex INTERFACE eigenlib)
+target_sources(BSplineX INTERFACE ${HEADER_FILES})
+target_link_libraries(BSplineX INTERFACE eigenlib)
 
 if(BSPLINEX_DEBUG_LOG_CALL)
-  target_compile_definitions(bsplinex INTERFACE -DBSPLINEX_DEBUG_LOG_CALL)
+  target_compile_definitions(BSplineX INTERFACE -DBSPLINEX_DEBUG_LOG_CALL)
 endif()
 
 if(BUILD_TESTS)
@@ -55,8 +56,40 @@ if(BUILD_EXAMPLES)
 endif()
 
 if(MSVC)
-  target_compile_options(bsplinex INTERFACE /W4 /WX)
+  target_compile_options(BSplineX INTERFACE /W4 /WX)
 else()
-  target_compile_options(bsplinex INTERFACE -Wall -Wextra -pedantic -Werror)
+  target_compile_options(BSplineX INTERFACE -Wall -Wextra -pedantic -Werror)
 endif()
+
+
+install(TARGETS BSplineX
+  EXPORT BSplineXTargets
+)
+
+install(DIRECTORY include/ DESTINATION include)
+
+install(EXPORT BSplineXTargets
+  FILE BSplineXTargets.cmake
+  NAMESPACE BSplineX::
+  DESTINATION lib/cmake/BSplineX
+)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  BSplineXConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion
+)
+
+configure_package_config_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/BSplineXConfig.cmake
+  INSTALL_DESTINATION lib/cmake/BSplineX
+)
+
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/BSplineXConfig.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/BSplineXConfigVersion.cmake
+  DESTINATION lib/cmake/BSplineX
+)
 
