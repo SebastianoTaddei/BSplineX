@@ -1,10 +1,4 @@
-include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/catch.cmake)
-
-list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
-include(CTest)
-include(Catch)
-
-# Tests
+include("${BSPLINEX_CMAKE_MODULES_DIR}/catch.cmake")
 
 file(GLOB_RECURSE KNOTS_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/knots/test_*.cpp")
 add_executable(test_knots ${KNOTS_TESTS})

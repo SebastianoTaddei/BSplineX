@@ -1,18 +1,6 @@
-include(FetchContent)
-
-set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
-fetchcontent_declare(
-  Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v3.7.1
-  GIT_PROGRESS   TRUE
-  FIND_PACKAGE_ARGS
-)
-fetchcontent_makeavailable(Catch2)
+include("${BSPLINEX_CMAKE_MODULES_DIR}/catch.cmake")
 
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
-include(CTest)
-include(Catch)
 
 # Benchmarks
 
@@ -22,10 +10,8 @@ file(GLOB_RECURSE
 )
 add_executable(bench_bspline ${BSPLINE_BENCHS})
 
-# SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer")
-
 target_link_libraries(bench_bspline PRIVATE
-  bsplinex Catch2::Catch2WithMain
+  bsplinex catchlib
 )
 catch_discover_tests(bench_bspline)
 

@@ -6,11 +6,11 @@ project(bsplinex
   HOMEPAGE_URL "https://github.com/SebastianoTaddei/BSplineX"
 )
 
-cmake_policy(SET CMP0135 NEW)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
-set(THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party")
+set(BSPLINEX_THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party")
+set(BSPLINEX_CMAKE_MODULES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_BENCHMARKS "Build benchmarks" OFF)
@@ -27,7 +27,7 @@ if(NOT CMAKE_INSTALL_PREFIX)
   message("CMAKE_INSTALL_PREFIX not specified, defaulting to ${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/eigen.cmake)
+include("${BSPLINEX_CMAKE_MODULES_DIR}/eigen.cmake")
 
 add_library(bsplinex INTERFACE)
 

@@ -209,3 +209,4 @@ bindings/python/BSplineX.py
 bindings/python/BSplineX_wrap.cpp
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,vim,clion
+venv
