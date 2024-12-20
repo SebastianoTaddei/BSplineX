@@ -27,4 +27,4 @@ jobs:
         cd build
         make -j
     - name: ctest
-      run: ctest --test-dir build/benchmarks --output-on-failure -V
+      run: ctest --test-dir build/tests --output-on-failure -V
