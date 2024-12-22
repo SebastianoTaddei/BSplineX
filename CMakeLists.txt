@@ -26,6 +26,7 @@ include("${BSPLINEX_CMAKE_MODULES_DIR}/eigen.cmake")
 
 # Library definition
 add_library(BSplineX INTERFACE)
+add_library(BSplineX::BSplineX ALIAS BSplineX)
 
 target_link_libraries(BSplineX INTERFACE Eigen3::Eigen)
 
