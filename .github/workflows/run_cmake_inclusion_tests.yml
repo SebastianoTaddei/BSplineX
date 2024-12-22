@@ -1,0 +1,57 @@
+name: Test BSplineX CMake Inclusion Methods
+
+on:
+  push:
+    branches: ["cmake_tests"]
+  pull_request:
+    branches: ["cmake_tests"]
+
+jobs:
+  test-cmake-methods:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake g++
+
+      - name: Copy test folder to separate location
+        run: |
+          mkdir -p /tmp/test_project
+          cp -r $GITHUB_WORKSPACE/test_cmake_inclusion /tmp/test_project
+          cd /tmp/test_project
+
+      - name: Prepare build directory
+        run: mkdir -p /tmp/test_project/build
+
+      - name: Test add_subdirectory method
+        run: |
+          cd /tmp/test_project
+          mkdir -p third_party
+          git clone $GITHUB_WORKSPACE third_party/BSplineX
+          cd build
+          cmake -DADD_SUBDIRECTORY_METHOD=ON ..
+          cmake --build .
+          ./test
+
+      - name: Test FetchContent method
+        run: |
+          cd /tmp/test_project
+          rm -rf third_party
+          rm -rf build/*
+          cd build
+          cmake -DFETCH_CONTENT_METHOD=ON ..
+          cmake --build .
+          ./test
+
+      - name: Test find_package method
+        run: |
+          cd /tmp/test_project
+          rm -rf build/*
+          cd build
+          cmake -DFIND_PACKAGE_METHOD=ON ..
+          cmake --build .
+          ./test
