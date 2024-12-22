@@ -21,7 +21,7 @@ jobs:
       - name: Copy test folder to separate location
         run: |
           mkdir -p /tmp/test_project
-          cp -r $GITHUB_WORKSPACE/test_cmake_inclusion /tmp/test_project
+          cp -r $GITHUB_WORKSPACE/cmake/test_cmake_inclusion /tmp/test_project
           cd /tmp/test_project
 
       - name: Prepare build directory
