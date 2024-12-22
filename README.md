@@ -24,20 +24,65 @@ If you are using CMake, you can add the library as a subdirectory in your projec
 
 ```cmake
 add_subdirectory(path/to/BSplineX)
-target_link_libraries(your_target BSplineX)
+target_link_libraries(your_target PRIVATE BSplineX::BSplineX)
 ```
 
 You can use `FetchContent` to download the library from GitHub.
 
 ```cmake
 include(FetchContent)
-FetchContent_Declare(
+
+# Optionally specify a custom path to fetch content to
+set(FETCHCONTENT_BASE_DIR "path/to/your/dependencies")
+fetchcontent_declare(
   BSplineX
   GIT_REPOSITORY https://github.com/SebastianoTaddei/BSplineX.git
   GIT_TAG        main
 )
-FetchContent_MakeAvailable(BSplineX)
-target_link_libraries(your_target BSplineX)
+fetchcontent_makeavailable(BSplineX)
+target_link_libraries(your_target PRIVATE BSplineX::BSplineX)
+```
+
+If you already have `BSplineX` somewhere on your system, you can use `find_pacakge` directly.
+
+```cmake
+# Optionally specify a custom path to find content from
+list(APPEND CMAKE_PREFIX_PATH "path/to/your/dependencies")
+find_package(
+  BSplineX
+  ${YOUR_DESIRED_BSPLINEX_VERSION}
+  NO_MODULE
+)
+
+target_link_libraries(your_target PRIVATE BSplineX::BSplineX)
+```
+
+Since we are nice people, we also show you how to conditionally use `FetchContent` based if you already have the library or not.
+
+```cmake
+# Optionally specify a custom path to find content from
+list(APPEND CMAKE_PREFIX_PATH "path/to/your/dependencies")
+find_package(
+  BSplineX
+  ${YOUR_DESIRED_BSPLINEX_VERSION}
+  NO_MODULE
+)
+
+if(NOT TARGET BSplineX::BSplineX)
+  include(FetchContent)
+
+  # Optionally specify a custom path to fetch content to
+  set(FETCHCONTENT_BASE_DIR "path/to/your/dependencies")
+  fetchcontent_declare(
+      BSplineX
+      GIT_REPOSITORY https://github.com/SebastianoTaddei/BSplineX.git
+      GIT_TAG        main
+  )
+
+  fetchcontent_makeavailable(BSplineX)
+endif()
+
+target_link_libraries(your_target PRIVATE BSplineX::BSplineX)
 ```
 
 ## Usage
