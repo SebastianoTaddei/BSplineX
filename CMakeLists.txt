@@ -31,15 +31,7 @@ include("${BSPLINEX_CMAKE_MODULES_DIR}/eigen.cmake")
 
 add_library(BSplineX INTERFACE)
 
-file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
-foreach(HEADER_FILE IN LISTS HEADER_FILES)
-  file(RELATIVE_PATH RELATIVE_PATH_HEADER_FILE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADER_FILE})
-  list(APPEND RELATIVE_HEADER_FILES ${RELATIVE_PATH_HEADER_FILE})
-endforeach()
 
-target_sources(BSplineX INTERFACE
-  $<BUILD_INTERFACE:${RELATIVE_HEADER_FILES}>
-)
 target_link_libraries(BSplineX INTERFACE Eigen3::Eigen)
 
 target_include_directories(BSplineX INTERFACE
@@ -47,20 +39,34 @@ target_include_directories(BSplineX INTERFACE
   $<INSTALL_INTERFACE:include>
 )
 
-if(BSPLINEX_DEBUG_LOG_CALL)
-  target_compile_definitions(BSplineX INTERFACE -DBSPLINEX_DEBUG_LOG_CALL)
-endif()
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
-if(BUILD_TESTS)
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
-endif()
+  file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
+  foreach(HEADER_FILE IN LISTS HEADER_FILES)
+    file(RELATIVE_PATH RELATIVE_PATH_HEADER_FILE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADER_FILE})
+    list(APPEND RELATIVE_HEADER_FILES ${RELATIVE_PATH_HEADER_FILE})
+  endforeach()
 
-if(BUILD_BENCHMARKS)
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/benchmarks)
-endif()
+  target_sources(BSplineX INTERFACE
+    $<BUILD_INTERFACE:${RELATIVE_HEADER_FILES}>
+  )
 
-if(BUILD_EXAMPLES)
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
+  if(BSPLINEX_DEBUG_LOG_CALL)
+    target_compile_definitions(BSplineX INTERFACE -DBSPLINEX_DEBUG_LOG_CALL)
+  endif()
+
+  if(BUILD_TESTS)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
+  endif()
+
+  if(BUILD_BENCHMARKS)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/benchmarks)
+  endif()
+
+  if(BUILD_EXAMPLES)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
+  endif()
+
 endif()
 
 if(MSVC)
