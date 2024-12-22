@@ -2,9 +2,9 @@ name: Test BSplineX CMake Inclusion Methods
 
 on:
   push:
-    branches: ["cmake_tests"]
+    branches: ["main"]
   pull_request:
-    branches: ["cmake_tests"]
+    branches: ["main"]
 
 jobs:
   test-cmake-methods:
