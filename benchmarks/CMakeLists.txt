@@ -11,7 +11,7 @@ file(GLOB_RECURSE
 add_executable(bench_bspline ${BSPLINE_BENCHS})
 
 target_link_libraries(bench_bspline PRIVATE
-  bsplinex catchlib
+  BSplineX catchlib
 )
 catch_discover_tests(bench_bspline)
 

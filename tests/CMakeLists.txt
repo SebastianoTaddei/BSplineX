@@ -2,7 +2,7 @@ include("${BSPLINEX_CMAKE_MODULES_DIR}/catch.cmake")
 
 file(GLOB_RECURSE KNOTS_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/knots/test_*.cpp")
 add_executable(test_knots ${KNOTS_TESTS})
-target_link_libraries(test_knots PRIVATE bsplinex catchlib)
+target_link_libraries(test_knots PRIVATE BSplineX catchlib)
 catch_discover_tests(test_knots)
 
 file(GLOB_RECURSE
@@ -11,7 +11,7 @@ file(GLOB_RECURSE
 )
 add_executable(test_control_points ${CONTROL_POINTS_TESTS})
 target_link_libraries(test_control_points PRIVATE
-  bsplinex catchlib
+  BSplineX catchlib
 )
 catch_discover_tests(test_control_points)
 
@@ -21,7 +21,7 @@ file(GLOB_RECURSE
 )
 add_executable(test_deboor ${DEBOOR_TESTS})
 target_link_libraries(test_deboor PRIVATE
-  bsplinex catchlib
+  BSplineX catchlib
 )
 catch_discover_tests(test_deboor)
 
@@ -31,7 +31,7 @@ file(GLOB_RECURSE
 )
 add_executable(test_bspline ${BSPLINE_TESTS})
 target_link_libraries(test_bspline PRIVATE
-  bsplinex catchlib
+  BSplineX catchlib
 )
 catch_discover_tests(test_bspline)
 

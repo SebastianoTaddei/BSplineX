@@ -31,13 +31,21 @@ include("${BSPLINEX_CMAKE_MODULES_DIR}/eigen.cmake")
 
 add_library(BSplineX INTERFACE)
 
+file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
+foreach(HEADER_FILE IN LISTS HEADER_FILES)
+  file(RELATIVE_PATH RELATIVE_PATH_HEADER_FILE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADER_FILE})
+  list(APPEND RELATIVE_HEADER_FILES ${RELATIVE_PATH_HEADER_FILE})
+endforeach()
+
+target_sources(BSplineX INTERFACE
+  $<BUILD_INTERFACE:${RELATIVE_HEADER_FILES}>
+)
+target_link_libraries(BSplineX INTERFACE Eigen3::Eigen)
+
 target_include_directories(BSplineX INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
-target_sources(BSplineX INTERFACE ${HEADER_FILES})
-target_link_libraries(BSplineX INTERFACE eigenlib)
 
 if(BSPLINEX_DEBUG_LOG_CALL)
   target_compile_definitions(BSplineX INTERFACE -DBSPLINEX_DEBUG_LOG_CALL)
@@ -66,7 +74,7 @@ install(TARGETS BSplineX
   EXPORT BSplineXTargets
 )
 
-install(DIRECTORY include/ DESTINATION include)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
 
 install(EXPORT BSplineXTargets
   FILE BSplineXTargets.cmake
