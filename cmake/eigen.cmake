@@ -1,7 +1,7 @@
 set(EIGEN_REQUIRED_VERSION 3.4)
 cmake_policy(SET CMP0135 NEW)
 
-set(FETCHCONTENT_BASE_DIR "${BSPLINEX_THIRD_PARTY_DIR}")
+list(APPEND CMAKE_PATH_PREFIX "${BSPLINEX_THIRD_PARTY_DIR}")
 find_package(
   Eigen3
   ${EIGEN_REQUIRED_VERSION}
@@ -17,6 +17,7 @@ if(NOT TARGET Eigen3::Eigen)
   )
   include(FetchContent)
 
+  set(FETCHCONTENT_BASE_DIR "${BSPLINEX_THIRD_PARTY_DIR}")
   fetchcontent_declare(
       Eigen3
       URL "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_REQUIRED_VERSION}/eigen-${EIGEN_REQUIRED_VERSION}.tar.gz"
