@@ -30,6 +30,7 @@ jobs:
       - name: Test add_subdirectory method
         run: |
           cd /tmp/test_project
+          ls .
           mkdir -p third_party
           git clone $GITHUB_WORKSPACE third_party/BSplineX
           cd build
