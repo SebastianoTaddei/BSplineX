@@ -94,13 +94,19 @@ install(TARGETS BSplineX EXPORT BSplineXTargets)
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
 
+include(CMakePackageConfigHelpers)
+
+export(EXPORT BSplineXTargets
+    FILE ${CMAKE_CURRENT_BINARY_DIR}/BSplineXTargets.cmake
+    NAMESPACE BSplineX::
+)
+
 install(EXPORT BSplineXTargets
   FILE BSplineXTargets.cmake
   NAMESPACE BSplineX::
   DESTINATION lib/cmake/BSplineX
 )
 
-include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
   BSplineXConfigVersion.cmake
   VERSION ${PROJECT_VERSION}
@@ -116,7 +122,6 @@ configure_package_config_file(
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/BSplineXConfig.cmake
   ${CMAKE_CURRENT_BINARY_DIR}/BSplineXConfigVersion.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/BSplineXTargets.cmake
   DESTINATION lib/cmake/BSplineX
 )
 
