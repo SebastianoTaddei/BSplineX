@@ -21,7 +21,7 @@ jobs:
       - name: Copy test folder to separate location
         run: |
           mkdir -p /tmp/test_project
-          cp -r $GITHUB_WORKSPACE/cmake/test_cmake_inclusion /tmp/test_project
+          cp -r $GITHUB_WORKSPACE/cmake/test_cmake_inclusion/* /tmp/test_project
           cd /tmp/test_project
 
       - name: Prepare build directory
@@ -30,7 +30,6 @@ jobs:
       - name: Test add_subdirectory method
         run: |
           cd /tmp/test_project
-          ls .
           mkdir -p third_party
           git clone $GITHUB_WORKSPACE third_party/BSplineX
           cd build
