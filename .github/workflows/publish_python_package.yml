@@ -9,9 +9,6 @@ on:
 env:
   PACKAGE_DIR: bindings/python
 
-env:
-  PACKAGE_DIR: bindings/python
-
 permissions:
   contents: read
 
