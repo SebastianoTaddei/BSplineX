@@ -43,9 +43,7 @@ jobs:
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_ARCHS_WINDOWS: "AMD64"
           CIBW_BEFORE_BUILD: "pip install scikit-build-core swig"
-          CIBW_PACKAGE_DIR: ${{ env.PACKAGE_DIR }}
-        working-directory: ./
-        run: python -m cibuildwheel --output-dir wheelhouse
+        run: python -m cibuildwheel --output-dir wheelhouse ${{ env.PACKAGE_DIR }}
 
       - uses: actions/upload-artifact@v4
         with:
