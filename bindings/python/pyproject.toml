@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=64", "swig>=4"]
-build-backend = "setuptools.build_meta"
+requires = ["scikit-build-core>=0.10.0", "swig>=4"]
+build-backend = "scikit_build_core.build"
 
 [project]
 name = "BSplineX"
@@ -8,8 +8,14 @@ version = "0.1.0"
 authors = [{ name = "Sebastiano Taddei" }, { name = "Gabriele Masina" }]
 description = "The B-Spline library you have always dreamed of were performance and easy-to-use interfaces live in harmony."
 readme = "README.md"
+requires-python = ">=3.7"
 
 [project.optional-dependencies]
 examples = ["matplotlib", "numpy"]
 
-[tool.setuptools_scm]
+[tool.scikit-build]
+cmake.build-type = "Release"
+build.verbose = true
+sdist.include = ["CMakeLists.txt"]
+wheel.packages = ["python/BSplineX"]
+build-dir = "build"
