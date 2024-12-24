@@ -39,7 +39,7 @@ public:
     DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
-    data   = other.data;
+    data = other.data;
     padder = other.padder;
     return *this;
   }
@@ -49,7 +49,7 @@ public:
     DEBUG_LOG_CALL();
     if (this == &other)
       return *this;
-    data   = std::move(other.data);
+    data = std::move(other.data);
     padder = std::move(other.padder);
     return *this;
   }
@@ -80,7 +80,16 @@ public:
     size_t index{0};
 
   public:
-    iterator(Atter<T, C, BC> const *atter, size_t index) : atter{atter}, index{index} {}
+    // iterator traits
+    using difference_type = int;
+    using value_type = T;
+    using pointer = const T *;
+    using reference = const T &;
+    using iterator_category = std::random_access_iterator_tag;
+
+    iterator(Atter<T, C, BC> const *atter, size_t index) : atter{atter}, index{index}
+    {
+    }
 
     iterator(iterator const &b) = default;
 
@@ -116,10 +125,10 @@ public:
       return *this;
     }
 
-    iterator operator+(int n)
+    iterator operator+(int n) const
     {
-      iterator retval  = *this;
-      retval          += n;
+      iterator retval = *this;
+      retval += n;
       return retval;
     }
 
@@ -129,14 +138,14 @@ public:
       return *this;
     }
 
-    iterator operator-(int n)
+    iterator operator-(int n) const
     {
-      iterator retval  = *this;
-      retval          -= n;
+      iterator retval = *this;
+      retval -= n;
       return retval;
     }
 
-    int operator-(iterator const &b) { return this->index - b.index; }
+    difference_type operator-(iterator const &b) const { return this->index - b.index; }
 
     bool operator==(iterator const &other) const { return this->index == other.index; }
 
@@ -154,24 +163,17 @@ public:
 
     bool operator!=(iterator const &other) const { return !(*this == other); }
 
-    T operator*() { return this->atter->at(this->index); }
+    value_type operator*() const { return this->atter->at(this->index); }
 
-    T operator[](int n) { return *(*this + n); }
+    value_type operator[](int n) const { return *(*this + n); }
 
-    bool operator<(iterator const &b) { return this->index < b.index; }
+    bool operator<(iterator const &b) const { return this->index < b.index; }
 
-    bool operator>(iterator const &b) { return this->index > b.index; }
+    bool operator>(iterator const &b) const { return this->index > b.index; }
 
-    bool operator<=(iterator const &b) { return !(*this > b); }
+    bool operator<=(iterator const &b) const { return !(*this > b); }
 
-    bool operator>=(iterator const &b) { return !(*this < b); }
-
-    // iterator traits
-    using difference_type   = int;
-    using value_type        = T;
-    using pointer           = const T *;
-    using reference         = const T &;
-    using iterator_category = std::random_access_iterator_tag;
+    bool operator>=(iterator const &b) const { return !(*this < b); }
   };
 
   iterator begin() const { return {this, 0}; }
