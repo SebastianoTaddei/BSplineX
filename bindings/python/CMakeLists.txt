@@ -29,5 +29,15 @@ target_link_libraries(BSplineXpy PRIVATE
         BSplineX::BSplineX
 )
 
+if (MSVC)
+    # Disable some warnings for Visual Studio.
+    # Most of them are related to the SWIG generated code.
+    target_compile_options(BSplineXpy PRIVATE
+            /wd4127 # conditional expression is constant
+            /wd4456 # declaration of 'identifier' hides previous local declaration
+            /wd4267 # conversion from 'size_t' to 'type', possible loss of data
+    )
+endif()
+
 install(TARGETS BSplineXpy DESTINATION .)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/BSplineX.py DESTINATION .)
