@@ -37,15 +37,17 @@ if(NOT TARGET Catch2::Catch2WithMain)
 
     fetchcontent_makeavailable(Catch2)
   endif()
-else()
-  get_target_property(CATCH2_INCLUDE_DIRS
-    Catch2::Catch2
-    INTERFACE_INCLUDE_DIRECTORIES
-  )
-  message("-- BSplineX: Found Catch2 installed in ${Catch2_INCLUDE_DIRS}")
 endif()
 
-list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+get_target_property(CATCH2_SOURCE_DIR
+    Catch2::Catch2
+    SOURCE_DIR
+)
+
+if(NOT DEFINED CATCH2_SOURCE_DIR)
+   message(FATAL_ERROR "-- BSplineX: Could not find Catch2 source directory")
+endif()
+
+list(APPEND CMAKE_MODULE_PATH ${CATCH2_SOURCE_DIR}/../extras)
 include(CTest)
 include(Catch)
-
