@@ -35,17 +35,16 @@ jobs:
 
       - name: Build wheels
         env:
-          CIBW_BUILD: "cp37-* cp38-* cp39-* cp310-* cp311-*"
+          CIBW_BUILD: "cp310-* cp311-* cp312-*"
           CIBW_ARCHS_MACOS: "x86_64 arm64"
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_ARCHS_WINDOWS: "AMD64"
           CIBW_BEFORE_BUILD: "pip install scikit-build-core swig cmake"
-          CIBW_BEFORE_ALL_LINUX: >
-            yum install -y python3-devel
         run: python -m cibuildwheel --output-dir wheelhouse ${{ env.PACKAGE_DIR }}
 
       - uses: actions/upload-artifact@v4
         with:
+          name: release-dists-wheels
           path: ./wheelhouse/*.whl
 
   sdist-build:
@@ -70,6 +69,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: release-dists-sdist
           path: ${{ env.PACKAGE_DIR }}/dist/*.tar.gz
 
   pypi-publish:
@@ -87,8 +87,14 @@ jobs:
       - name: Retrieve release distributions
         uses: actions/download-artifact@v4
         with:
-          name: artifact
-          path: dist/
+            name: release-dists-wheels
+            path: dist/
+
+      - name: Retrieve source distribution
+        uses: actions/download-artifact@v4
+        with:
+            name: release-dists-sdist
+            path: dist/
 
       - name: Publish release distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
